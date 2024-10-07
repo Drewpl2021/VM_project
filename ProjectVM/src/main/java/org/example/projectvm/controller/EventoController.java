@@ -11,6 +11,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/evento")
+@CrossOrigin(origins = "http://localhost:4200")
 public class EventoController {
     @Autowired
     private EventoService eventoService;

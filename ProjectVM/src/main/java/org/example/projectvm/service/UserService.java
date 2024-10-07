@@ -22,6 +22,17 @@ public class UserService {
         return userRepository.findById(id);
     }
 
+    // Obtener un usuario por Dni
+    public Optional<User> buscarPorDni(String dni) {
+        return userRepository.findByDni(dni);
+    }
+
+    // Obtener un usuario por Codigo
+    public Optional<User> buscarPorCodigo(String codigo) {
+        return userRepository.findByCodigo(codigo);
+    }
+
+
     // Crear un nuevo usuario
     public User createUser(User user) {
         return userRepository.save(user);

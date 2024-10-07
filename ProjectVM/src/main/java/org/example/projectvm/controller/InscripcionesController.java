@@ -11,6 +11,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/inscripciones")
+@CrossOrigin(origins = "http://localhost:4200")
 public class InscripcionesController {
     @Autowired
     private InscripcionesService inscripcionesService;
