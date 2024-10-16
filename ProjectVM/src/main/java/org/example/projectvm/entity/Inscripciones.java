@@ -18,4 +18,7 @@ public class Inscripciones {
     @ManyToOne
     @JoinColumn(name = "usuarios_id", nullable = false)
     private User usuario;
+
+    private Integer horas_obtenidas;
+    private String anio_academico;
 }
