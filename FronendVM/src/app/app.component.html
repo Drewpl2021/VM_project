@@ -1,40 +1,44 @@
 <!-- Toolbar -->
-<div class="toolbar" role="banner">
-  <img
-    width="40"
-    alt="Angular Logo"
-    src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNTAgMjUwIj4KICAgIDxwYXRoIGZpbGw9IiNERDAwMzEiIGQ9Ik0xMjUgMzBMMzEuOSA2My4ybDE0LjIgMTIzLjFMMTI1IDIzMGw3OC45LTQzLjcgMTQuMi0xMjMuMXoiIC8+CiAgICA8cGF0aCBmaWxsPSIjQzMwMDJGIiBkPSJNMTI1IDMwdjIyLjItLjFWMjMwbDc4LjktNDMuNyAxNC4yLTEyMy4xTDEyNSAzMHoiIC8+CiAgICA8cGF0aCAgZmlsbD0iI0ZGRkZGRiIgZD0iTTEyNSA1Mi4xTDY2LjggMTgyLjZoMjEuN2wxMS43LTI5LjJoNDkuNGwxMS43IDI5LjJIMTgzTDEyNSA1Mi4xem0xNyA4My4zaC0zNGwxNy00MC45IDE3IDQwLjl6IiAvPgogIDwvc3ZnPg=="
-  />
-  <img src="">
 
-</div>
-<div class="container">
-  <!-- Título -->
-  <div class="titulo">
-    <h2> ¿Deseas saber cuántas horas de vinculación <br> con el medio tienes? </h2>
-  </div>
+<div class="main">
+  <div class="toolbar" role="banner">
+    <img src="../assets/images/logo.png" alt="Logo" class="toolbar-logo">
 
-  <!-- Formulario de búsqueda -->
-  <form (ngSubmit)="onSearch()">
-    <div class="form-group search-container custom-floating-label" style="display: flex">
-      <input type="text" id="query" [(ngModel)]="query" name="query" class="search-input" placeholder=" ">
-      <label for="query" class="floating-label">Ingrese DNI o Código de Usuario</label>
-      <button type="submit" class="btn btn-primary search-button">
-        <i class="fa-solid fa-magnifying-glass"></i>
-      </button>
+    <!-- Menú u otros elementos alineados a la derecha -->
+    <div class="toolbar-right">
+      <button class="btn btn-light">Perfil</button>
+      <button class="btn btn-light">Cerrar Sesión</button>
     </div>
-  </form>
-
-  <div *ngIf="resultado">
-    <h3>Resultado de la búsqueda:</h3>
-    <p>{{ resultado.apellido }}, {{ resultado.nombre }}</p>
-    <p>Horas: {{ resultado.horas_obtenidas }}</p>
   </div>
 
-  <div *ngIf="error">
-    <p>{{ error }}</p>
+
+  <div class="container">
+    <!-- Título -->
+    <div class="titulo">
+      <h2> ¿Deseas saber cuántas horas de vinculación <br> con el medio tienes? </h2>
+    </div>
+
+    <!-- Formulario de búsqueda -->
+    <form (ngSubmit)="onSearch()">
+      <div class="form-group search-container custom-floating-label" style="display: flex">
+        <input type="text" id="query" [(ngModel)]="query" name="query" class="search-input" placeholder=" ">
+        <label for="query" class="floating-label">Ingrese DNI o Código de Usuario</label>
+        <button type="submit" class="btn btn-primary search-button">
+          <i class="fa-solid fa-magnifying-glass"></i>
+        </button>
+      </div>
+    </form>
+    <div *ngIf="resultado">
+      <h3>Resultado de la búsqueda:</h3>
+      <p>{{ resultado.apellido }}, {{ resultado.nombre }}</p>
+      <p>Horas: {{ resultado.horas_obtenidas }}</p>
+    </div>
+    <div *ngIf="error">
+      <p>{{ error }}</p>
+    </div>
   </div>
 </div>
+
 
 
 

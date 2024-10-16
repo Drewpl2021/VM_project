@@ -1,10 +1,76 @@
-.toolbar{
+.toolbar {
   background-color: #00234b;
   height: 80px;
-  align-content: center;
-
+  width: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
 }
+
+.toolbar-logo {
+  height: 60px;
+  max-width: 100%;
+  object-fit: contain;
+}
+
+.toolbar-right {
+  display: flex;
+  gap: 10px;
+}
+
 .titulo{
+}
+
+.main {
+  margin-top: 80px;
+  background-image: url('../assets/images/fondo.jpeg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  min-height: calc(100vh - 80px);
+  padding: 20px;
+}
+
+.container {
+  text-align: center;
+  padding: 20px;
+  min-height: 30vh;
+  display: block;
+  background-color: rgba(255, 255, 255, 0.8);
+  border-radius: 8px;
+  margin-top: 20px;
+}
+
+h3 {
+  margin-bottom: 20px;
+}
+
+form {
+  margin: 0 auto;
+  width: 650px;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: #fff;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.search-button {
+  padding: 10px 20px;
+  border: 1px solid #005fb1;
+  background-color: #005fb1;
+  color: white;
+  border-radius: 0 8px 8px 0;
+  cursor: pointer;
+  outline: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .custom-floating-label {
@@ -46,42 +112,4 @@
 
 .custom-floating-label input:focus + label {
   color: #007bff;
-}
-
-/* Estilo para el contenedor */
-.container {
-  text-align: center;
-  padding: 20px;
-  min-height: 100vh; /* Mantener el contenedor ocupando toda la pantalla */
-  display: block;
-}
-
-/* Título principal */
-h3 {
-  margin-bottom: 20px; /* Espacio entre el título y el formulario */
-}
-
-/* Estilo para el formulario */
-form {
-  margin: 0 auto; /* Centrar el formulario */
-  width: 650px; /* Aumenta el ancho a 600px, ajusta según lo que necesites */
-  padding: 20px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  background-color: #fff;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
-
-
-.search-button {
-  padding: 10px 20px;
-  border: 1px solid #007bff;
-  background-color: #007bff;
-  color: white;
-  border-radius: 0 8px 8px 0;
-  cursor: pointer;
-  outline: none;
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }
