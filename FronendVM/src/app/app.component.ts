@@ -8,7 +8,8 @@ import {BackendService} from "./services/backend.service";
 })
 export class AppComponent  {
   nombre: string = '';
-
+  eventos: any[] = [];
+  eventosActivos: any[] = [];
   query: string = ''; // Un único campo para búsqueda
   resultado: any = null;
   error: string = '';
@@ -31,6 +32,21 @@ export class AppComponent  {
       },
       error => {
         console.error('Error al guardar la carrera:', error);
+      }
+    );
+  }
+
+  ngOnInit(): void {
+    this.backendService.getEventos().subscribe(
+      (data) => {
+        console.log('Eventos cargados:', data);
+        this.eventos = data;
+
+        // Filtramos los eventos que están en estado 'Activo'
+        this.eventosActivos = this.eventos.filter(evento => evento.status === 'Activo');
+      },
+      (error) => {
+        console.error('Error al cargar los eventos:', error);
       }
     );
   }

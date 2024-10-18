@@ -11,7 +11,6 @@
     </div>
   </div>
 
-
   <div class="container">
     <!-- Título -->
     <div class="titulo">
@@ -37,6 +36,47 @@
       <p>{{ error }}</p>
     </div>
   </div>
+
+
+
+  <div *ngIf="eventos.length > 0" class="container " style=" width: 600px;">
+    <h2>Proximos eventos</h2>
+    <div id="carouselExampleCaptions" class="carousel slide" data-bs-ride="carousel">
+      <div class="carousel-inner">
+        <div *ngFor="let evento of eventosActivos; let i = index" class="carousel-item" [class.active]="i === 0">
+          <div class="card" style="width: 18rem; margin-left: 150px">
+            <div class="card-body">
+            <h5>{{ evento.nombre }}</h5>
+            <p>{{ evento.lugar }} </p>
+              <p>Fecha: El dia {{ evento.fecha | date:'EEEE d \'de\' MMMM\' del\' y':'es' }} a las {{ evento.hora }}</p>
+            <p>Horas Validas: {{ evento.horas_obtenidas }}</p>
+            <p>Dirrección: {{ evento.direccion }}</p>
+              <a href="#" class="card-link">Card link</a>
+              <a href="#" class="card-link">Another link</a>
+            </div>
+          </div>
+        </div>
+
+
+
+      <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Anterior</span>
+      </button>
+      <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Siguiente</span>
+      </button>
+    </div>
+  </div>
+
+    <div *ngIf="eventosActivos.length === 0" class="alert " role="alert" ><br>
+      <h4>No hay eventos disponibles.</h4> <br>
+      <img style="width: 200px;" src="https://img.freepik.com/vector-premium/hombre-esperando-stand-dibujos-animados_435121-89.jpg">
+    </div>
+  </div>
+
+
 </div>
 
 

@@ -17,7 +17,11 @@ public class Evento {
     private Date fecha;
     private String hora;
     private String horas_obtenidas;
+
     @Enumerated(EnumType.STRING)
+
+
+
     private Evento.Status status;
     public enum Status {
         Activo,

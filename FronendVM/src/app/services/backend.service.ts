@@ -29,4 +29,8 @@ export class BackendService {
   buscarPorDni(dni: string): Observable<any> {
     return this.http.get(`${this.apiUrl}/user/dni/${dni}`);
   }
+
+  getEventos(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/evento`);
+  }
 }
