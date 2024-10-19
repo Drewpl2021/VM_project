@@ -6,8 +6,7 @@
 
     <!-- Menú u otros elementos alineados a la derecha -->
     <div class="toolbar-right">
-      <button class="btn btn-light">Perfil</button>
-      <button class="btn btn-light">Cerrar Sesión</button>
+      <a routerLink="/login" class="btn botoncito">Iniciar Sesión</a>
     </div>
   </div>
 
@@ -46,13 +45,12 @@
         <div *ngFor="let evento of eventosActivos; let i = index" class="carousel-item" [class.active]="i === 0">
           <div class="card" style="width: 18rem; margin-left: 150px">
             <div class="card-body">
-            <h5>{{ evento.nombre }}</h5>
-            <p>{{ evento.lugar }} </p>
+              <h5>{{ evento.nombre }}</h5>
+              <p>{{ evento.lugar }} </p>
               <p>Fecha: El dia {{ evento.fecha | date:'EEEE d \'de\' MMMM\' del\' y':'es' }} a las {{ evento.hora }}</p>
-            <p>Horas Validas: {{ evento.horas_obtenidas }}</p>
-            <p>Dirrección: {{ evento.direccion }}</p>
-              <a href="#" class="card-link">Card link</a>
-              <a href="#" class="card-link">Another link</a>
+              <p>Horas Validas: {{ evento.horas_obtenidas }}</p>
+              <p>Dirrección: {{ evento.direccion }}</p>
+              <a href="#" class="btn card-link" style="background-color: #005fb1; color: white;">Inscribirse</a>
             </div>
           </div>
         </div>

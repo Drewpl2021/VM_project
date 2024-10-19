@@ -1,5 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {BackendService} from "./services/backend.service";
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-root',
@@ -14,7 +15,8 @@ export class AppComponent  {
   resultado: any = null;
   error: string = '';
 
-  constructor(private backendService: BackendService) { }
+  constructor(private backendService: BackendService,
+              private router: Router) { }
 
 
   // Este método se ejecutará cuando se envíe el formulario
@@ -49,6 +51,11 @@ export class AppComponent  {
         console.error('Error al cargar los eventos:', error);
       }
     );
+    const usuarioAutenticado = false; // Simulación de autenticación
+
+    if (!usuarioAutenticado) {
+      this.router.navigate(['/login']);
+    }
   }
 
 

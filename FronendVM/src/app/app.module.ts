@@ -7,13 +7,16 @@ import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import {registerLocaleData} from "@angular/common";
 import localeEs from '@angular/common/locales/es';
+import { LoginComponent } from './login/login.component';
 
 
 registerLocaleData(localeEs, 'es');
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    LoginComponent,
+
   ],
   imports: [
     BrowserModule,
