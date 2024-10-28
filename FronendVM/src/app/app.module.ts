@@ -9,6 +9,7 @@ import {registerLocaleData} from "@angular/common";
 import localeEs from '@angular/common/locales/es';
 import { LoginComponent } from './components/login/login.component';
 import { DashboardComponent } from './components/dashboard.component';
+import { MainComponent } from './components/navbarlateral/main.component';
 
 
 registerLocaleData(localeEs, 'es');
@@ -18,6 +19,7 @@ registerLocaleData(localeEs, 'es');
     AppComponent,
     LoginComponent,
     DashboardComponent,
+    MainComponent,
 
 
   ],
