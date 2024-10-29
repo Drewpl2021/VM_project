@@ -1,0 +1,85 @@
+/* Estilos generales */
+.body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Sidebar */
+.sidebar {
+  height: 100vh; /* Ocupa toda la altura de la pantalla */
+  width: 250px; /* Ancho fijo de la barra lateral */
+  position: fixed;
+  top: 0;
+  left: 0;
+  background-color: #333;
+  padding-top: 20px;
+  overflow-x: hidden; /* Oculta el scroll horizontal */
+}
+
+/* Enlaces dentro de la barra */
+.sidebar a {
+  padding: 15px 10px;
+  text-decoration: none;
+  font-size: 18px;
+  color: white;
+  display: block;
+  transition: 0.3s;
+}
+
+/* Hover efecto en enlaces */
+.sidebar a:hover {
+  background-color: #575757;
+  color: #fff;
+}
+
+/* Estado activo del enlace */
+.sidebar a.active {
+  background-color: #4CAF50;
+  color: white;
+}
+
+/* Contenido principal */
+.content {
+  margin-left: 260px; /* Deja espacio para la barra lateral */
+  padding: 20px;
+  height: 100vh;
+  background-color: #f4f4f9;
+}
+
+.sidebar a.active {
+  background-color: #4CAF50;
+  color: white;
+}
+/* Sección del perfil */
+.profile-section {
+  position: absolute;
+  bottom: 20px;
+  width: 100%;
+  text-align: center;
+  padding: 10px 0;
+  background-color: #333;
+}
+
+.profile-pic {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%; /* Hacer la imagen circular */
+  margin-bottom: 10px;
+  border: 2px solid white;
+}
+
+.logout-btn {
+  background-color: #ff4c4c;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background-color 0.3s;
+}
+
+.logout-btn:hover {
+  background-color: #e60000;
+}

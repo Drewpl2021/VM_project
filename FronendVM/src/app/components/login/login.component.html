@@ -18,7 +18,7 @@
       <i class="fa fa-lock"></i>
     </div>
 
-    <button type="submit" class="submit">Inicio</button>
+    <button (click)="goToSecondComponent()" type="submit" class="submit">Inicio</button>
     <button  routerLink="/" class="regresar">Cancelar</button>
 
     <div class="bottom">
@@ -26,7 +26,7 @@
         <input type="checkbox" id="recordar">
         <label for="recordar">Recordarme</label>
       </div>
-      <span><a href="#">¿Olvidaste la contraseña?</a></span>
+      <span><a href="/main">¿Olvidaste la contraseña?</a></span>
     </div>
   </div>
 </div>
