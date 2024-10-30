@@ -3,7 +3,6 @@ package org.example.projectvm.service;
 import org.example.projectvm.entity.User;
 import org.example.projectvm.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -32,6 +31,14 @@ public class UserService {
     public Optional<User> buscarPorCodigo(String codigo) {
         return userRepository.findByCodigo(codigo);
     }
+
+
+    // Crear un nuevo usuario
+    public User createUser(User user) {
+
+        return userRepository.save(user);
+    }
+
 
     // Eliminar un usuario por ID
     public void deleteUser(Integer id) {
