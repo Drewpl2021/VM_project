@@ -1,0 +1,22 @@
+<!-- layout.component.html -->
+<div class="body">
+  <!-- Barra lateral fija -->
+  <div [class.sidebar]="sidebarVisible">
+    <a style="margin-top: 50px" routerLink="/proximos_eventos" routerLinkActive="active">Próximos Eventos</a>
+    <a routerLink="/eventos_participados" routerLinkActive="active">Eventos Participados</a>
+    <a routerLink="/gestion_eventos" routerLinkActive="active">Gestión de Eventos</a>
+    <a routerLink="/importar_datos" routerLinkActive="active">Importar Datos</a>
+
+    <div class="profile-section">
+      <button (click)="goToSecondComponent()" class="logout-btn">
+        <i class="fa-solid fa-user" style="color: white; margin-right: 5px;"></i>
+        Cerrar sesión
+      </button>
+    </div>
+  </div>
+
+  <!-- Contenido de cada página -->
+  <div class="content">
+    <router-outlet></router-outlet>
+  </div>
+</div>

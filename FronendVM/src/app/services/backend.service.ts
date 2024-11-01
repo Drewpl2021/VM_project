@@ -33,4 +33,8 @@ export class BackendService {
   getEventos(): Observable<any[]> {
     return this.http.get<any[]>(`${this.apiUrl}/evento`);
   }
+
+  uploadExcel(formData: FormData): Observable<any> {
+    return this.http.post(`${this.apiUrl}/user/upload`, formData);
+  }
 }

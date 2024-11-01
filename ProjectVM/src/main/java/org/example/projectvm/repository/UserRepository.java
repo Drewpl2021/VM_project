@@ -8,5 +8,7 @@ import java.util.Optional;
 
 public interface UserRepository  extends JpaRepository<User, Integer> {
     Optional<User> findByDni(String dni);  // Buscar por DNI
-    Optional<User> findByCodigo(String codigo);  // Buscar por Código
+    Optional<User> findByCodigo(String codigo);// Buscar por Código
+    boolean existsByDni(String dni);
+    boolean existsByCodigo(String codigo);
 }

@@ -9,7 +9,11 @@ import {registerLocaleData} from "@angular/common";
 import localeEs from '@angular/common/locales/es';
 import { LoginComponent } from './components/login/login.component';
 import { DashboardComponent } from './components/dashboard.component';
-import { MainComponent } from './components/navbarlateral/main.component';
+import { LayoutComponent } from './components/layout/layout.component';
+import { ProximosEventosComponent } from './components/main/proximos-eventos/proximos-eventos.component';
+import { EventosParticipadosComponent } from './components/main/eventos-participados/eventos-participados.component';
+import { GestionEventosComponent } from './components/main/gestion-eventos/gestion-eventos.component';
+import { ImportarDatosComponent } from './components/main/importar-datos/importar-datos.component';
 
 
 registerLocaleData(localeEs, 'es');
@@ -19,7 +23,11 @@ registerLocaleData(localeEs, 'es');
     AppComponent,
     LoginComponent,
     DashboardComponent,
-    MainComponent,
+    LayoutComponent,
+    ProximosEventosComponent,
+    EventosParticipadosComponent,
+    GestionEventosComponent,
+    ImportarDatosComponent,
 
 
   ],

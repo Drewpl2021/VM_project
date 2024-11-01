@@ -1,0 +1,14 @@
+<form (ngSubmit)="uploadFile()">
+  <div class="mb-3">
+    <label for="formFile" class="form-label">Selecciona un archivo Excel:</label>
+    <input class="form-control" type="file" id="formFile" type="file"
+           id="file"
+           (change)="onFileChange($event)"
+           accept=".xlsx"
+           required>
+  </div>
+
+
+
+  <button type="submit">Subir Archivo</button>
+</form>
