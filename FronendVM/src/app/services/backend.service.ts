@@ -37,4 +37,21 @@ export class BackendService {
   uploadExcel(formData: FormData): Observable<any> {
     return this.http.post(`${this.apiUrl}/user/upload`, formData);
   }
+
+  //User:
+  getAllUsers(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/user`);
+  }
+
+  createUser(user: any): Observable<any> {
+    return this.http.post(`${this.apiUrl}/user`, user);
+  }
+
+  updateUser(id: number, user: any): Observable<any> {
+    return this.http.put(`${this.apiUrl}/user/${id}`, user);
+  }
+
+  deleteUser(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/user/${id}`);
+  }
 }

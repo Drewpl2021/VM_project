@@ -8,6 +8,7 @@ import {BackendService} from "../../../services/backend.service";
 })
 export class ImportarDatosComponent {
   selectedFile: File | null = null;  // Variable para almacenar el archivo
+  users: any[] = [];
 
   constructor(private backendService: BackendService) {}
 
@@ -40,4 +41,22 @@ export class ImportarDatosComponent {
       }
     );
   }
+  ngOnInit(): void {
+    this.backendService.getAllUsers().subscribe(
+      (data) => {
+        this.users = data;
+      },
+      (error) => {
+        console.error('Error al obtener usuarios:', error);
+      }
+    );
+  }
+  editarCliente(cliente: any) {
+    // Lógica para editar
+  }
+
+  eliminarCliente(cliente: any) {
+    // Lógica para eliminar
+  }
+
 }

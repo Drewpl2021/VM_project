@@ -1,4 +1,4 @@
-<form (ngSubmit)="uploadFile()">
+<!--<form (ngSubmit)="uploadFile()">
   <div class="mb-3">
     <label for="formFile" class="form-label">Selecciona un archivo Excel:</label>
     <input class="form-control" type="file" id="formFile" type="file"
@@ -11,4 +11,66 @@
 
 
   <button type="submit">Subir Archivo</button>
-</form>
+</form>-->
+
+
+<div class="container">
+  <div class="header">
+    <h2><b>Usuarios</b></h2>
+    <div class="search-bar">
+      <input type="text" placeholder="Buscar" />
+      <button class="add-button">+ Nuevo cliente</button>
+    </div>
+  </div>
+
+
+
+  <!-- Tabla de datos -->
+  <table>
+    <thead>
+    <tr>
+      <th>ID</th>
+      <th>Nombre</th>
+      <th>Apellido</th>
+      <th>DNI</th>
+      <th>Código</th>
+      <th>Email</th>
+      <th>Horas Obtenidas</th>
+      <th>Status</th>
+      <th>Acciones</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let user   of users">
+      <td>{{ user.id }}</td>
+      <td>{{ user.nombre }}</td>
+      <td>{{ user.apellido }}</td>
+      <td>{{ user.dni }}</td>
+      <td>{{ user.codigo }}</td>
+      <td>{{ user.email }}</td>
+      <td>{{ user.horas_obtenidas }}</td>
+      <td>{{ user.status }}</td>
+      <td class="actions">
+        <button class="edit-btn">✏️</button>
+        <button class="delete-btn">🗑️</button>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+
+  <!-- Paginación -->
+  <div class="pagination">
+    <span>Líneas por página:</span>
+    <select>
+      <option>10</option>
+      <option>20</option>
+      <option>50</option>
+    </select>
+    <span>1-10 de 135 registros</span>
+    <button>Anterior</button>
+    <button>Siguiente</button>
+  </div>
+</div>
+
+
+
