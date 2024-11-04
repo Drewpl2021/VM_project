@@ -49,6 +49,14 @@ public class UserService {
     //Actualizar clientes
     public User actualizar(User user) {return userRepository.save(user);}
 
+    //Buscar por nombre
+    public List<User> findByNombreContaining(String nombre) {
+        return userRepository.findByNombreContaining(nombre);
+    }
+    //Buscar por apellido
+    public List<User> findByApellidoContaining(String apellido) {
+        return userRepository.findByApellidoContaining(apellido);
+    }
 
 
 

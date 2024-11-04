@@ -7,8 +7,9 @@ import {BackendService} from "../../../services/backend.service";
   styleUrls: ['./importar-datos.component.css']
 })
 export class ImportarDatosComponent {
-  selectedFile: File | null = null;  // Variable para almacenar el archivo
+  selectedFile: File | null = null;
   users: any[] = [];
+  searchTerm: string = '';
 
   constructor(private backendService: BackendService) {}
 
@@ -42,6 +43,33 @@ export class ImportarDatosComponent {
     );
   }
   ngOnInit(): void {
+    this.buscarUsuarios(); // Llama al método de búsqueda, que cargará todos los usuarios si no hay término de búsqueda
+  }
+  editarCliente(cliente: any) {
+    // Lógica para editar
+  }
+
+  eliminarCliente(cliente: any) {
+    // Lógica para eliminar
+  }
+
+
+  buscarUsuarios(): void {
+    if (this.searchTerm.trim()) {
+      this.backendService.buscarUsuariosPorTermino(this.searchTerm).subscribe(
+        (data) => {
+          this.users = data;
+        },
+        (error) => {
+          console.error('Error al buscar usuarios:', error);
+        }
+      );
+    } else {
+      this.obtenerUsuarios(); // Si no hay término de búsqueda, cargar todos los usuarios
+    }
+  }
+
+  obtenerUsuarios(): void {
     this.backendService.getAllUsers().subscribe(
       (data) => {
         this.users = data;
@@ -51,12 +79,6 @@ export class ImportarDatosComponent {
       }
     );
   }
-  editarCliente(cliente: any) {
-    // Lógica para editar
-  }
 
-  eliminarCliente(cliente: any) {
-    // Lógica para eliminar
-  }
 
 }

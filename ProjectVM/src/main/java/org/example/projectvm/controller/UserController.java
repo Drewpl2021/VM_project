@@ -9,8 +9,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/user")
@@ -72,6 +74,49 @@ public class UserController {
         User updatedUser = userService.actualizar(user);
         return ResponseEntity.ok(updatedUser);
     }
+    @GetMapping("nombre/{nombre}")
+    public ResponseEntity<List<User>> buscarPorNombre(@PathVariable String nombre) {
+        List<User> users = userService.findByNombreContaining(nombre);
+        if (users.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(users);
+    }
+
+    @GetMapping("apellido/{apellido}")
+    public ResponseEntity<List<User>> buscarPorApellido(@PathVariable String apellido) {
+        List<User> users = userService.findByApellidoContaining(apellido);
+        if (users.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(users);
+    }
+
+    @GetMapping("buscar")
+    public ResponseEntity<List<User>> buscarUsuarios(@RequestParam String termino) {
+        List<User> usuarios = new ArrayList<>();
+
+        // Buscar por nombre
+        usuarios.addAll(userService.findByNombreContaining(termino));
+
+        // Buscar por apellido
+        usuarios.addAll(userService.findByApellidoContaining(termino));
+
+        // Buscar por DNI
+        userService.buscarPorDni(termino).ifPresent(usuarios::add);
+
+        // Buscar por código
+        userService.buscarPorCodigo(termino).ifPresent(usuarios::add);
+
+        // Eliminar duplicados si es necesario
+        usuarios = usuarios.stream().distinct().collect(Collectors.toList());
+
+        if (usuarios.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(usuarios);
+    }
+
 
 
 

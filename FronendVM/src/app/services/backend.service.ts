@@ -15,6 +15,15 @@ export class BackendService {
     return this.http.get(`${this.apiUrl}/carreras`);
   }
 
+  // Método para buscar usuarios por nombre
+  buscarUsuariosPorNombre(nombre: string): Observable<any> {
+    return this.http.get(`${this.apiUrl}/user/nombre/${nombre}`);
+  }
+  // Método para buscar usuarios por un término general
+  buscarUsuariosPorTermino(termino: string): Observable<any> {
+    return this.http.get(`${this.apiUrl}/user/buscar?termino=${termino}`);
+  }
+
   // Método para enviar datos
   postData(data: any): Observable<any> {
     return this.http.post(`${this.apiUrl}/carreras`, data);

@@ -1,28 +1,24 @@
-<!--<form (ngSubmit)="uploadFile()">
-  <div class="mb-3">
-    <label for="formFile" class="form-label">Selecciona un archivo Excel:</label>
-    <input class="form-control" type="file" id="formFile" type="file"
-           id="file"
-           (change)="onFileChange($event)"
-           accept=".xlsx"
-           required>
-  </div>
-
-
-
-  <button type="submit">Subir Archivo</button>
-</form>-->
-
-
 <div class="container">
   <div class="header">
     <h2><b>Usuarios</b></h2>
     <div class="search-bar">
-      <input type="text" placeholder="Buscar" />
+      <input type="text" placeholder="Buscar" [(ngModel)]="searchTerm" (input)="buscarUsuarios()" />
       <button class="add-button">+ Nuevo cliente</button>
-    </div>
-  </div>
+      <!-- Formulario de carga de archivo con estilo integrado -->
+      <form (ngSubmit)="uploadFile()" class="file-upload-form">
+        <label for="formFile" class="form-label">
+          <i class="fa-solid fa-file-import"></i> Importar Datos
+        </label>
+        <input class="form-control file-input" type="file" id="formFile"
+               (change)="onFileChange($event)"
+               accept=".xlsx"
+               required>
+        <button type="submit" class="submit-button">Subir Archivo</button>
+      </form>
 
+    </div>
+
+  </div>
 
 
   <!-- Tabla de datos -->
@@ -41,7 +37,7 @@
     </tr>
     </thead>
     <tbody>
-    <tr *ngFor="let user   of users">
+    <tr *ngFor="let user of users">
       <td>{{ user.id }}</td>
       <td>{{ user.nombre }}</td>
       <td>{{ user.apellido }}</td>
@@ -57,7 +53,6 @@
     </tr>
     </tbody>
   </table>
-
   <!-- Paginación -->
   <div class="pagination">
     <span>Líneas por página:</span>
@@ -71,6 +66,7 @@
     <button>Siguiente</button>
   </div>
 </div>
+
 
 
 
