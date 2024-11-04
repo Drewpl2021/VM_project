@@ -58,8 +58,13 @@ public class UserService {
         return userRepository.findByApellidoContaining(apellido);
     }
 
+    //Buscar a un email
+    public Optional<User> findByEmail(String email) {
+        return userRepository.findByEmail(email);
+    }
 
 
+    //subir excel
     public List<String> saveUsersFromExcel(MultipartFile file) throws Exception {
         List<User> usersToSave = new ArrayList<>();
         List<String> mensajesOmitidos = new ArrayList<>();

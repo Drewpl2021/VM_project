@@ -8,6 +8,7 @@ import {ProximosEventosComponent} from "./components/main/proximos-eventos/proxi
 import {EventosParticipadosComponent} from "./components/main/eventos-participados/eventos-participados.component";
 import {GestionEventosComponent} from "./components/main/gestion-eventos/gestion-eventos.component";
 import {ImportarDatosComponent} from "./components/main/importar-datos/importar-datos.component";
+import {AuthGuard} from "./guards/auth.guard";
 
 const routes: Routes = [
   { path: '', component: DashboardComponent }, // Página de inicio
@@ -16,6 +17,7 @@ const routes: Routes = [
   {
     path: '',
     component: LayoutComponent,
+    canActivate: [AuthGuard],
     children: [
       { path: 'proximos_eventos', component: ProximosEventosComponent },
       { path: 'eventos_participados', component: EventosParticipadosComponent },

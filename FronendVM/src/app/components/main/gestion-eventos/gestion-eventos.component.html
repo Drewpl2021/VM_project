@@ -1,10 +1,10 @@
 <div class="container">
-  <h2>Próximos eventos</h2>
+  <h2>Gestión de eventos</h2>
 
   <!-- Barra de búsqueda y botón de agregar evento -->
   <div class="d-flex justify-content-between align-items-center mb-4">
     <input type="text" placeholder="Buscar evento" [(ngModel)]="searchTerm" (input)="buscarEventos()" class="form-control w-50" />
-    <button (click)="abrirModalCrearEvento()" class="btn btn-primary">+ Agregar Evento</button>
+    <button (click)="abrirModalCrearEvento()" class="btn btn-primary"><i class="fa-solid fa-plus"></i> Agregar Evento</button>
   </div>
 
   <!-- Contenedor de tarjetas de eventos -->
@@ -19,6 +19,7 @@
           <p class="card-text">Dirección: {{ evento.direccion }}</p>
 
           <div class="d-flex justify-content-between mt-3">
+            <button class="btn btn-warning">Ver inscritos</button>
             <button (click)="abrirModalEditarEvento(evento)" class="btn btn-warning">Editar</button>
             <button (click)="eliminarEvento(evento.id)" class="btn btn-danger">Eliminar</button>
           </div>

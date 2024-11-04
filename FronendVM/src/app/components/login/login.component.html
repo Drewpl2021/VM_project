@@ -3,31 +3,34 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" />
 
 <div class="body">
-<div class="box">
-  <div class="container">
-    <header>Iniciar Sesión</header>
+  <div class="box">
+    <div class="container">
+      <header>Iniciar Sesión</header>
 
-    <div class="input-field">
-      <input type="text" class="input" placeholder="Usuario" required>
-      <i class="fa-solid fa-user"></i>
-
-    </div>
-
-    <div class="input-field">
-      <input type="password" class="input" placeholder="Contraseña" required>
-      <i class="fa fa-lock"></i>
-    </div>
-
-    <button (click)="goToSecondComponent()" type="submit" class="submit">Inicio</button>
-    <button  routerLink="/" class="regresar">Cancelar</button>
-
-    <div class="bottom">
-      <div class="left">
-        <input type="checkbox" id="recordar">
-        <label for="recordar">Recordarme</label>
+      <div class="input-field">
+        <input type="text" class="input" placeholder="Correo" [(ngModel)]="email" required>
+        <i class="fa-solid fa-user"></i>
       </div>
-      <span><a href="/main">¿Olvidaste la contraseña?</a></span>
+
+      <div class="input-field">
+        <input type="password" class="input" placeholder="Contraseña" [(ngModel)]="password" required>
+        <i class="fa fa-lock"></i>
+      </div>
+
+      <button (click)="login()" type="submit" class="submit">Inicio</button>
+      <button routerLink="/" class="regresar">Cancelar</button>
+
+      <div *ngIf="errorMessage" class="alert alert-danger mt-3">{{ errorMessage }}</div>
+
+      <div class="bottom">
+        <div class="left">
+          <input type="checkbox" id="recordar">
+          <label for="recordar">Recordarme</label>
+        </div>
+        <span><a href="/main">¿Olvidaste la contraseña?</a></span>
+      </div>
     </div>
   </div>
-</div>
+
+
 </div>

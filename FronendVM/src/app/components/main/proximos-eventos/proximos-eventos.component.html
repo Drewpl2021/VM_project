@@ -1,1 +1,22 @@
-<p>proximos-eventos works!</p>
+<div class="container">
+  <h2>Próximos eventos activos</h2>
+  <br><br>
+  <!-- Contenedor de tarjetas de eventos -->
+  <div class="row">
+    <div *ngFor="let evento of eventosFiltrados" class="col-md-4 mb-4 d-flex align-items-stretch">
+      <div class="card" style="width: 100%;">
+        <div class="card-body">
+          <h5 class="card-title">{{ evento.nombre }}</h5>
+          <p class="card-text">{{ evento.lugar }}</p>
+          <p class="card-text">Fecha: El día {{ evento.fecha | date:'EEEE d \'de\' MMMM\' del\' y':'es' }} a las {{ evento.hora }}</p>
+          <p class="card-text">Horas Válidas: {{ evento.horas_obtenidas }}</p>
+          <p class="card-text">Dirección: {{ evento.direccion }}</p>
+
+          <div class="d-flex justify-content-between mt-3">
+            <button class="btn btn-warning">Inscribirse</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

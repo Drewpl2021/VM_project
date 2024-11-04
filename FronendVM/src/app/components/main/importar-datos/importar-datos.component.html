@@ -2,8 +2,8 @@
   <div class="header">
     <h2><b>Usuarios</b></h2>
     <div class="search-bar">
-      <input type="text" placeholder="Buscar" [(ngModel)]="searchTerm" (input)="buscarUsuarios()" />
-      <button class="add-button">+ Nuevo cliente</button>
+      <input type="text" placeholder="Buscar " [(ngModel)]="searchTerm" (input)="buscarUsuarios()" />
+      <button class="add-button"><i class="fa-solid fa-plus"></i> Nuevo Usuario</button>
       <!-- Formulario de carga de archivo con estilo integrado -->
       <form (ngSubmit)="uploadFile()" class="file-upload-form">
         <label for="formFile" class="form-label">
