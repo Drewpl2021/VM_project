@@ -10,9 +10,17 @@ export class BackendService {
 
   constructor(private http: HttpClient) { }
 
-  // Método para obtener datos
+  // Método para obtener datos de carrera
   getData(): Observable<any> {
     return this.http.get(`${this.apiUrl}/carreras`);
+  }
+  // Método para crear un evento
+  createEvento(evento: any): Observable<any> {
+    return this.http.post(`${this.apiUrl}/evento`, evento);
+  }
+  // Método para actualizar un evento
+  actualizarEvento(id: number, evento: any): Observable<any> {
+    return this.http.put(`${this.apiUrl}/evento/${id}`, evento);
   }
 
   // Método para buscar usuarios por nombre
@@ -38,11 +46,17 @@ export class BackendService {
   buscarPorDni(dni: string): Observable<any> {
     return this.http.get(`${this.apiUrl}/user/dni/${dni}`);
   }
+  // Método para eliminar un evento por su ID
+  deleteEvento(id: number): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/evento/${id}`);
+  }
 
+  //Metodo para obtener datos de evento
   getEventos(): Observable<any[]> {
     return this.http.get<any[]>(`${this.apiUrl}/evento`);
   }
 
+  //Metodo para subir el documento
   uploadExcel(formData: FormData): Observable<any> {
     return this.http.post(`${this.apiUrl}/user/upload`, formData);
   }

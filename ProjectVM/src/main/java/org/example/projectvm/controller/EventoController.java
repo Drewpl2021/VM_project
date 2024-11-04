@@ -32,7 +32,7 @@ public class EventoController {
 
     // Crear
     @PostMapping
-    public Evento createUser(@RequestBody Evento evento) {
+    public Evento createEvento(@RequestBody Evento evento) {
         return eventoService.create(evento);
     }
 
