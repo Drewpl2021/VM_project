@@ -1,16 +1,23 @@
-import { Component } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {Router} from "@angular/router";
+import {AuthService} from "../../services/auth.service";
 
 @Component({
   selector: 'app-layout',
   templateUrl: './layout.component.html',
   styleUrls: ['./layout.component.css']
 })
-export class LayoutComponent {
+export class LayoutComponent implements OnInit {
   sidebarVisible: boolean = true;
+  usuario: any = {};
 
-  constructor(private router: Router) {}
+  constructor(private router: Router,
+              private authService: AuthService) {}
 
+
+  ngOnInit(): void {
+    this.obtenerDatosUsuario(); // Asegúrate de llamar a este método aquí
+  }
   // Método para alternar la visibilidad de la barra lateral
   toggleSidebar() {
     this.sidebarVisible = !this.sidebarVisible;
@@ -21,4 +28,19 @@ export class LayoutComponent {
     if (window.confirm("Sesión cerrada correctamente")) {
       this.router.navigate(['/login']);}
   }
+  logout(): void {
+    this.authService.logout();
+  }
+  obtenerDatosUsuario(): void {
+    this.authService.getAuthenticatedUser().subscribe(
+      (userData) => {
+        console.log('Datos del usuario autenticado:', userData); // Este log mostrará el nombre y apellido
+        this.usuario = userData;
+      },
+      (error) => {
+        console.error('Error al obtener los datos del usuario:', error);
+      }
+    );
+  }
+
 }

@@ -9,6 +9,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -27,6 +29,25 @@ public class AuthController {
             return ResponseEntity.ok(Collections.singletonMap("message", "Inicio de sesión exitoso"));
         } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Credenciales incorrectas");
+        }
+    }
+    @GetMapping("/me")
+    public ResponseEntity<?> getAuthenticatedUser(@RequestParam String email) {
+        Optional<User> user = userService.findByEmail(email);
+
+        if (user.isPresent()) {
+            User userData = user.get();
+            // Crea un objeto de respuesta con solo los datos necesarios
+            Map<String, Object> response = new HashMap<>();
+            response.put("id", userData.getId());
+            response.put("nombre", userData.getNombre());
+            response.put("apellido", userData.getApellido());
+            response.put("email", userData.getEmail());
+            // Agrega más campos si los necesitas
+
+            return ResponseEntity.ok(response);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuario no encontrado");
         }
     }
 }

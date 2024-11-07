@@ -17,6 +17,7 @@ export class LoginComponent {
   login(): void {
     this.authService.login(this.email, this.password).subscribe(
       (response) => {
+        this.authService.setAuthenticatedUserEmail(this.email);
         console.log(response); // Verifica la respuesta en la consola
         this.router.navigate(['/main']);
       },
