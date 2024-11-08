@@ -27,7 +27,9 @@ public class InscripcionesService {
     public Inscripciones create(Inscripciones inscripciones) {
         return inscripcionesRepository.save(inscripciones);
     }
-
+    public boolean verificarInscripcion(Integer usuarioId, Integer eventoId) {
+        return inscripcionesRepository.findByUsuarioIdAndEventoId(usuarioId, eventoId).isPresent();
+    }
     // Eliminar
     public void delete(Integer id) {
         inscripcionesRepository.deleteById(id);

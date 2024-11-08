@@ -1,8 +1,12 @@
 package org.example.projectvm.controller;
 
 
+import org.example.projectvm.entity.Evento;
 import org.example.projectvm.entity.Inscripciones;
+import org.example.projectvm.entity.User;
+import org.example.projectvm.service.EventoService;
 import org.example.projectvm.service.InscripcionesService;
+import org.example.projectvm.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,6 +19,10 @@ import java.util.List;
 public class InscripcionesController {
     @Autowired
     private InscripcionesService inscripcionesService;
+    @Autowired
+    private UserService userService;
+    @Autowired
+    private EventoService eventoService;
 
     // Listar todos
     @GetMapping
@@ -30,11 +38,37 @@ public class InscripcionesController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    // Crear
     @PostMapping
-    public Inscripciones createUser(@RequestBody Inscripciones inscripciones) {
-        return inscripcionesService.create(inscripciones);
+    public ResponseEntity<Inscripciones> createInscripciones(@RequestBody Inscripciones inscripcion) {
+        // Obtener los IDs de usuario y evento
+        Integer userId = inscripcion.getUsuario().getId();
+        Integer eventoId = inscripcion.getEvento().getId();
+
+        // Buscar el usuario y el evento por sus IDs
+        User usuario = userService.getUserById(userId)
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+        Evento evento = eventoService.getById(eventoId)
+                .orElseThrow(() -> new RuntimeException("Evento no encontrado"));
+
+        // Asignar las entidades encontradas a la inscripción
+        inscripcion.setUsuario(usuario);
+        inscripcion.setEvento(evento);
+
+        // Guardar la inscripción
+        Inscripciones savedInscripcion = inscripcionesService.create(inscripcion);
+
+        return ResponseEntity.ok(savedInscripcion);
     }
+    // InscripcionesController.java
+    @GetMapping("/verificar")
+    public ResponseEntity<Boolean> verificarInscripcion(
+            @RequestParam Integer usuarioId,
+            @RequestParam Integer eventoId) {
+        boolean existe = inscripcionesService.verificarInscripcion(usuarioId, eventoId);
+        return ResponseEntity.ok(existe);
+    }
+
+
 
     // Eliminar
     @DeleteMapping("/{id}")

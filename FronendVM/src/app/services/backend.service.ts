@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import {HttpClient, HttpParams} from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -59,6 +59,19 @@ export class BackendService {
   //Metodo para subir el documento
   uploadExcel(formData: FormData): Observable<any> {
     return this.http.post(`${this.apiUrl}/user/upload`, formData);
+  }
+
+  // inscribirse
+  inscribirUsuario(inscripcion: any): Observable<any> {
+    return this.http.post(`${this.apiUrl}/inscripciones`, inscripcion);
+  }
+
+  verificarInscripcion(usuarioId: number, eventoId: number): Observable<boolean> {
+    const params = new HttpParams()
+      .set('usuarioId', usuarioId.toString())
+      .set('eventoId', eventoId.toString());
+
+    return this.http.get<boolean>(`${this.apiUrl}/inscripciones/verificar`, { params });
   }
 
   //User:
