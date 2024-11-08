@@ -19,7 +19,7 @@
           <p class="card-text">Dirección: {{ evento.direccion }}</p>
 
           <div class="d-flex justify-content-between mt-3">
-            <button class="btn btn-warning">Ver inscritos</button>
+            <button routerLink="/lista_participantes" class="btn btn-warning">Ver inscritos</button>
             <button (click)="abrirModalEditarEvento(evento)" class="btn btn-warning">Editar</button>
             <button (click)="eliminarEvento(evento.id)" class="btn btn-danger">Eliminar</button>
           </div>

@@ -14,6 +14,7 @@ import { ProximosEventosComponent } from './components/main/proximos-eventos/pro
 import { EventosParticipadosComponent } from './components/main/eventos-participados/eventos-participados.component';
 import { GestionEventosComponent } from './components/main/gestion-eventos/gestion-eventos.component';
 import { ImportarDatosComponent } from './components/main/importar-datos/importar-datos.component';
+import { ListaParticipantesComponent } from './components/main/lista-participantes/lista-participantes.component';
 
 
 registerLocaleData(localeEs, 'es');
@@ -28,6 +29,7 @@ registerLocaleData(localeEs, 'es');
     EventosParticipadosComponent,
     GestionEventosComponent,
     ImportarDatosComponent,
+    ListaParticipantesComponent,
 
 
   ],

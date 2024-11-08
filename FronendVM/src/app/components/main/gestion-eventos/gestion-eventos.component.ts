@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import {BackendService} from "../../../services/backend.service";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-gestion-eventos',
@@ -16,7 +17,7 @@ export class GestionEventosComponent {
   nuevoEvento: any = { status: 'Activo' };
   eventoSeleccionado: any = {};
 
-  constructor(private backendService: BackendService) {}
+  constructor(private backendService: BackendService,) {}
 
   ngOnInit(): void {
     this.obtenerEventos();
