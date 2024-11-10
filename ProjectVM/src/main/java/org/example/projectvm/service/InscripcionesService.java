@@ -2,12 +2,14 @@ package org.example.projectvm.service;
 
 
 import org.example.projectvm.entity.Inscripciones;
+import org.example.projectvm.entity.User;
 import org.example.projectvm.repository.InscripcionesRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class InscripcionesService {
@@ -34,9 +36,16 @@ public class InscripcionesService {
     public void delete(Integer id) {
         inscripcionesRepository.deleteById(id);
     }
+    public List<User> obtenerParticipantesPorEvento(Integer eventoId) {
+        return inscripcionesRepository.findByEventoId(eventoId).stream()
+                .map(Inscripciones::getUsuario)
+                .collect(Collectors.toList());
+    }
+
 
     //Actualizar
     public Inscripciones actualizar(Inscripciones inscripciones) {
         return inscripcionesRepository.save(inscripciones);
     }
 }
+

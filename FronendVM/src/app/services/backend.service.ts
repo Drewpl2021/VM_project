@@ -90,4 +90,12 @@ export class BackendService {
   deleteUser(id: number): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/user/${id}`);
   }
+  obtenerParticipantes(eventoId: number): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/inscripciones/evento/${eventoId}/participantes`);
+  }
+  // Método para obtener un evento por su ID y obtener su nombre
+  obtenerEventoPorId(eventoId: number): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/evento/${eventoId}`);
+  }
+
 }

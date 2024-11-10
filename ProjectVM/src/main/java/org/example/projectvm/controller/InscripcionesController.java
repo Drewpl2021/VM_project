@@ -68,7 +68,11 @@ public class InscripcionesController {
         return ResponseEntity.ok(existe);
     }
 
-
+    @GetMapping("/evento/{eventoId}/participantes")
+    public ResponseEntity<List<User>> obtenerParticipantesPorEvento(@PathVariable Integer eventoId) {
+        List<User> participantes = inscripcionesService.obtenerParticipantesPorEvento(eventoId);
+        return ResponseEntity.ok(participantes);
+    }
 
     // Eliminar
     @DeleteMapping("/{id}")

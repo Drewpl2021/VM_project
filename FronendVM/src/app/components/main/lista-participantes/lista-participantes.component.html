@@ -1,1 +1,52 @@
 <button routerLink="/gestion_eventos"><i class="fa-solid fa-arrow-left"></i></button>
+
+
+<div class="container">
+  <h2>Lista de Participantes para el Evento: {{ eventoNombre || eventoId }}</h2>
+
+  <!-- Tabla de datos -->
+  <table>
+    <thead>
+    <tr>
+      <th>ID</th>
+      <th>Nombre</th>
+      <th>Apellido</th>
+      <th>DNI</th>
+      <th>Código</th>
+      <th>Email</th>
+      <th>Horas Obtenidas</th>
+      <th>Status</th>
+      <th>Acciones</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let user of participantes">
+      <td>{{ user.id }}</td>
+      <td>{{ user.nombre }}</td>
+      <td>{{ user.apellido }}</td>
+      <td>{{ user.dni }}</td>
+      <td>{{ user.codigo }}</td>
+      <td>{{ user.email }}</td>
+      <td>{{ user.horas_obtenidas }}</td>
+      <td>{{ user.status }}</td>
+      <td class="actions">
+        <button class="edit-btn">✏️</button>
+        <button class="delete-btn">🗑️</button>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+
+  <!-- Paginación -->
+  <div class="pagination">
+    <span>Líneas por página:</span>
+    <select>
+      <option>10</option>
+      <option>20</option>
+      <option>50</option>
+    </select>
+    <span>1-10 de {{ participantes.length }} registros</span>
+    <button>Anterior</button>
+    <button>Siguiente</button>
+  </div>
+</div>

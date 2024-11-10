@@ -15,7 +15,6 @@ const routes: Routes = [
   { path: '', component: DashboardComponent }, // Página de inicio
   { path: 'login', component: LoginComponent }, // Ruta del login
   { path: 'main', component: LayoutComponent, canActivate: [AuthGuard] },
-
   {
     path: '',
     component: LayoutComponent,
@@ -25,7 +24,7 @@ const routes: Routes = [
       { path: 'eventos_participados', component: EventosParticipadosComponent },
       { path: 'gestion_eventos', component: GestionEventosComponent },
       { path: 'importar_datos', component: ImportarDatosComponent },
-      { path: 'lista_participantes', component: ListaParticipantesComponent},
+      { path: 'lista_participantes/:id', component: ListaParticipantesComponent},
       { path: '', redirectTo: 'proximos_eventos', pathMatch: 'full' }
     ]
   }
