@@ -89,4 +89,10 @@ public class InscripcionesController {
         Inscripciones updatedUser = inscripcionesService.actualizar(inscripciones);
         return ResponseEntity.ok(updatedUser);
     }
+
+    // Obtener eventos en los que un usuario está inscrito
+    @GetMapping("/usuario/{usuarioId}/eventos")
+    public List<Evento> getEventosPorUsuarioId(@PathVariable Integer usuarioId) {
+        return inscripcionesService.getEventosPorUsuarioId(usuarioId);
+    }
 }

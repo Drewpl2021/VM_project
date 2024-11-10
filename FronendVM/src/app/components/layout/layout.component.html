@@ -3,11 +3,23 @@
 
   <!-- Barra lateral fija -->
   <div [class.sidebar]="sidebarVisible">
-    <a style="color: white">Bienvenido  {{ usuario.nombre }} {{ usuario.apellido }} </a>
-    <a style="margin-top: 50px" routerLink="/proximos_eventos" routerLinkActive="active">Próximos Eventos</a>
-    <a routerLink="/eventos_participados" routerLinkActive="active">Eventos Participados</a>
-    <a routerLink="/gestion_eventos" routerLinkActive="active">Gestión de Eventos</a>
-    <a routerLink="/importar_datos" routerLinkActive="active">Gestión de Usuarios</a>
+    <div style="display: flex; justify-content: center; align-items: center;">
+      <p style="color: white; text-align: center;">
+        <i class="fa-regular fa-user" style="font-size: 2em;"></i><br>
+        {{ usuario.nombre }} {{ usuario.apellido }}
+      </p>
+    </div>
+
+    <!-- Opciones de menú según el rol -->
+    <ng-container *ngIf="usuario.rol">
+      <!-- Opciones para el rol 1 (e.g., "ROLE_USER") -->
+      <a *ngIf="usuario.rol === 'Estudiante'" style="margin-top: 50px" routerLink="/proximos_eventos" routerLinkActive="active">Próximos Eventos</a>
+      <a *ngIf="usuario.rol === 'Estudiante'" routerLink="/eventos_participados" routerLinkActive="active">Eventos Participados</a>
+
+      <!-- Opciones para el rol 2 (e.g., "ROLE_ADMIN") -->
+      <a *ngIf="usuario.rol === 'Coordinador'" routerLink="/gestion_eventos" routerLinkActive="active">Gestión de Eventos</a>
+      <a *ngIf="usuario.rol === 'Coordinador'" routerLink="/importar_datos" routerLinkActive="active">Gestión de Usuarios</a>
+    </ng-container>
 
     <div class="profile-section">
       <button (click)="logout()" class="logout-btn">
@@ -23,4 +35,3 @@
   </div>
 
 </div>
-

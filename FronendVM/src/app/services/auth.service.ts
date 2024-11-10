@@ -10,6 +10,7 @@ import {Router} from "@angular/router";
 export class AuthService {
   private apiUrl = 'http://localhost:8080/auth';
   private authenticatedUserEmail: string | null = null;
+  private usuario: any = null;
 
   constructor(private http: HttpClient,
               private router: Router) {
@@ -21,6 +22,9 @@ export class AuthService {
         localStorage.setItem('isAuthenticated', 'true'); // Guardar estado de autenticación
       })
     );
+  }
+  getAuthenticatedUserData() {
+    return this.usuario;
   }
 
   isLoggedIn(): boolean {

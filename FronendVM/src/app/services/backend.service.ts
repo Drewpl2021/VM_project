@@ -97,5 +97,10 @@ export class BackendService {
   obtenerEventoPorId(eventoId: number): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}/evento/${eventoId}`);
   }
+  obtenerEventosInscritosPorUsuario(usuarioId: number): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/inscripciones/usuario/${usuarioId}/eventos`);
+  }
+
+
 
 }

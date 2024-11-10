@@ -13,7 +13,7 @@
   position: fixed;
   top: 0;
   left: 0;
-  background-color: #333;
+  background-color: #00234b;
   padding-top: 20px;
   overflow-x: hidden; /* Oculta el scroll horizontal */
 }
@@ -27,18 +27,29 @@
   display: block;
   transition: 0.3s;
 }
+/* Enlaces dentro de la barra */
+.sidebar p {
+  padding: 15px 10px;
+  text-decoration: none;
+  font-size: 18px;
+  color: white;
+  display: block;
+  transition: 0.3s;
+}
 
 /* Hover efecto en enlaces */
 .sidebar a:hover {
-  background-color: #575757;
+  background-color: #058df3;
   color: #fff;
 }
 
 /* Estado activo del enlace */
 .sidebar a.active {
-  background-color: #4CAF50;
+  background-color: #0170cc;
   color: white;
 }
+
+
 
 /* Contenido principal */
 .content {
@@ -49,7 +60,7 @@
 }
 
 .sidebar a.active {
-  background-color: #4CAF50;
+  background-color: #0170cc;
   color: white;
 }
 /* Sección del perfil */
@@ -59,7 +70,7 @@
   width: 100%;
   text-align: center;
   padding: 10px 0;
-  background-color: #333;
+  background-color: #00234b;
 }
 
 .profile-pic {

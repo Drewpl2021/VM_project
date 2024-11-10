@@ -43,7 +43,8 @@ public class AuthController {
             response.put("nombre", userData.getNombre());
             response.put("apellido", userData.getApellido());
             response.put("email", userData.getEmail());
-            // Agrega más campos si los necesitas
+            // Obtiene el nombre o el ID del rol y lo agrega a la respuesta
+            response.put("rol", userData.getRol().getNombre()); // Ajusta según tu modelo de Roles
 
             return ResponseEntity.ok(response);
         } else {

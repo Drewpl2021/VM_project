@@ -32,6 +32,7 @@ registerLocaleData(localeEs, 'es');
     ListaParticipantesComponent,
 
 
+
   ],
   imports: [
     BrowserModule,

@@ -1,0 +1,14 @@
+.estado-sello {
+  width: 80px; /* Ajusta el tamaño para mayor visibilidad */
+  position: absolute;
+  top: 10px; /* Desplaza hacia abajo desde el borde superior */
+  right: 10px; /* Desplaza hacia la izquierda desde el borde derecho */
+  opacity: 0.9; /* Ajusta la opacidad para mejor integración */
+}
+.container {
+  max-width: 1500px;
+  margin: auto;
+  background-color: #ffffff;
+  padding: 20px;
+  border-radius: 8px;
+}

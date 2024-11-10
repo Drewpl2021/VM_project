@@ -10,9 +10,10 @@ import {AuthService} from "../../services/auth.service";
 export class LayoutComponent implements OnInit {
   sidebarVisible: boolean = true;
   usuario: any = {};
+  userRole: number | null = null;
 
   constructor(private router: Router,
-              private authService: AuthService) {}
+              private authService: AuthService,) {}
 
 
   ngOnInit(): void {
@@ -36,6 +37,7 @@ export class LayoutComponent implements OnInit {
       (userData) => {
         console.log('Datos del usuario autenticado:', userData); // Este log mostrará el nombre y apellido
         this.usuario = userData;
+        this.userRole = userData.roles_id;
       },
       (error) => {
         console.error('Error al obtener los datos del usuario:', error);

@@ -1,6 +1,7 @@
 package org.example.projectvm.service;
 
 
+import org.example.projectvm.entity.Evento;
 import org.example.projectvm.entity.Inscripciones;
 import org.example.projectvm.entity.User;
 import org.example.projectvm.repository.InscripcionesRepository;
@@ -40,6 +41,9 @@ public class InscripcionesService {
         return inscripcionesRepository.findByEventoId(eventoId).stream()
                 .map(Inscripciones::getUsuario)
                 .collect(Collectors.toList());
+    }
+    public List<Evento> getEventosPorUsuarioId(Integer usuarioId) {
+        return inscripcionesRepository.findEventosByUsuarioId(usuarioId);
     }
 
 
