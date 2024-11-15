@@ -9,9 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @RestController
@@ -31,11 +29,27 @@ public class UserController {
 
     // Obtener un usuario por ID
     @GetMapping("/{id}")
-    public ResponseEntity<User> getUserById(@PathVariable Integer id) {
-        return userService.getUserById(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+    public ResponseEntity<Map<String, Object>> getUserById(@PathVariable Integer id) {
+        Optional<User> user = userService.getUserById(id);
+
+        if (user.isPresent()) {
+            Map<String, Object> response = new HashMap<>();
+            response.put("id", user.get().getId());
+            response.put("nombre", user.get().getNombre());
+            response.put("apellido", user.get().getApellido());
+            response.put("dni", user.get().getDni());
+            response.put("codigo", user.get().getCodigo());
+            response.put("email", user.get().getEmail());
+            response.put("horas_obtenidas", user.get().getHoras_obtenidas());
+            response.put("status", user.get().getStatus().name());
+            response.put("carreras_id", user.get().getCarrera().getId()); // Solo el ID
+            response.put("roles_id", user.get().getRol().getId()); // Solo el ID
+            return ResponseEntity.ok(response);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
     }
+
 
     // Obtener un usuario por Codigo
     @GetMapping("codigo/{codigo}")
