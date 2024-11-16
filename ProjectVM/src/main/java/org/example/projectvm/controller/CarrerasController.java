@@ -1,7 +1,9 @@
 package org.example.projectvm.controller;
 
 
+import jakarta.annotation.PostConstruct;
 import org.example.projectvm.entity.Carreras;
+import org.example.projectvm.repository.CarrerasRepository;
 import org.example.projectvm.service.CarrerasService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +17,8 @@ import java.util.List;
 public class CarrerasController {
     @Autowired
     private CarrerasService carrerasService;
+    @Autowired
+    private CarrerasRepository carrerasRepository;
 
     // Listar todos
     @GetMapping
@@ -50,5 +54,14 @@ public class CarrerasController {
         carreras.setId(id); // Establece el ID para asegurarte de que estás actualizando el registro correcto
         Carreras updatedUser = carrerasService.actualizar(carreras);
         return ResponseEntity.ok(updatedUser);
+    }
+
+    @PostConstruct
+    public void initCarreras() {
+        if (carrerasRepository.count() == 0) { // Verifica si la tabla está vacía
+            Carreras carrera = new Carreras();
+            carrera.setNombre("Ingeniería de Sistemas");
+            carrerasRepository.save(carrera); // Guarda el registro en la base de datos
+        }
     }
 }

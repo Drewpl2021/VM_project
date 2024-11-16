@@ -1,6 +1,11 @@
 package org.example.projectvm.controller;
 
+import jakarta.annotation.PostConstruct;
+import org.example.projectvm.entity.Carreras;
+import org.example.projectvm.entity.Roles;
 import org.example.projectvm.entity.User;
+import org.example.projectvm.repository.CarrerasRepository;
+import org.example.projectvm.repository.RolesRepository;
 import org.example.projectvm.repository.UserRepository;
 import org.example.projectvm.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +25,10 @@ public class UserController {
     private UserService userService;
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private RolesRepository rolesRepository;
+    @Autowired
+    private CarrerasRepository carrerasRepository;
 
     // Listar todos los usuarios
     @GetMapping
@@ -131,9 +140,6 @@ public class UserController {
         return ResponseEntity.ok(usuarios);
     }
 
-
-
-
     @PostMapping("/upload")
     public ResponseEntity<String> uploadFile(@RequestParam("file") MultipartFile file) {
         if (file.isEmpty()) {
@@ -150,6 +156,34 @@ public class UserController {
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al procesar el archivo.");
+        }
+    }
+
+    @PostConstruct
+    public void initUsuario() {
+        if (userRepository.count() == 0) { // Verifica si no hay usuarios registrados
+            // Busca el rol con ID 2
+            Roles rol = rolesRepository.findById(2).orElseThrow(() -> new RuntimeException("Rol no encontrado"));
+
+            // Busca la carrera con ID 1
+            Carreras carrera = carrerasRepository.findById(1).orElseThrow(() -> new RuntimeException("Carrera no encontrada"));
+
+            // Crea un nuevo usuario
+            User usuario = new User();
+            usuario.setNombre("Eder");
+            usuario.setApellido("Gutierrez Quispe");
+            usuario.setDni("41857964");
+            usuario.setCodigo(null); // Campo código como NULL
+            usuario.setEmail("eder.gutierres@gmail.com");
+            usuario.setPassword("12345"); // Mejor encriptar la contraseña
+            usuario.setPrivate_ingreso("1");
+            usuario.setHoras_obtenidas(0);
+            usuario.setStatus(User.Status.Docente); // Estado inicial
+            usuario.setRol(rol); // Asigna el rol con ID 2
+            usuario.setCarrera(carrera); // Asigna la carrera con ID 1
+
+            // Guarda el usuario en la base de datos
+            userRepository.save(usuario);
         }
     }
 }

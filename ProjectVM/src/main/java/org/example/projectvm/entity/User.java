@@ -1,10 +1,14 @@
 package org.example.projectvm.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
-@Entity
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Entity
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,8 +24,9 @@ public class User {
     @Enumerated(EnumType.STRING)
     private Status status;
     public enum Status {
-        Cachimbo,
+        Estudiante,
         Egresado,
+        Docente
 
     }
 
