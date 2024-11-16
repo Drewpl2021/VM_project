@@ -1,6 +1,7 @@
-<button routerLink="/gestion_eventos"><i class="fa-solid fa-arrow-left"></i></button>
-
-
+<div style="display: flex">
+<button routerLink="/gestion_eventos" class="styled-back-button">
+  <i class="fa-solid fa-arrow-left"></i>
+</button>
 <div class="container">
   <h2>Lista de Participantes de {{ eventoNombre || eventoId }}</h2>
   <br>
@@ -70,4 +71,5 @@
     <button>Anterior</button>
     <button>Siguiente</button>
   </div>
+</div>
 </div>

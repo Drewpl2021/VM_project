@@ -1,7 +1,9 @@
 package org.example.projectvm.controller;
 
 
+import jakarta.annotation.PostConstruct;
 import org.example.projectvm.entity.Roles;
+import org.example.projectvm.repository.RolesRepository;
 import org.example.projectvm.service.RolesService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +17,9 @@ import java.util.List;
 public class RolesController {
     @Autowired
     private RolesService rolesService;
+
+    @Autowired
+    private RolesRepository rolesRepository;
 
     // Listar todos
     @GetMapping
@@ -50,5 +55,14 @@ public class RolesController {
         roles.setId(id); // Establece el ID para asegurarte de que estás actualizando el registro correcto
         Roles updatedUser = rolesService.actualizar(roles);
         return ResponseEntity.ok(updatedUser);
+    }
+
+    @PostConstruct
+    public void initRoles() {
+        if (rolesRepository.count() == 0) { // Verifica si la tabla está vacía
+            rolesRepository.save(new Roles(null, "Estudiante"));
+            rolesRepository.save(new Roles(null, "Coordinador"));
+            rolesRepository.save(new Roles(null, "Administrador"));
+        }
     }
 }

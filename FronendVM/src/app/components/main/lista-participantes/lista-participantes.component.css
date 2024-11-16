@@ -120,3 +120,34 @@ table tbody tr:nth-child(even) {
   padding: 10px;
   cursor: pointer;
 }
+input.form-control {
+  width: 80px;
+  padding: 2px;
+  text-align: center;
+}
+
+
+
+.styled-back-button {
+  background-color: #005fb1; /* Color de fondo */
+  color: white; /* Color del ícono */
+  border: none; /* Sin bordes */
+  border-radius: 50%; /* Forma circular */
+  width: 40px; /* Ancho del botón */
+  height: 40px; /* Altura del botón */
+  display: flex; /* Centrar contenido */
+  justify-content: center; /* Centrar contenido horizontalmente */
+  align-items: center; /* Centrar contenido verticalmente */
+  cursor: pointer; /* Cursor de mano al pasar por encima */
+  transition: background-color 0.3s ease, transform 0.2s ease; /* Transiciones suaves */
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2); /* Sombra para darle profundidad */
+}
+
+.styled-back-button:hover {
+  background-color: #003f7f; /* Color más oscuro al pasar el ratón */
+  transform: scale(1.1); /* Aumenta ligeramente el tamaño */
+}
+
+.styled-back-button:active {
+  transform: scale(0.95); /* Efecto de presión al hacer clic */
+}
