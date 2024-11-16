@@ -11,7 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import java.util.*;
 
 @RestController
 @RequestMapping("/inscripciones")
@@ -40,25 +40,26 @@ public class InscripcionesController {
 
     @PostMapping
     public ResponseEntity<Inscripciones> createInscripciones(@RequestBody Inscripciones inscripcion) {
-        // Obtener los IDs de usuario y evento
         Integer userId = inscripcion.getUsuario().getId();
         Integer eventoId = inscripcion.getEvento().getId();
 
-        // Buscar el usuario y el evento por sus IDs
         User usuario = userService.getUserById(userId)
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
         Evento evento = eventoService.getById(eventoId)
                 .orElseThrow(() -> new RuntimeException("Evento no encontrado"));
 
-        // Asignar las entidades encontradas a la inscripción
         inscripcion.setUsuario(usuario);
         inscripcion.setEvento(evento);
 
-        // Guardar la inscripción
         Inscripciones savedInscripcion = inscripcionesService.create(inscripcion);
+
+        // Llamada al método para actualizar horas del usuario
+        inscripcionesService.actualizarHorasUsuario(userId);
 
         return ResponseEntity.ok(savedInscripcion);
     }
+
+
     // InscripcionesController.java
     @GetMapping("/verificar")
     public ResponseEntity<Boolean> verificarInscripcion(
@@ -69,30 +70,61 @@ public class InscripcionesController {
     }
 
     @GetMapping("/evento/{eventoId}/participantes")
-    public ResponseEntity<List<User>> obtenerParticipantesPorEvento(@PathVariable Integer eventoId) {
-        List<User> participantes = inscripcionesService.obtenerParticipantesPorEvento(eventoId);
+    public ResponseEntity<List<Map<String, Object>>> obtenerParticipantesPorEvento(@PathVariable Integer eventoId) {
+        List<Map<String, Object>> participantes = inscripcionesService.obtenerParticipantesPorEvento(eventoId);
         return ResponseEntity.ok(participantes);
     }
+
+
 
     // Eliminar
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Integer id) {
+        Inscripciones inscripcion = inscripcionesService.getById(id)
+                .orElseThrow(() -> new RuntimeException("Inscripción no encontrada"));
+
         inscripcionesService.delete(id);
+
+        // Llamada al método para actualizar horas del usuario
+        inscripcionesService.actualizarHorasUsuario(inscripcion.getUsuario().getId());
+
         return ResponseEntity.noContent().build();
     }
 
-    //Actualizar
+
     @PutMapping("/{id}")
-    public ResponseEntity<Inscripciones> actualizar(@PathVariable Integer id, @RequestBody Inscripciones inscripciones) {
-        // Aquí puedes verificar que el ID del usuario en el cuerpo coincide con el ID de la ruta
-        inscripciones.setId(id); // Establece el ID para asegurarte de que estás actualizando el registro correcto
-        Inscripciones updatedUser = inscripcionesService.actualizar(inscripciones);
-        return ResponseEntity.ok(updatedUser);
+    public ResponseEntity<Inscripciones> actualizar(@PathVariable Integer id, @RequestBody Map<String, Object> updates) {
+        Optional<Inscripciones> inscripcionOptional = inscripcionesService.getById(id);
+
+        if (inscripcionOptional.isPresent()) {
+            Inscripciones inscripcion = inscripcionOptional.get();
+
+            // Actualizar las horas obtenidas si se incluye en el cuerpo de la solicitud
+            if (updates.containsKey("horas_obtenidas")) {
+                inscripcion.setHoras_obtenidas((Integer) updates.get("horas_obtenidas"));
+            }
+
+            Inscripciones updatedInscripcion = inscripcionesService.actualizar(inscripcion);
+
+            // Actualizar las horas obtenidas en el usuario relacionado
+            inscripcionesService.actualizarHorasUsuario(inscripcion.getUsuario().getId());
+
+            return ResponseEntity.ok(updatedInscripcion);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
+
+
 
     // Obtener eventos en los que un usuario está inscrito
     @GetMapping("/usuario/{usuarioId}/eventos")
     public List<Evento> getEventosPorUsuarioId(@PathVariable Integer usuarioId) {
         return inscripcionesService.getEventosPorUsuarioId(usuarioId);
     }
+
+
+
+
+
 }

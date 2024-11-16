@@ -2,7 +2,20 @@
 
 
 <div class="container">
-  <h2>Lista de Participantes para el Evento: {{ eventoNombre || eventoId }}</h2>
+  <h2>Lista de Participantes de {{ eventoNombre || eventoId }}</h2>
+  <br>
+  <div class="search-bar">
+    <input type="text" placeholder="Buscar"/>
+    <button class="add-button" (click)="toggleEditMode()" style="background-color: #005fb1; color: white">
+      {{ editMode ? 'Guardar cambios' : 'Editar Horas' }}
+    </button>
+    <button class="add-button" style="background-color: #005fb1; color: white">
+      Agregar Participantes
+    </button>
+    <button class="add-button" style="background-color: #005fb1; color: white">
+      Importar Participantes
+    </button>
+  </div>
 
   <!-- Tabla de datos -->
   <table>
@@ -17,17 +30,31 @@
     </tr>
     </thead>
     <tbody>
-    <tr *ngFor="let user of participantes">
-      <td>{{ user.id }}</td>
-      <td>{{ user.nombre }}</td>
-      <td>{{ user.apellido }}</td>
-      <td>{{ user.codigo }}</td>
-      <td>{{ user.horas_obtenidas }}</td>
+    <tr *ngFor="let participante of participantes">
+      <td>{{ participante.idUsuario }}</td>
+      <td>{{ participante.nombre }}</td>
+      <td>{{ participante.apellido }}</td>
+      <td>{{ participante.codigo }}</td>
+      <td>
+        <!-- Mostrar input solo en modo de edición -->
+        <ng-container *ngIf="editMode; else displayText">
+          <input
+            type="number"
+            [(ngModel)]="participante.horas_obtenidas"
+            class="form-control"
+            (change)="convertirANumero(participante)"
+          >
+        </ng-container>
+        <!-- Mostrar texto cuando no está en modo de edición -->
+        <ng-template #displayText>
+          {{ participante.horas_obtenidas }}
+        </ng-template>
+      </td>
       <td class="actions">
-        <button class="edit-btn">✏️</button>
-        <button class="delete-btn">🗑️</button>
+        <button class="delete-btn" (click)="eliminarParticipante(participante.idInscripcion)">🗑️</button>
       </td>
     </tr>
+
     </tbody>
   </table>
 

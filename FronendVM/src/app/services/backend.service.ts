@@ -10,71 +10,61 @@ export class BackendService {
 
   constructor(private http: HttpClient) { }
 
-  // Método para obtener datos de carrera
+
+  //Carrera
   getData(): Observable<any> {
     return this.http.get(`${this.apiUrl}/carreras`);
   }
-  // Método para crear un evento
-  createEvento(evento: any): Observable<any> {
-    return this.http.post(`${this.apiUrl}/evento`, evento);
-  }
-  // Método para actualizar un evento
-  actualizarEvento(id: number, evento: any): Observable<any> {
-    return this.http.put(`${this.apiUrl}/evento/${id}`, evento);
-  }
 
-  // Método para buscar usuarios por nombre
-  buscarUsuariosPorNombre(nombre: string): Observable<any> {
-    return this.http.get(`${this.apiUrl}/user/nombre/${nombre}`);
-  }
-  // Método para buscar usuarios por un término general
-  buscarUsuariosPorTermino(termino: string): Observable<any> {
-    return this.http.get(`${this.apiUrl}/user/buscar?termino=${termino}`);
-  }
-
-  // Método para enviar datos
   postData(data: any): Observable<any> {
     return this.http.post(`${this.apiUrl}/carreras`, data);
   }
 
-  // Método para obtener datos
-  buscarPorCodigo(codigo: string): Observable<any> {
-    return this.http.get(`${this.apiUrl}/user/codigo/${codigo}`);
+
+
+  // Eventos
+  createEvento(evento: any): Observable<any> {
+    return this.http.post(`${this.apiUrl}/evento`, evento);
   }
 
-  // Método para obtener datos
-  buscarPorDni(dni: string): Observable<any> {
-    return this.http.get(`${this.apiUrl}/user/dni/${dni}`);
+  actualizarEvento(id: number, evento: any): Observable<any> {
+    return this.http.put(`${this.apiUrl}/evento/${id}`, evento);
   }
-  // Método para eliminar un evento por su ID
+
   deleteEvento(id: number): Observable<any> {
     return this.http.delete(`${this.apiUrl}/evento/${id}`);
   }
 
-  //Metodo para obtener datos de evento
   getEventos(): Observable<any[]> {
     return this.http.get<any[]>(`${this.apiUrl}/evento`);
   }
 
-  //Metodo para subir el documento
+  obtenerEventoPorId(eventoId: number): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/evento/${eventoId}`);
+  }
+
+
+
+  //  Usuarios
+  buscarUsuariosPorNombre(nombre: string): Observable<any> {
+    return this.http.get(`${this.apiUrl}/user/nombre/${nombre}`);
+  }
+
+  buscarUsuariosPorTermino(termino: string): Observable<any> {
+    return this.http.get(`${this.apiUrl}/user/buscar?termino=${termino}`);
+  }
+
+  buscarPorCodigo(codigo: string): Observable<any> {
+    return this.http.get(`${this.apiUrl}/user/codigo/${codigo}`);
+  }
+
+  buscarPorDni(dni: string): Observable<any> {
+    return this.http.get(`${this.apiUrl}/user/dni/${dni}`);
+  }
+
   uploadExcel(formData: FormData): Observable<any> {
     return this.http.post(`${this.apiUrl}/user/upload`, formData);
   }
-
-  // inscribirse
-  inscribirUsuario(inscripcion: any): Observable<any> {
-    return this.http.post(`${this.apiUrl}/inscripciones`, inscripcion);
-  }
-
-  verificarInscripcion(usuarioId: number, eventoId: number): Observable<boolean> {
-    const params = new HttpParams()
-      .set('usuarioId', usuarioId.toString())
-      .set('eventoId', eventoId.toString());
-
-    return this.http.get<boolean>(`${this.apiUrl}/inscripciones/verificar`, { params });
-  }
-
-  //User:
   getAllUsers(): Observable<any[]> {
     return this.http.get<any[]>(`${this.apiUrl}/user`);
   }
@@ -90,17 +80,36 @@ export class BackendService {
   deleteUser(id: number): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/user/${id}`);
   }
+
+
+
+  // Inscripciones
+  inscribirUsuario(inscripcion: any): Observable<any> {
+    return this.http.post(`${this.apiUrl}/inscripciones`, inscripcion);
+  }
+
+  verificarInscripcion(usuarioId: number, eventoId: number): Observable<boolean> {
+    const params = new HttpParams()
+      .set('usuarioId', usuarioId.toString())
+      .set('eventoId', eventoId.toString());
+
+    return this.http.get<boolean>(`${this.apiUrl}/inscripciones/verificar`, { params });
+  }
+
   obtenerParticipantes(eventoId: number): Observable<any[]> {
     return this.http.get<any[]>(`${this.apiUrl}/inscripciones/evento/${eventoId}/participantes`);
   }
-  // Método para obtener un evento por su ID y obtener su nombre
-  obtenerEventoPorId(eventoId: number): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}/evento/${eventoId}`);
-  }
+
   obtenerEventosInscritosPorUsuario(usuarioId: number): Observable<any[]> {
     return this.http.get<any[]>(`${this.apiUrl}/inscripciones/usuario/${usuarioId}/eventos`);
   }
 
+  eliminarParticipante(participanteId: number): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/inscripciones/participante/${participanteId}`);
+  }
 
+  actualizarInscripcion(idInscripcion: number, payload: any): Observable<any> {
+    return this.http.put(`${this.apiUrl}/inscripciones/${idInscripcion}`, payload);
+  }
 
 }

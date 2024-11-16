@@ -14,5 +14,6 @@ public interface InscripcionesRepository extends JpaRepository<Inscripciones, In
     List<Inscripciones> findByEventoId(Integer eventoId);
     @Query("SELECT i.evento FROM Inscripciones i WHERE i.usuario.id = :usuarioId")
     List<Evento> findEventosByUsuarioId(@Param("usuarioId") Integer usuarioId);
+    List<Inscripciones> findByUsuarioId(Integer usuarioId);
 
 }

@@ -3,21 +3,21 @@
     <h2><b>Usuarios</b></h2>
     <div class="search-bar">
       <input type="text" placeholder="Buscar " [(ngModel)]="searchTerm" (input)="buscarUsuarios()" />
-      <button class="add-button" style="background-color: #005fb1; color: white"><i class="fa-solid fa-plus" ></i> Nuevo Usuario</button>
-      <!-- Formulario de carga de archivo con estilo integrado -->
-      <form (ngSubmit)="uploadFile()" class="file-upload-form">
-        <label for="formFile" class="form-label">
-          <i class="fa-solid fa-file-import"></i> Importar Datos
-        </label>
-        <input class="form-control file-input" type="file" id="formFile"
-               (change)="onFileChange($event)"
-               accept=".xlsx"
-               required>
-        <button type="submit" class="submit-button">Subir Archivo</button>
-      </form>
-
-    </div>
-
+      <button class="add-button" (click)="abrirModalCrearUsuario()" style="background-color: #005fb1; color: white">
+        <i class="fa-solid fa-plus"></i> Nuevo Usuario
+      </button>
+        <!-- Formulario de carga de archivo con estilo integrado -->
+        <form (ngSubmit)="uploadFile()" class=" form file-upload-form" style="">
+          <label for="formFile" class="form-label">
+            <i class="fa-solid fa-file-import"></i> Importar Datos
+          </label>
+          <input class="form-control file-input" type="file" id="formFile"
+                 (change)="onFileChange($event)"
+                 accept=".xlsx"
+                 required>
+          <button type="submit" class="submit-button">Subir Archivo</button>
+        </form>
+      </div>
   </div>
 
 
@@ -32,7 +32,7 @@
       <th>Código</th>
       <th>Email</th>
       <th>Horas Obtenidas</th>
-      <th>Status</th>
+      <th>Estado</th>
       <th>Acciones</th>
     </tr>
     </thead>
@@ -47,8 +47,8 @@
       <td>{{ user.horas_obtenidas }}</td>
       <td>{{ user.status }}</td>
       <td class="actions">
-        <button class="edit-btn">✏️</button>
-        <button class="delete-btn">🗑️</button>
+        <button class="edit-btn" (click)="abrirModalEditarUsuario(user)">✏️</button>
+        <button class="delete-btn" (click)="eliminarUsuario(user.id)">🗑️</button>
       </td>
     </tr>
     </tbody>
@@ -66,6 +66,74 @@
     <button>Siguiente</button>
   </div>
 </div>
+
+
+<!-- Modal para crear usuario -->
+<div *ngIf="mostrarModalCrear || mostrarModalEditar" class="modal-overlay" (click)="cerrarModal()">
+  <div class="modal-dialog" (click)="$event.stopPropagation()">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Crear Usuario</h5>
+        <button type="button" class="btn-close" (click)="cerrarModal()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <form (ngSubmit)="crearUsuario()">
+          <div style="display: flex">
+            <div class="form-group">
+              <label for="nombre">Nombre</label>
+              <input type="text" class="form-control" [(ngModel)]="usuarioForm.nombre" name="nombre" required />
+            </div>
+            <div class="form-group">
+              <label for="apellido">Apellido</label>
+              <input type="text" class="form-control" [(ngModel)]="usuarioForm.apellido" name="apellido" required />
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="dni">DNI</label>
+            <input type="text" class="form-control" [(ngModel)]="usuarioForm.dni" name="dni" required />
+          </div>
+          <div class="form-group">
+            <label for="codigo">Código</label>
+            <input type="text" class="form-control" [(ngModel)]="usuarioForm.codigo" name="codigo" required />
+          </div>
+          <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" class="form-control" [(ngModel)]="usuarioForm.email" name="email" required />
+          </div>
+          <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" class="form-control" [(ngModel)]="usuarioForm.password" name="password" required />
+          </div>
+          <div class="form-group">
+            <label for="private_ingreso">Private Ingreso</label>
+            <input type="text" class="form-control" [(ngModel)]="usuarioForm.private_ingreso" name="private_ingreso" required />
+          </div>
+          <div class="form-group">
+            <label for="horas_obtenidas">Horas Obtenidas</label>
+            <input type="number" class="form-control" [(ngModel)]="usuarioForm.horas_obtenidas" name="horas_obtenidas" required />
+          </div>
+          <div class="form-group">
+            <label for="status">Status</label>
+            <select class="form-control" [(ngModel)]="usuarioForm.status" name="status" required>
+              <option [value]="'Cachimbo'">Cachimbo</option>
+              <option [value]="'Egresado'">Egresado</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="carreras_id">Carrera</label>
+            <input type="number" class="form-control" [(ngModel)]="usuarioForm.carreras_id" name="carreras_id" required />
+          </div>
+          <div class="form-group">
+            <label for="roles_id">Rol</label>
+            <input type="number" class="form-control" [(ngModel)]="usuarioForm.roles_id" name="roles_id" required />
+          </div>
+          <button type="submit" class="btn btn-primary">Guardar</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
 
 
 

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {BackendService} from "../../../services/backend.service";
 
 @Component({
@@ -6,10 +6,26 @@ import {BackendService} from "../../../services/backend.service";
   templateUrl: './importar-datos.component.html',
   styleUrls: ['./importar-datos.component.css']
 })
-export class ImportarDatosComponent {
+export class ImportarDatosComponent implements OnInit {
   selectedFile: File | null = null;
   users: any[] = [];
   searchTerm: string = '';
+  mostrarModalCrear = false;
+  mostrarModalEditar = false;
+  usuarioForm: any = {
+    nombre: '',
+    apellido: '',
+    dni: '',
+    codigo: '',
+    email: '',
+    password: '',
+    private_ingreso: '',
+    horas_obtenidas: 0,
+    status: 'Cachimbo', // Valor predeterminado
+    carreras_id: null,
+    roles_id: null
+  };
+
 
   constructor(private backendService: BackendService) {}
 
@@ -21,6 +37,7 @@ export class ImportarDatosComponent {
       console.log('Archivo seleccionado:', file); // Confirmar que se seleccionó el archivo
     }
   }
+
 
   // Subir el archivo al backend
   uploadFile() {
@@ -78,6 +95,49 @@ export class ImportarDatosComponent {
         console.error('Error al obtener usuarios:', error);
       }
     );
+  }
+
+  abrirModalCrearUsuario(): void {
+    this.usuarioForm = {};
+    this.mostrarModalCrear = true;
+  }
+
+  abrirModalEditarUsuario(user: any): void {
+    this.mostrarModalEditar = true;
+    this.mostrarModalCrear = false;
+    this.usuarioForm = {
+      ...user,
+      carreras_id: user.carrera ? user.carrera.id : null,
+      roles_id: user.rol ? user.rol.id : null
+    };
+  }
+
+
+  cerrarModal(): void {
+    this.mostrarModalCrear = false;
+    this.mostrarModalEditar = false;
+  }
+
+  crearUsuario(): void {
+    this.backendService.createUser(this.usuarioForm).subscribe(() => {
+      this.obtenerUsuarios();
+      this.cerrarModal();
+    });
+  }
+
+  actualizarUsuario(): void {
+    this.backendService.updateUser(this.usuarioForm.id, this.usuarioForm).subscribe(() => {
+      this.obtenerUsuarios();
+      this.cerrarModal();
+    });
+  }
+
+  eliminarUsuario(id: number): void {
+    if (confirm('¿Estás seguro de que deseas eliminar este usuario?')) {
+      this.backendService.deleteUser(id).subscribe(() => {
+        this.obtenerUsuarios();
+      });
+    }
   }
 
 
