@@ -126,3 +126,112 @@ form {
 .custom-floating-label input:focus + label {
   color: #007bff;
 }
+.result-container {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.result-card {
+  width: 100%;
+  max-width: 400px;
+  background: #ffffff;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+  padding: 20px;
+  text-align: center;
+}
+
+.result-card .card-title {
+  font-size: 1.5rem;
+  color: #007bff;
+}
+
+.result-card .card-text {
+  font-size: 1.2rem;
+  color: #333;
+}
+
+.result-card .badge {
+  font-size: 1rem;
+  padding: 10px;
+}
+.error-container {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.alert-danger {
+  width: 100%;
+  max-width: 400px;
+  border-radius: 10px;
+  font-size: 1rem;
+  font-weight: bold;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+.card {
+  transition: transform 0.2s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+  transform: scale(1.03);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+}
+
+.card-title {
+  color: #005fb1;
+  font-weight: bold;
+}
+
+.btn-primary {
+  background-color: #005fb1;
+  border: none;
+}
+
+.btn-primary:hover {
+  background-color: #003f7f;
+}
+
+h2 {
+  color: #333;
+  font-weight: bold;
+}
+
+.card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+  transform: scale(1.05);
+  box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.3);
+}
+
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+  filter: invert(100%); /* Cambiar color de las flechas a blanco */
+}
+
+.carousel {
+  position: relative;
+}
+
+.carousel-item {
+  text-align: center;
+}
+
+.alert {
+  background-color: #f8d7da;
+  color: #721c24;
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.carousel-inner {
+  display: flex;
+  align-items: center;
+  min-height: 400px; /* Altura mínima para evitar saltos */
+}

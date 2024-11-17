@@ -27,51 +27,74 @@
         </button>
       </div>
     </form>
-    <div *ngIf="resultado">
-      <h3>Resultado de la búsqueda:</h3>
-      <p>{{ resultado.apellido }}, {{ resultado.nombre }}</p>
-      <p>Horas: {{ resultado.horas_obtenidas }}</p>
+    <div *ngIf="resultado" class="result-container">
+      <div class="card result-card shadow">
+        <div class="card-body">
+          <h5 class="card-title text-center">Resultado de la búsqueda</h5>
+          <hr />
+          <p class="card-text text-center">
+            <strong>{{ resultado.apellido }}, {{ resultado.nombre }}</strong>
+          </p>
+          <p class="card-text text-center">
+            <span class="badge bg-primary">Tiene {{ resultado.horas_obtenidas }} Horas De Vinculacion Con El Medio</span>
+          </p>
+        </div>
+      </div>
     </div>
-    <div *ngIf="error">
-      <p>{{ error }}</p>
+
+    <div *ngIf="error" class="error-container">
+      <div class="alert alert-danger text-center" role="alert">
+        <strong>{{ error }}</strong>
+      </div>
     </div>
+
   </div>
 
 
 
-  <div *ngIf="eventos.length > 0" class="container " style=" width: 600px;">
-    <h2>Proximos eventos</h2>
+  <div *ngIf="eventos.length > 0" class="container mt-5">
+    <h2 class="text-center mb-4">Próximos eventos</h2>
     <div id="carouselExampleCaptions" class="carousel slide" data-bs-ride="carousel">
       <div class="carousel-inner">
         <div *ngFor="let evento of eventosActivos; let i = index" class="carousel-item" [class.active]="i === 0">
-          <div class="card" style="width: 18rem; margin-left: 150px">
+          <div class="card mx-auto" style="width: 20rem; border-radius: 10px; overflow: hidden; box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);">
             <div class="card-body">
-              <h5>{{ evento.nombre }}</h5>
-              <p>{{ evento.lugar }} </p>
-              <p>Fecha: El dia {{ evento.fecha | date:'EEEE d \'de\' MMMM\' del\' y':'es' }} a las {{ evento.hora }}</p>
-              <p>Horas Validas: {{ evento.horas_obtenidas }}</p>
-              <p>Dirrección: {{ evento.direccion }}</p>
-              <a routerLink="/proximos_eventos" class="btn card-link" style="background-color: #005fb1; color: white;">Inscribirse</a>
+              <h5 class="card-title text-primary text-center">{{ evento.nombre }}</h5>
+              <p class="text-muted text-center">{{ evento.lugar }}</p>
+              <hr />
+              <p class="card-text">
+                <strong>Fecha:</strong> El día
+                {{ evento.fecha | date:'EEEE d \'de\' MMMM\' del\' y':'es' }} a las {{ evento.hora }}
+              </p>
+              <p class="card-text"><strong>Horas válidas:</strong> {{ evento.horas_obtenidas }}</p>
+              <p class="card-text"><strong>Dirección:</strong> {{ evento.direccion }}</p>
+              <div class="text-center">
+                <a routerLink="/proximos_eventos" class="btn btn-primary">Inscribirse</a>
+              </div>
             </div>
           </div>
         </div>
-
-
-
-        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
-          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-          <span class="visually-hidden">Anterior</span>
-        </button>
-        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="next">
-          <span class="carousel-control-next-icon" aria-hidden="true"></span>
-          <span class="visually-hidden">Siguiente</span>
-        </button>
       </div>
+
+      <!-- Botones de navegación -->
+      <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Anterior</span>
+      </button>
+      <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Siguiente</span>
+      </button>
     </div>
 
-    <div *ngIf="eventosActivos.length === 0" class="alert " role="alert" ><br>
-      <h4>No hay eventos disponibles.</h4> <br>
-      <img style="width: 200px;" src="https://img.freepik.com/vector-premium/hombre-esperando-stand-dibujos-animados_435121-89.jpg">
+    <!-- Mensaje si no hay eventos -->
+    <div *ngIf="eventosActivos.length === 0" class="text-center mt-5">
+      <h4 class="text-muted">No hay eventos disponibles.</h4>
+      <img
+        style="width: 200px;"
+        src="https://img.freepik.com/vector-premium/hombre-esperando-stand-dibujos-animados_435121-89.jpg"
+        alt="No eventos disponibles"
+      />
     </div>
   </div>
 
