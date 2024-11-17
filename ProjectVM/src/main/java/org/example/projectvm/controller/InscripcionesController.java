@@ -103,6 +103,9 @@ public class InscripcionesController {
             if (updates.containsKey("horas_obtenidas")) {
                 inscripcion.setHoras_obtenidas((Integer) updates.get("horas_obtenidas"));
             }
+            if (updates.containsKey("detalles")) {
+                inscripcion.setDetalles((String) updates.get("detalles"));
+            }
 
             Inscripciones updatedInscripcion = inscripcionesService.actualizar(inscripcion);
 

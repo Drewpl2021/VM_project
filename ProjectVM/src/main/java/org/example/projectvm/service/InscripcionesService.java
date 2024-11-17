@@ -55,6 +55,7 @@ public class InscripcionesService {
                     participanteData.put("apellido", inscripcion.getUsuario().getApellido());
                     participanteData.put("codigo", inscripcion.getUsuario().getCodigo());
                     participanteData.put("horas_obtenidas", inscripcion.getHoras_obtenidas()); // Horas obtenidas
+                    participanteData.put("detalles", inscripcion.getDetalles());
                     return participanteData;
                 })
                 .collect(Collectors.toList());

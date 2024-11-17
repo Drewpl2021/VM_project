@@ -115,7 +115,7 @@ export class BackendService {
   }
 
   eliminarParticipante(participanteId: number): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/inscripciones/participante/${participanteId}`);
+    return this.http.delete<void>(`${this.apiUrl}/inscripciones/${participanteId}`);
   }
 
   actualizarInscripcion(idInscripcion: number, payload: any): Observable<any> {

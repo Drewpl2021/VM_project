@@ -27,6 +27,7 @@
       <th>Apellido</th>
       <th>Código</th>
       <th>Horas Obtenidas</th>
+      <th>Descripcion</th>
       <th>Acciones</th>
     </tr>
     </thead>
@@ -37,8 +38,7 @@
       <td>{{ participante.apellido }}</td>
       <td>{{ participante.codigo }}</td>
       <td>
-        <!-- Mostrar input solo en modo de edición -->
-        <ng-container *ngIf="editMode; else displayText">
+        <ng-container *ngIf="editMode; else displayHoras">
           <input
             type="number"
             [(ngModel)]="participante.horas_obtenidas"
@@ -46,14 +46,26 @@
             (change)="convertirANumero(participante)"
           >
         </ng-container>
-        <!-- Mostrar texto cuando no está en modo de edición -->
-        <ng-template #displayText>
+        <ng-template #displayHoras>
           {{ participante.horas_obtenidas }}
+        </ng-template>
+      </td>
+      <td>
+        <ng-container *ngIf="editMode; else displayDetalles">
+    <textarea
+      [(ngModel)]="participante.detalles"
+      class="form-control"
+      rows="3"
+      placeholder="Escribe los detalles aquí..."></textarea>
+        </ng-container>
+        <ng-template #displayDetalles>
+          {{ truncarTexto(participante.detalles, 20) }}
         </ng-template>
       </td>
       <td class="actions">
         <button class="delete-btn" (click)="eliminarParticipante(participante.idInscripcion)">🗑️</button>
       </td>
+
     </tr>
 
     </tbody>
