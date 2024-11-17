@@ -4,6 +4,9 @@ package org.example.projectvm.controller;
 import org.example.projectvm.entity.Evento;
 import org.example.projectvm.entity.Inscripciones;
 import org.example.projectvm.entity.User;
+import org.example.projectvm.repository.EventoRepository;
+import org.example.projectvm.repository.InscripcionesRepository;
+import org.example.projectvm.repository.UserRepository;
 import org.example.projectvm.service.EventoService;
 import org.example.projectvm.service.InscripcionesService;
 import org.example.projectvm.service.UserService;
@@ -12,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/inscripciones")
@@ -23,6 +27,12 @@ public class InscripcionesController {
     private UserService userService;
     @Autowired
     private EventoService eventoService;
+    @Autowired
+    private UserRepository userRepository;
+    @Autowired
+    private EventoRepository eventoRepository;
+    @Autowired
+    private InscripcionesRepository inscripcionesRepository;
 
     // Listar todos
     @GetMapping
@@ -131,6 +141,21 @@ public class InscripcionesController {
         return inscripcionesService.findByUsuarioId(usuarioId);
     }
 
+    @PostMapping("/batch")
+    public ResponseEntity<?> agregarInscripciones(@RequestBody List<Map<String, Object>> inscripcionesData) {
+        List<Inscripciones> inscripciones = inscripcionesData.stream().map(data -> {
+            Inscripciones inscripcion = new Inscripciones();
+            inscripcion.setUsuario(userRepository.findById((Integer) data.get("usuarioId")).orElse(null));
+            inscripcion.setEvento(eventoRepository.findById((Integer) data.get("eventoId")).orElse(null));
+            inscripcion.setHoras_obtenidas((Integer) data.get("horas_obtenidas"));
+            inscripcion.setAnio_academico((String) data.get("anio_academico"));
+            inscripcion.setDetalles((String) data.get("detalles"));
+            return inscripcion;
+        }).collect(Collectors.toList());
+
+        inscripcionesRepository.saveAll(inscripciones);
+        return ResponseEntity.ok("Inscripciones agregadas correctamente.");
+    }
 
 
 }

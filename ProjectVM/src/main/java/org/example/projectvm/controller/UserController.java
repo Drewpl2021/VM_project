@@ -6,6 +6,7 @@ import org.example.projectvm.entity.Carreras;
 import org.example.projectvm.entity.Roles;
 import org.example.projectvm.entity.User;
 import org.example.projectvm.repository.CarrerasRepository;
+import org.example.projectvm.repository.InscripcionesRepository;
 import org.example.projectvm.repository.RolesRepository;
 import org.example.projectvm.repository.UserRepository;
 import org.example.projectvm.service.UserService;
@@ -30,6 +31,8 @@ public class UserController {
     private RolesRepository rolesRepository;
     @Autowired
     private CarrerasRepository carrerasRepository;
+    @Autowired
+    private InscripcionesRepository inscripcionesRepository;
 
     // Listar todos los usuarios
     @GetMapping
@@ -211,4 +214,22 @@ public class UserController {
             userRepository.save(usuario);
         }
     }
+
+    @GetMapping("/no-inscritos/{eventoId}")
+    public ResponseEntity<List<User>> obtenerUsuariosNoInscritos(@PathVariable Integer eventoId) {
+        // Obtener los IDs de los usuarios que ya están inscritos en el evento
+        List<Integer> usuariosInscritosIds = inscripcionesRepository.findUsuariosIdsByEventoId(eventoId);
+
+        // Si no hay usuarios inscritos, devuelve todos los estudiantes
+        if (usuariosInscritosIds.isEmpty()) {
+            usuariosInscritosIds = Collections.singletonList(-1); // Valor que no existirá en la base de datos
+        }
+
+        // Obtener la lista de usuarios que no están inscritos en este evento y son "Estudiantes"
+        List<User> usuariosNoInscritos = userRepository.findByIdNotInAndStatusEstudiante(usuariosInscritosIds);
+
+        return ResponseEntity.ok(usuariosNoInscritos);
+    }
+
+
 }

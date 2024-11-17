@@ -13,6 +13,15 @@ export class ListaParticipantesComponent implements OnInit {
   eventoNombre: string | null = null;
   participantes: any[] = [];
   editMode: boolean = false;
+  usuariosNoInscritos: any[] = []; // Lista de usuarios no inscritos con una propiedad 'seleccionado'
+  usuariosFiltrados: any[] = [];
+  busquedaUsuario: string = '';
+  mostrarModalAgregarParticipantes: boolean = false;
+  eventoHorasObtenidas: number = 0;
+  participantesOriginales: any[] = [];
+  usuariosNoInscritosOriginales: any[] = [];
+
+
 
   constructor(private route: ActivatedRoute,
               private backendService: BackendService) {}
@@ -34,19 +43,22 @@ export class ListaParticipantesComponent implements OnInit {
   cargarParticipantes(): void {
     this.backendService.obtenerParticipantes(this.eventoId!).subscribe(
       (data) => {
-        this.participantes = data;
-        console.log('Datos recibidos:', data);
+        this.participantesOriginales = [...data]; // Mantén una copia de los datos originales
+        this.participantes = [...data]; // Los datos que se mostrarán en la tabla
+        console.log('Participantes cargados:', data);
       },
       (error) => {
-        console.error("Error al obtener participantes:", error);
+        console.error('Error al cargar participantes:', error);
       }
     );
   }
+
 
   cargarNombreEvento(): void {
     this.backendService.obtenerEventoPorId(this.eventoId!).subscribe(
       (evento) => {
         this.eventoNombre = evento.nombre;
+        this.eventoHorasObtenidas = evento.horas_obtenidas; // Almacena las horas del evento
       },
       (error) => {
         console.error("Error al obtener el nombre del evento:", error);
@@ -77,26 +89,6 @@ export class ListaParticipantesComponent implements OnInit {
     }
   }
 
-
-
-  guardarCambios(): void {
-    this.participantes.forEach(participante => {
-      // Asegúrate de convertir horas_obtenidas a número antes de enviarlo
-      participante.horas_obtenidas = Number(participante.horas_obtenidas);
-
-      this.backendService.actualizarInscripcion(participante.idInscripcion, {
-        horas_obtenidas: participante.horas_obtenidas
-      }).subscribe(
-        () => {
-          console.log(`Horas obtenidas actualizadas para la inscripción con ID: ${participante.idInscripcion}`);
-        },
-        (error) => {
-          console.error("Error al actualizar las horas obtenidas:", error);
-        }
-      );
-    });
-  }
-
   convertirANumero(participante: any): void {
     participante.horas_obtenidas = Number(participante.horas_obtenidas);
   }
@@ -112,20 +104,181 @@ export class ListaParticipantesComponent implements OnInit {
       confirmButtonColor: '#d33',
       cancelButtonColor: '#3085d6',
       confirmButtonText: 'Sí, eliminar',
-      cancelButtonText: 'Cancelar'
+      cancelButtonText: 'Cancelar',
     }).then((result) => {
       if (result.isConfirmed) {
         this.backendService.eliminarParticipante(participanteId).subscribe(
           () => {
-            this.participantes = this.participantes.filter(part => part.id !== participanteId);
-            Swal.fire('Eliminado', 'El participante ha sido eliminado con éxito.', 'success');
+            Swal.fire('Eliminado', 'El participante ha sido eliminado con éxito.', 'success').then(() => {
+              // Refresca la página después de la eliminación
+              window.location.reload();
+            });
           },
           (error) => {
-            console.error("Error al eliminar participante:", error);
+            console.error('Error al eliminar participante:', error);
             Swal.fire('Error', 'Hubo un problema al eliminar al participante.', 'error');
           }
         );
       }
     });
   }
+// Método para abrir el modal y cargar usuarios no inscritos
+  abrirModalAgregarParticipantes(): void {
+    this.mostrarModalAgregarParticipantes = true;
+
+    // Llamar al backend para obtener los usuarios no inscritos
+    this.backendService.obtenerUsuariosNoInscritos(this.eventoId!).subscribe(
+      (data) => {
+        this.usuariosNoInscritos = data.map((usuario: any) => ({
+          ...usuario,
+          seleccionado: false // Agrega un campo temporal para manejar selección
+        }));
+        this.usuariosFiltrados = [...this.usuariosNoInscritos]; // Inicializa la lista filtrada
+      },
+      (error) => {
+        console.error('Error al obtener usuarios no inscritos:', error);
+      }
+    );
+  }
+
+// Método para cerrar el modal
+  cerrarModalAgregarParticipantes(): void {
+    this.mostrarModalAgregarParticipantes = false;
+  }
+
+// Método para filtrar usuarios en tiempo real
+  filtrarUsuariosNoInscritos(): void {
+    const termino = this.busquedaUsuario.trim().toLowerCase();
+    if (termino) {
+      this.backendService.buscarUsuariosPorTermino(termino).subscribe(
+        (resultado) => {
+          this.usuariosNoInscritos = resultado;
+          console.log('Usuarios filtrados:', resultado);
+        },
+        (error) => {
+          console.error('Error al buscar usuarios:', error);
+          this.usuariosNoInscritos = []; // Vacía la lista si hay error
+        }
+      );
+    } else {
+      // Si no hay término de búsqueda, muestra todos los usuarios no inscritos
+      this.usuariosNoInscritos = [...this.usuariosNoInscritos];
+    }
+  }
+
+  filtrarUsuarios(): void {
+    const termino = this.busquedaUsuario.trim().toLowerCase();
+    if (termino) {
+      // Filtra los participantes ya cargados en la tabla
+      this.participantes = this.participantesOriginales.filter((participante) =>
+        participante.nombre.toLowerCase().includes(termino) ||
+        participante.apellido.toLowerCase().includes(termino) ||
+        participante.codigo.toLowerCase().includes(termino)
+      );
+    } else {
+      // Si no hay término de búsqueda, muestra todos los participantes originales
+      this.participantes = [...this.participantesOriginales];
+    }
+  }
+
+
+  cargarUsuariosNoInscritos(): void {
+    this.backendService.obtenerUsuariosNoInscritos(this.eventoId!).subscribe(
+      (data) => {
+        this.usuariosNoInscritos = data.map(usuario => ({
+          ...usuario,
+          seleccionado: false // Añade la propiedad para rastrear la selección
+        }));
+      },
+      (error) => {
+        console.error("Error al cargar usuarios no inscritos:", error);
+      }
+    );
+  }
+
+
+  agregarParticipantes(): void {
+    const participantesSeleccionados = this.usuariosNoInscritos.filter(u => u.seleccionado);
+
+    if (participantesSeleccionados.length === 0) {
+      Swal.fire({
+        icon: 'warning',
+        title: 'Sin selección',
+        text: 'Por favor, selecciona al menos un participante.',
+      });
+      return;
+    }
+
+    const inscripcionesExitosas: any[] = [];
+    const inscripcionesFallidas: any[] = [];
+
+    participantesSeleccionados.forEach((participante, index) => {
+      this.backendService.crearInscripcion({
+        evento: { id: this.eventoId },
+        usuario: { id: participante.id },
+        horas_obtenidas: this.eventoHorasObtenidas,
+        anio_academico: "2024",
+        detalles: null,
+      }).subscribe(
+        response => {
+          console.log("Inscripción creada:", response);
+          inscripcionesExitosas.push(participante);
+
+          // Verifica si es el último participante
+          if (index === participantesSeleccionados.length - 1) {
+            this.finalizarInscripciones(inscripcionesExitosas, inscripcionesFallidas);
+          }
+        },
+        error => {
+          console.error(`Error al inscribir usuario ${participante.id}:`, error);
+          inscripcionesFallidas.push(participante);
+
+          // Verifica si es el último participante
+          if (index === participantesSeleccionados.length - 1) {
+            this.finalizarInscripciones(inscripcionesExitosas, inscripcionesFallidas);
+          }
+        }
+      );
+    });
+  }
+
+// Método para finalizar las inscripciones y cerrar el modal
+  private finalizarInscripciones(exitosos: any[], fallidos: any[]): void {
+    if (fallidos.length === 0) {
+      Swal.fire({
+        icon: 'success',
+        title: '¡Inscripciones completadas!',
+        text: `${exitosos.length} participantes inscritos correctamente.`,
+      }).then(() => {
+        // Recarga la página al cerrar la alerta
+        window.location.reload();
+      });
+    } else {
+      Swal.fire({
+        icon: 'warning',
+        title: 'Inscripciones completadas con errores',
+        html: `
+        <p>${exitosos.length} participantes inscritos correctamente.</p>
+        <p>${fallidos.length} inscripciones fallidas:</p>
+        <ul>
+          ${fallidos.map(f => `<li>${f.nombre} (${f.id})</li>`).join('')}
+        </ul>
+      `,
+      }).then(() => {
+        // Recarga la página al cerrar la alerta
+        window.location.reload();
+      });
+    }
+  }
+
+
+
+
+
+  detenerPropagacion(event: MouseEvent): void {
+    event.stopPropagation();
+  }
+
+
+
 }

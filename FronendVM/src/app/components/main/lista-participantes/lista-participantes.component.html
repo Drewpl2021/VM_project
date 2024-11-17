@@ -6,11 +6,17 @@
   <h2>Lista de Participantes de {{ eventoNombre || eventoId }}</h2>
   <br>
   <div class="search-bar">
-    <input type="text" placeholder="Buscar"/>
-    <button class="add-button" (click)="toggleEditMode()" style="background-color: #005fb1; color: white">
+      <input
+        type="text"
+        placeholder="Buscar por nombre, apellido o código"
+        [(ngModel)]="busquedaUsuario"
+        (input)="filtrarUsuarios()"
+        class="form-control"
+      />
+    <button class="add-button" (click)="toggleEditMode()" style="background-color: #005fb1; color: white" >
       {{ editMode ? 'Guardar cambios' : 'Editar Horas' }}
     </button>
-    <button class="add-button" style="background-color: #005fb1; color: white">
+    <button (click)="abrirModalAgregarParticipantes()" class="add-button" style="background-color: #005fb1; color: white">
       Agregar Participantes
     </button>
     <button class="add-button" style="background-color: #005fb1; color: white">
@@ -85,3 +91,82 @@
   </div>
 </div>
 </div>
+
+
+<div class="modal-overlay" tabindex="-1" [ngClass]="{ 'show': mostrarModalAgregarParticipantes }" *ngIf="mostrarModalAgregarParticipantes" (click)="cerrarModalAgregarParticipantes()">
+  <div class="modal-dialog" (click)="$event.stopPropagation()">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Agregar Participantes</h5>
+        <button type="button" class="btn-close" aria-label="Close" (click)="cerrarModalAgregarParticipantes()"></button>
+      </div>
+      <div class="modal-body">
+
+        <div class="table-responsive custom-table-scroll"><br>
+          <div class="search-bar" style="position: relative; width: 100%; margin-bottom: 15px;">
+            <i
+              class="fa fa-search"
+              style="position: absolute; top: 50%; left: 15px; transform: translateY(-50%); font-size: 1.2rem; color: #6c757d; pointer-events: none;">
+            </i>
+            <input
+              type="text"
+              placeholder="Buscar usuario por nombre, apellido o email"
+              [(ngModel)]="busquedaUsuario"
+              (input)="filtrarUsuariosNoInscritos()"
+              class="form-control"
+              style="width: 1000px; padding: 10px 40px; border: 1px solid #ced4da; border-radius: 25px; font-size: 1rem; transition: border-color 0.3s ease, box-shadow 0.3s ease;"
+            />
+          </div>
+
+          <br>
+          <table class="table table-striped table-hover">
+            <thead class="table-primary">
+            <tr>
+              <th>Seleccionar</th>
+              <th>Nombre</th>
+              <th>Apellido</th>
+              <th>Código</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let usuario of usuariosNoInscritos">
+              <td>
+                <div style="position: relative; display: inline-block;">
+                  <input
+                    type="checkbox"
+                    [(ngModel)]="usuario.seleccionado"
+                    style="position: absolute; opacity: 0; width: 0; height: 0;"
+                    id="checkbox-{{usuario.id}}"
+                  />
+                  <label
+                    for="checkbox-{{usuario.id}}"
+                    style="width: 20px; height: 20px; display: inline-block; background-color: #e9ecef; border: 2px solid #ced4da; border-radius: 5px; cursor: pointer; position: relative; transition: background-color 0.2s ease, border-color 0.2s ease;"
+                  >
+                    <i
+                      *ngIf="usuario.seleccionado"
+                      class="fa fa-check"
+                      style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 14px; color: #007bff;"
+                    ></i>
+                  </label>
+                </div>
+              </td>
+
+              <td>{{ usuario.nombre }}</td>
+              <td>{{ usuario.apellido }}</td>
+              <td>{{ usuario.codigo }}</td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Botón para agregar -->
+        <button class="btn btn-primary w-100 mt-3" (click)="agregarParticipantes()">Agregar Participantes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+

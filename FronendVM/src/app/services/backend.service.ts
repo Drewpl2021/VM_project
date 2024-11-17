@@ -88,7 +88,9 @@ export class BackendService {
   obtenerUsuarioPorId(userId: number): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}/user/${userId}`);
   }
-
+  obtenerUsuariosNoInscritos(eventoId: number): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/user/no-inscritos/${eventoId}`);
+  }
 
 
 
@@ -125,6 +127,10 @@ export class BackendService {
   obtenerInscripcionesPorUsuario(usuarioId: number) {
     return this.http.get<any[]>(`http://localhost:8080/inscripciones/usuario/${usuarioId}`);
   }
+  crearInscripcion(inscripcion: any): Observable<any> {
+    return this.http.post(`${this.apiUrl}/inscripciones`, inscripcion);
+  }
+
 
 
 

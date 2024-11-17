@@ -5,6 +5,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.example.projectvm.entity.Carreras;
 import org.example.projectvm.entity.Roles;
 import org.example.projectvm.entity.User;
+import org.example.projectvm.repository.InscripcionesRepository;
 import org.example.projectvm.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -15,6 +16,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService {
@@ -23,6 +25,8 @@ public class UserService {
 
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
+    @Autowired
+    private InscripcionesRepository inscripcionesRepository;
 
     // Listar todos los usuarios
     public List<User> getAllUsers() {
@@ -140,5 +144,15 @@ public class UserService {
         }
     }
 
+    public List<User> obtenerUsuariosNoInscritos(Integer eventoId) {
+        List<User> todosUsuarios = userRepository.findAll();
+        List<Integer> usuariosInscritosIds = inscripcionesRepository.findByEventoId(eventoId)
+                .stream()
+                .map(inscripcion -> inscripcion.getUsuario().getId())
+                .collect(Collectors.toList());
+        return todosUsuarios.stream()
+                .filter(usuario -> !usuariosInscritosIds.contains(usuario.getId()))
+                .collect(Collectors.toList());
+    }
 
 }
