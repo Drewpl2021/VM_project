@@ -106,7 +106,7 @@ export class ImportarDatosComponent implements OnInit {
         },
         (error) => {
           console.error('Error al buscar usuarios:', error);
-          Swal.fire('Error', 'No existe un usuario con esas caracteristicas', 'error');
+
         }
       );
     } else {

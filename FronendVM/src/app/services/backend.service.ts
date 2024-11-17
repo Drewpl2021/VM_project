@@ -130,6 +130,18 @@ export class BackendService {
   crearInscripcion(inscripcion: any): Observable<any> {
     return this.http.post(`${this.apiUrl}/inscripciones`, inscripcion);
   }
+  importarParticipantes(eventoId: number, file: File): Observable<any> {
+    const formData: FormData = new FormData();
+    formData.append('file', file);
+
+    return this.http.post(`${this.apiUrl}/inscripciones/importarparticipantes/${eventoId}`, formData,{ responseType: 'text' });
+  }
+  descargarReportePorEvento(eventoId: number): Observable<Blob> {
+    return this.http.get(`${this.apiUrl}/inscripciones/reporte/${eventoId}`, {
+      responseType: 'blob', // Importante para manejar archivos binarios
+    });
+  }
+
 
 
 

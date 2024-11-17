@@ -1,6 +1,10 @@
 package org.example.projectvm.controller;
 
 
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.example.projectvm.entity.Evento;
 import org.example.projectvm.entity.Inscripciones;
 import org.example.projectvm.entity.User;
@@ -11,11 +15,12 @@ import org.example.projectvm.service.EventoService;
 import org.example.projectvm.service.InscripcionesService;
 import org.example.projectvm.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -180,5 +185,60 @@ public class InscripcionesController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al procesar el archivo.");
         }
     }
+
+
+
+    @GetMapping("/reporte/{eventoId}")
+    public ResponseEntity<byte[]> generarReportePorEvento(@PathVariable Integer eventoId) {
+        try {
+            // Validar si el evento existe
+            Optional<Evento> eventoOpt = eventoRepository.findById(eventoId);
+            if (eventoOpt.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+            }
+
+            Evento evento = eventoOpt.get();
+
+            // Crear el archivo Excel
+            Workbook workbook = new XSSFWorkbook();
+            Sheet sheet = workbook.createSheet("Reporte Participantes");
+
+            // Encabezados
+            Row header = sheet.createRow(0);
+            header.createCell(0).setCellValue("Nombre");
+            header.createCell(1).setCellValue("Apellido");
+            header.createCell(2).setCellValue("Código");
+            header.createCell(3).setCellValue("Horas Obtenidas");
+
+            // Filtrar participantes por evento
+            List<Inscripciones> participantes = inscripcionesRepository.findByEventoId(eventoId);
+            int rowNum = 1;
+            for (Inscripciones participante : participantes) {
+                Row row = sheet.createRow(rowNum++);
+                row.createCell(0).setCellValue(participante.getUsuario().getNombre());
+                row.createCell(1).setCellValue(participante.getUsuario().getApellido());
+                row.createCell(2).setCellValue(participante.getUsuario().getCodigo());
+                row.createCell(3).setCellValue(participante.getHoras_obtenidas());
+            }
+
+            // Convertir a byte array
+            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+            workbook.write(outputStream);
+            workbook.close();
+
+            byte[] excelContent = outputStream.toByteArray();
+
+            // Configurar la respuesta
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+            headers.setContentDisposition(ContentDisposition.builder("attachment").filename("reporte_evento_" + eventoId + ".xlsx").build());
+
+            return ResponseEntity.ok().headers(headers).body(excelContent);
+
+        } catch (IOException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+    }
+
 
 }

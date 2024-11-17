@@ -19,7 +19,7 @@ export class ListaParticipantesComponent implements OnInit {
   mostrarModalAgregarParticipantes: boolean = false;
   eventoHorasObtenidas: number = 0;
   participantesOriginales: any[] = [];
-  usuariosNoInscritosOriginales: any[] = [];
+  fileToUpload: File | null = null;
 
 
 
@@ -33,6 +33,77 @@ export class ListaParticipantesComponent implements OnInit {
       this.cargarNombreEvento();
     }
   }
+
+  generarReporte(): void {
+    if (this.eventoId) {
+      this.backendService.descargarReportePorEvento(this.eventoId).subscribe(
+        (response) => {
+          const blob = new Blob([response], { type: 'application/octet-stream' });
+          const url = window.URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = `reporte_evento_${this.eventoId}.xlsx`;
+          a.click();
+          window.URL.revokeObjectURL(url);
+        },
+        (error) => {
+          console.error('Error al generar el reporte:', error);
+          Swal.fire('Error', 'No se pudo generar el reporte. Intente nuevamente.', 'error');
+        }
+      );
+    } else {
+      Swal.fire('Advertencia', 'No se seleccionó un evento válido.', 'warning');
+    }
+  }
+
+
+  abrirInputArchivo(): void {
+    const input = document.getElementById('inputArchivo') as HTMLInputElement;
+    if (input) {
+      input.click();
+    }
+  }
+
+  descargarFormatoExcel(): void {
+    const link = document.createElement('a');
+    link.href = 'assets/documentos/Lista_de_participantes.xlsx'; // Ruta al archivo Excel dentro de assets
+    link.download = 'Lista_de_participantes.xlsx'; // Nombre del archivo que se descargará
+    link.click();
+  }
+
+  handleFileInput(event: any): void {
+    this.fileToUpload = event.target.files[0];
+    if (this.fileToUpload) {
+      this.subirArchivo();
+    }
+  }
+
+  subirArchivo(): void {
+    if (!this.fileToUpload) {
+      Swal.fire('Error', 'Por favor, selecciona un archivo antes de continuar.', 'error');
+      return;
+    }
+
+    if (this.eventoId === null) {
+      Swal.fire('Error', 'No se seleccionó un evento válido.', 'error');
+      return;
+    }
+
+    this.backendService.importarParticipantes(this.eventoId, this.fileToUpload).subscribe(
+      (response: any) => {
+        Swal.fire('Éxito', response, 'success');
+
+      },
+      (error) => {
+        const errorMensaje = error.error?.message || 'Hubo un problema al subir el archivo.';
+        Swal.fire('Error', errorMensaje, 'error');
+        console.error('Error al importar participantes:', error);
+      }
+    );
+  }
+
+
+
   truncarTexto(texto: string | null, limite: number): string {
     if (!texto) return "Sin descripción"; // Devuelve "Sin descripción" si el campo está vacío o es nulo
     return texto.length > limite ? texto.substring(0, limite) + '...' : texto;

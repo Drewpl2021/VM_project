@@ -14,14 +14,30 @@
         class="form-control"
       />
     <button class="add-button" (click)="toggleEditMode()" style="background-color: #005fb1; color: white" >
-      {{ editMode ? 'Guardar cambios' : 'Editar Horas' }}
+      <i class="fa-solid fa-pen-to-square"></i> {{ editMode ? 'Guardar cambios' : 'Editar Horas' }}
     </button>
     <button (click)="abrirModalAgregarParticipantes()" class="add-button" style="background-color: #005fb1; color: white">
-      Agregar Participantes
+      <i class="fa-solid fa-plus"></i> Agregar Participantes
     </button>
-    <button class="add-button" style="background-color: #005fb1; color: white">
-      Importar Participantes
+    <button class="add-button" style="background-color: #005fb1; color: white" (click)="abrirInputArchivo()">
+      <i class="fa-solid fa-file-import"></i> Importar Participantes
     </button>
+    <input
+      type="file"
+      id="inputArchivo"
+      style="display: none;"
+      (change)="handleFileInput($event)"
+      accept=".xlsx"
+    />
+    <button class="add-button" (click)="descargarFormatoExcel()" style="background-color: #28a745; color: white; ">
+      <i class="fa-solid fa-download"></i> Formato de Excel
+    </button>
+    <button class="add-button" style="background-color: #28a745; color: white;" (click)="generarReporte()">
+      <i class="fa-solid fa-download"></i> Reporte
+    </button>
+
+
+
   </div>
 
   <!-- Tabla de datos -->
@@ -38,8 +54,8 @@
     </tr>
     </thead>
     <tbody>
-    <tr *ngFor="let participante of participantes">
-      <td>{{ participante.idUsuario }}</td>
+    <tr *ngFor="let participante of participantes, let i = index">
+      <td>{{ i + 1 }}</td>
       <td>{{ participante.nombre }}</td>
       <td>{{ participante.apellido }}</td>
       <td>{{ participante.codigo }}</td>
