@@ -14,7 +14,8 @@ public class Evento {
     private String nombre;
     private String direccion;
     private String lugar;
-    private Date fecha;
+    private Date fecha_inicio;
+    private Date fecha_fin;
     private String hora;
     private String horas_obtenidas;
     @Enumerated(EnumType.STRING)

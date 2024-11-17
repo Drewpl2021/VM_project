@@ -14,7 +14,9 @@
         <div class="card-body">
           <h5 class="card-title">{{ evento.nombre }}</h5>
           <p class="card-text">{{ evento.lugar }}</p>
-          <p class="card-text">Fecha: El día {{ evento.fecha | date:'EEEE d \'de\' MMMM\' del\' y':'es' }} a las {{ evento.hora }}</p>
+          <p class="card-text">Inicia el día {{ evento.fecha_inicio | date:'EEEE d \'de\' MMMM\' del\' y':'es' }}</p>
+          <p class="card-text">Termina {{ evento.fecha_fin | date:'EEEE d \'de\' MMMM\' del\' y':'es' }}</p>
+          <p class="card-text">La hora del evento es a las {{ evento.hora }} horas</p>
           <p class="card-text">Horas Válidas: {{ evento.horas_obtenidas }}</p>
           <p class="card-text">Dirección: {{ evento.direccion }}</p>
 
@@ -47,13 +49,36 @@
               <input type="text" class="form-control" id="lugar" [(ngModel)]="nuevoEvento.lugar" name="lugar" required>
             </div>
             <div class="mb-3">
-              <label for="fecha" class="form-label">Fecha</label>
-              <input type="date" class="form-control" id="fecha" [(ngModel)]="nuevoEvento.fecha" name="fecha" required>
+              <label for="fecha_inicio" class="form-label">Inicio del evento</label>
+              <input
+                type="date"
+                class="form-control custom-input"
+                id="fecha_inicio"
+                [(ngModel)]="nuevoEvento.fecha_inicio"
+                name="fecha_inicio"
+                required>
+            </div>
+            <div class="mb-3">
+              <label for="fecha_fin" class="form-label">Fin del evento</label>
+              <input
+                type="date"
+                class="form-control custom-input"
+                id="fecha_fin"
+                [(ngModel)]="nuevoEvento.fecha_fin"
+                name="fecha_fin"
+                required>
             </div>
             <div class="mb-3">
               <label for="hora" class="form-label">Hora</label>
-              <input type="time" class="form-control" id="hora" [(ngModel)]="nuevoEvento.hora" name="hora" required>
+              <input
+                type="time"
+                class="form-control custom-input"
+                id="hora"
+                [(ngModel)]="nuevoEvento.hora"
+                name="hora"
+                required>
             </div>
+
             <div class="mb-3">
               <label for="horas_obtenidas" class="form-label">Horas Válidas</label>
               <input type="number" class="form-control" id="horas_obtenidas" [(ngModel)]="nuevoEvento.horas_obtenidas" name="horas_obtenidas" required>
@@ -77,7 +102,7 @@
   </div>
 
   <!-- Modal para editar un evento existente -->
-  <div class="modal-overlay" tabindex="-1" [ngClass]="{ 'show': mostrarModalEditar }" style="display: block;" *ngIf="mostrarModalEditar" (click)="cerrarModalCrearEvento()">
+  <div class="modal-overlay" tabindex="-1" [ngClass]="{ 'show': mostrarModalEditar }" style="display: block;" *ngIf="mostrarModalEditar" (click)="cerrarModalEditarEvento()">
     <div class="modal-dialog" (click)="detenerPropagacion($event)">
       <div class="modal-content">
         <div class="modal-header">
@@ -95,13 +120,36 @@
               <input type="text" class="form-control" id="lugar" [(ngModel)]="eventoSeleccionado.lugar" name="lugar" required>
             </div>
             <div class="mb-3">
-              <label for="fecha" class="form-label">Fecha</label>
-              <input type="date" class="form-control" id="fecha" [(ngModel)]="eventoSeleccionado.fecha" name="fecha" required>
+              <label for="fecha_inicio" class="form-label">Inicio del evento</label>
+              <input
+                type="date"
+                class="form-control custom-input"
+                id="fecha_inicio"
+                [(ngModel)]="eventoSeleccionado.fecha_inicio"
+                name="fecha_inicio"
+                required>
+            </div>
+            <div class="mb-3">
+              <label for="fecha_fin" class="form-label">Fin del evento</label>
+              <input
+                type="date"
+                class="form-control custom-input"
+                id="fecha_fin"
+                [(ngModel)]="eventoSeleccionado.fecha_fin"
+                name="fecha_fin"
+                required>
             </div>
             <div class="mb-3">
               <label for="hora" class="form-label">Hora</label>
-              <input type="time" class="form-control" id="hora" [(ngModel)]="eventoSeleccionado.hora" name="hora" required>
+              <input
+                type="time"
+                class="form-control custom-input"
+                id="hora"
+                [(ngModel)]="eventoSeleccionado.hora"
+                name="hora"
+                required>
             </div>
+
             <div class="mb-3">
               <label for="horas_obtenidas" class="form-label">Horas Válidas</label>
               <input type="number" class="form-control" id="horas_obtenidas" [(ngModel)]="eventoSeleccionado.horas_obtenidas" name="horas_obtenidas" required>
@@ -123,4 +171,3 @@
       </div>
     </div>
   </div>
-</div>

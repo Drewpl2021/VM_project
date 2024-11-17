@@ -133,4 +133,43 @@ modal-overlay {
 .modal-body {
   padding: 20px;
 }
+/* Estilo general de los inputs */
+.custom-input {
+  background-color: #f9f9f9;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 10px 15px;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Hover efecto */
+.custom-input:hover {
+  background-color: #f0f8ff;
+  border-color: #007bff;
+}
+
+/* Focus efecto */
+.custom-input:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 6px rgba(0, 123, 255, 0.5);
+  background-color: white;
+}
+
+/* Etiquetas de los inputs */
+.form-label {
+  font-size: 1rem;
+  font-weight: bold;
+  color: #333;
+}
+
+/* Responsive: Cambiar tamaño en pantallas pequeñas */
+@media (max-width: 768px) {
+  .custom-input {
+    font-size: 0.9rem;
+    padding: 8px 12px;
+  }
+}
 

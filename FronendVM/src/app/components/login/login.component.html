@@ -18,17 +18,11 @@
       </div>
 
       <button (click)="login()" type="submit" class="submit">Inicio</button>
-      <button routerLink="/" class="regresar">Cancelar</button>
+      <button routerLink="/" class="regresar">Volver</button>
 
       <div *ngIf="errorMessage" class="alert alert-danger mt-3">{{ errorMessage }}</div>
 
-      <div class="bottom">
-        <div class="left">
-          <input type="checkbox" id="recordar">
-          <label for="recordar">Recordarme</label>
-        </div>
-        <span><a href="/main">¿Olvidaste la contraseña?</a></span>
-      </div>
+
     </div>
   </div>
 

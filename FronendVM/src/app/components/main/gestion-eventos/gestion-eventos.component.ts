@@ -57,6 +57,14 @@ export class GestionEventosComponent {
   }
 
   crearEvento(): void {
+    // Ajustar las fechas para que el backend las reciba correctamente
+    if (this.nuevoEvento.fechaInicio) {
+      this.nuevoEvento.fechaInicio = this.ajustarFechaTimezone(this.nuevoEvento.fechaInicio);
+    }
+    if (this.nuevoEvento.fechaFin) {
+      this.nuevoEvento.fechaFin = this.ajustarFechaTimezone(this.nuevoEvento.fechaFin);
+    }
+
     this.backendService.createEvento(this.nuevoEvento).subscribe(
       (data) => {
         this.eventos.push(data);
@@ -71,6 +79,14 @@ export class GestionEventosComponent {
     );
   }
 
+// Ajustar la fecha para ignorar el timezone
+  private ajustarFechaTimezone(fecha: string): string {
+    const date = new Date(fecha);
+    date.setMinutes(date.getMinutes() - date.getTimezoneOffset());
+    return date.toISOString().split('T')[0]; // Retorna solo la parte de la fecha
+  }
+
+
   abrirModalEditarEvento(evento: any): void {
     this.eventoSeleccionado = { ...evento };
     this.mostrarModalEditar = true;
@@ -79,9 +95,11 @@ export class GestionEventosComponent {
   cerrarModalEditarEvento(): void {
     this.mostrarModalEditar = false;
   }
+
   detenerPropagacion(event: MouseEvent): void {
     event.stopPropagation();
   }
+
   // Función para convertir la fecha al formato 'yyyy-MM-dd'
   private formatearFecha(fecha: string): string {
     const date = new Date(fecha);

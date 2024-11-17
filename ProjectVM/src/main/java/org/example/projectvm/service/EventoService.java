@@ -37,4 +37,8 @@ public class EventoService {
     public Evento actualizar(Evento evento) {
         return eventoRepository.save(evento);
     }
+
+    public Evento save(Evento evento) {
+        return eventoRepository.save(evento);
+    }
 }

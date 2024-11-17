@@ -21,4 +21,5 @@ public class Inscripciones {
 
     private Integer horas_obtenidas;
     private String anio_academico;
+    private String detalles;
 }
