@@ -11,8 +11,10 @@ import org.example.projectvm.service.EventoService;
 import org.example.projectvm.service.InscripcionesService;
 import org.example.projectvm.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -157,5 +159,26 @@ public class InscripcionesController {
         return ResponseEntity.ok("Inscripciones agregadas correctamente.");
     }
 
+    @PostMapping("/importarparticipantes/{eventoId}")
+    public ResponseEntity<String> importarParticipantesDesdeExcel(
+            @PathVariable Integer eventoId,
+            @RequestParam("file") MultipartFile file) {
+
+        if (file.isEmpty()) {
+            return ResponseEntity.badRequest().body("El archivo está vacío.");
+        }
+
+        try {
+            List<String> mensajesOmitidos = inscripcionesService.registrarParticipantesDesdeExcel(eventoId, file);
+            String mensaje = "Archivo cargado y participantes registrados exitosamente.";
+            if (!mensajesOmitidos.isEmpty()) {
+                mensaje += " Se omitieron " + mensajesOmitidos.size() + " filas debido a errores o duplicados.";
+            }
+            return ResponseEntity.ok(mensaje);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al procesar el archivo.");
+        }
+    }
 
 }
