@@ -87,5 +87,8 @@ public class InscripcionesService {
         userRepository.save(usuario);
     }
 
+    public List<Inscripciones> findByUsuarioId(Integer usuarioId) {
+        return inscripcionesRepository.findByUsuarioId(usuarioId);
+    }
 }
 

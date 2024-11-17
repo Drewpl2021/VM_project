@@ -51,7 +51,7 @@
               <p>Fecha: El dia {{ evento.fecha | date:'EEEE d \'de\' MMMM\' del\' y':'es' }} a las {{ evento.hora }}</p>
               <p>Horas Validas: {{ evento.horas_obtenidas }}</p>
               <p>Dirrección: {{ evento.direccion }}</p>
-              <a href="#" class="btn card-link" style="background-color: #005fb1; color: white;">Inscribirse</a>
+              <a routerLink="/proximos_eventos" class="btn card-link" style="background-color: #005fb1; color: white;">Inscribirse</a>
             </div>
           </div>
         </div>

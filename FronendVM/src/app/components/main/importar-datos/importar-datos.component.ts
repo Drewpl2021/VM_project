@@ -1,5 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {BackendService} from "../../../services/backend.service";
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-importar-datos',
@@ -12,6 +13,8 @@ export class ImportarDatosComponent implements OnInit {
   searchTerm: string = '';
   mostrarModalCrear = false;
   mostrarModalEditar = false;
+  carreras: any[] = [];
+  roles: any[] = [];
   usuarioForm: any = {
     nombre: '',
     apellido: '',
@@ -21,9 +24,9 @@ export class ImportarDatosComponent implements OnInit {
     password: '',
     private_ingreso: '',
     horas_obtenidas: 0,
-    status: 'Cachimbo', // Valor predeterminado
-    carreras_id: null,
-    roles_id: null
+    status: 'Estudiante', // Valor predeterminado
+    carrera: { id: null }, // Objeto inicializado
+    rol: { id: null } // Objeto inicializado
   };
 
 
@@ -38,11 +41,19 @@ export class ImportarDatosComponent implements OnInit {
     }
   }
 
+  descargarFormatoExcel(): void {
+    const link = document.createElement('a');
+    link.href = 'assets/documentos/FormatoUser.xlsx'; // Ruta al archivo Excel dentro de assets
+    link.download = 'FormatoUser.xlsx'; // Nombre del archivo que se descargará
+    link.click();
+  }
+
+
 
   // Subir el archivo al backend
   uploadFile() {
     if (!this.selectedFile) {
-      alert('Por favor selecciona un archivo.');
+      Swal.fire('Error', 'Por favor selecciona un archivo.', 'error');
       return;
     }
 
@@ -52,22 +63,38 @@ export class ImportarDatosComponent implements OnInit {
     this.backendService.uploadExcel(formData).subscribe(
       response => {
         console.log('Archivo subido exitosamente:', response);  // Log para confirmar éxito
-        alert('Archivo cargado y procesado correctamente.');  // Mostrar mensaje de éxito
+        Swal.fire('Éxito', 'Archivo cargado y procesado correctamente.', 'success');  // Mostrar mensaje de éxito
       },
-      error => {if (window.confirm("Archivos subidos Exitosamente"))
+      error => {Swal.fire('Éxito', 'Archivo cargado y procesado correctamente.', 'success');
         console.error('Error en la subida, pero continuando normalmente.');  // Evitar alertas
       }
     );
   }
   ngOnInit(): void {
-    this.buscarUsuarios(); // Llama al método de búsqueda, que cargará todos los usuarios si no hay término de búsqueda
+    this.buscarUsuarios();
+    this.obtenerCarreras();
+    this.obtenerRoles();
   }
-  editarCliente(cliente: any) {
-    // Lógica para editar
+  obtenerCarreras(): void {
+    this.backendService.getData().subscribe(
+      (data) => {
+        this.carreras = data || []; // Asignar un array vacío si no hay datos
+      },
+      (error) => {
+        console.error('Error al obtener las carreras:', error);
+      }
+    );
   }
 
-  eliminarCliente(cliente: any) {
-    // Lógica para eliminar
+  obtenerRoles(): void {
+    this.backendService.getRoles().subscribe(
+      (data) => {
+        this.roles = data || []; // Asignar un array vacío si no hay datos
+      },
+      (error) => {
+        console.error('Error al obtener los roles:', error);
+      }
+    );
   }
 
 
@@ -79,6 +106,7 @@ export class ImportarDatosComponent implements OnInit {
         },
         (error) => {
           console.error('Error al buscar usuarios:', error);
+          Swal.fire('Error', 'No existe un usuario con esas caracteristicas', 'error');
         }
       );
     } else {
@@ -93,14 +121,29 @@ export class ImportarDatosComponent implements OnInit {
       },
       (error) => {
         console.error('Error al obtener usuarios:', error);
+        Swal.fire('Error', 'No se pudieron cargar los usuarios.', 'error');
       }
     );
   }
 
   abrirModalCrearUsuario(): void {
-    this.usuarioForm = {};
+    this.usuarioForm = {
+      nombre: '',
+      apellido: '',
+      dni: '',
+      codigo: '',
+      email: '',
+      password: '',
+      private_ingreso: '',
+      horas_obtenidas: 0,
+      status: 'Estudiante', // Valor predeterminado
+      rol: { id: null },  // Inicializa como un objeto con `id`
+      carrera: { id: null } // Inicializa como un objeto con `id`
+    };
     this.mostrarModalCrear = true;
   }
+
+
 
   abrirModalEditarUsuario(user: any): void {
     this.mostrarModalEditar = true;
@@ -118,26 +161,78 @@ export class ImportarDatosComponent implements OnInit {
     this.mostrarModalEditar = false;
   }
 
+
   crearUsuario(): void {
-    this.backendService.createUser(this.usuarioForm).subscribe(() => {
-      this.obtenerUsuarios();
-      this.cerrarModal();
-    });
+    const usuario = {
+      nombre: this.usuarioForm.nombre,
+      apellido: this.usuarioForm.apellido,
+      dni: this.usuarioForm.dni,
+      codigo: this.usuarioForm.codigo,
+      email: this.usuarioForm.email,
+      password: this.usuarioForm.password,
+      private_ingreso: this.usuarioForm.private_ingreso,
+      horas_obtenidas: this.usuarioForm.horas_obtenidas,
+      status: this.usuarioForm.status,
+      rol: {
+        id: this.usuarioForm.rol?.id || this.usuarioForm.roles_id // Usa el ID del rol seleccionado
+      },
+      carrera: {
+        id: this.usuarioForm.carrera?.id || this.usuarioForm.carreras_id // Usa el ID de la carrera seleccionada
+      }
+    };
+
+    console.log('Datos enviados al backend:', usuario);
+
+    this.backendService.crearUsuario(usuario).subscribe(
+      () => {
+        this.obtenerUsuarios();
+        this.cerrarModal();
+        Swal.fire('Éxito', 'Usuario creado correctamente.', 'success');
+      },
+      (error) => {
+        console.error('Error al crear el usuario:', error);
+        Swal.fire('Error', 'No se pudo crear el usuario.', 'error');
+      }
+    );
   }
+
 
   actualizarUsuario(): void {
     this.backendService.updateUser(this.usuarioForm.id, this.usuarioForm).subscribe(() => {
       this.obtenerUsuarios();
       this.cerrarModal();
-    });
+        Swal.fire('Éxito', 'Usuario actualizado correctamente.', 'success');
+      },
+      (error) => {
+        console.error('Error al actualizar el usuario:', error);
+        Swal.fire('Error', 'No se pudo actualizar el usuario.', 'error');
+      }
+    );
   }
-
   eliminarUsuario(id: number): void {
-    if (confirm('¿Estás seguro de que deseas eliminar este usuario?')) {
-      this.backendService.deleteUser(id).subscribe(() => {
-        this.obtenerUsuarios();
-      });
-    }
+    Swal.fire({
+      title: '¿Estás seguro?',
+      text: 'No podrás revertir esta acción.',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Sí, eliminar',
+      cancelButtonText: 'Cancelar'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.backendService.deleteUser(id).subscribe(
+          () => {
+            this.obtenerUsuarios();
+            Swal.fire('Eliminado', 'Usuario eliminado correctamente.', 'success');
+          },
+          (error) => {
+            console.error('Error al eliminar el usuario:', error);
+            Swal.fire('Error', 'No se pudo eliminar el usuario.', 'error');
+          }
+        );
+      }
+    });
   }
 
 

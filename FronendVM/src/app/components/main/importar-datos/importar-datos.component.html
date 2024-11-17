@@ -1,10 +1,14 @@
 <div class="container">
-  <div class="header">
+  <div class="">
     <h2><b>Usuarios</b></h2>
     <div class="search-bar">
-      <input type="text" placeholder="Buscar " [(ngModel)]="searchTerm" (input)="buscarUsuarios()" />
-      <button class="add-button" (click)="abrirModalCrearUsuario()" style="background-color: #005fb1; color: white">
+      <input type="text" placeholder="Buscar " [(ngModel)]="searchTerm" (input)="buscarUsuarios()" class="form-control " />
+
+      <button class="add-button" (click)="abrirModalCrearUsuario()" style="background-color: #005fb1; color: white; margin-left: 350px">
         <i class="fa-solid fa-plus"></i> Nuevo Usuario
+      </button>
+      <button class="add-button" (click)="descargarFormatoExcel()" style="background-color: #28a745; color: white; margin-left: 10px;">
+        <i class="fa-solid fa-file-excel"></i> Descargar Formato Excel
       </button>
         <!-- Formulario de carga de archivo con estilo integrado -->
         <form (ngSubmit)="uploadFile()" class=" form file-upload-form" style="">
@@ -32,7 +36,7 @@
       <th>Código</th>
       <th>Email</th>
       <th>Horas Obtenidas</th>
-      <th>Estado</th>
+      <th>Ocupacion</th>
       <th>Acciones</th>
     </tr>
     </thead>
@@ -53,81 +57,151 @@
     </tr>
     </tbody>
   </table>
-  <!-- Paginación -->
-  <div class="pagination">
-    <span>Líneas por página:</span>
-    <select>
-      <option>10</option>
-      <option>20</option>
-      <option>50</option>
-    </select>
-    <span>1-10 de 135 registros</span>
-    <button>Anterior</button>
-    <button>Siguiente</button>
-  </div>
+
 </div>
 
 
-<!-- Modal para crear usuario -->
+<!-- Modal para crear/editar usuario -->
 <div *ngIf="mostrarModalCrear || mostrarModalEditar" class="modal-overlay" (click)="cerrarModal()">
   <div class="modal-dialog" (click)="$event.stopPropagation()">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title">Crear Usuario</h5>
+        <h5 class="modal-title">{{ mostrarModalCrear ? 'Crear Usuario' : 'Editar Usuario' }}</h5>
         <button type="button" class="btn-close" (click)="cerrarModal()">&times;</button>
       </div>
       <div class="modal-body">
-        <form (ngSubmit)="crearUsuario()">
-          <div style="display: flex">
-            <div class="form-group">
-              <label for="nombre">Nombre</label>
-              <input type="text" class="form-control" [(ngModel)]="usuarioForm.nombre" name="nombre" required />
+        <form (ngSubmit)="mostrarModalCrear ? crearUsuario() : actualizarUsuario()">
+          <div class="row">
+            <div class="col-md-6 form-group mb-3">
+              <label  for="nombre">Nombre</label>
+              <input
+                type="text"
+                class="form-control"
+                [(ngModel)]="usuarioForm.nombre"
+                name="nombre"
+                placeholder="Ingrese nombre"
+                required
+              />
             </div>
-            <div class="form-group">
+            <div class="col-md-6 form-group mb-3">
               <label for="apellido">Apellido</label>
-              <input type="text" class="form-control" [(ngModel)]="usuarioForm.apellido" name="apellido" required />
+              <input
+                type="text"
+                class="form-control"
+                [(ngModel)]="usuarioForm.apellido"
+                name="apellido"
+                placeholder="Ingrese apellido"
+                required
+              />
             </div>
           </div>
-          <div class="form-group">
-            <label for="dni">DNI</label>
-            <input type="text" class="form-control" [(ngModel)]="usuarioForm.dni" name="dni" required />
+          <div class="row">
+            <div class="col-md-6 form-group mb-3">
+              <label for="dni">DNI</label>
+              <input
+                type="text"
+                class="form-control"
+                [(ngModel)]="usuarioForm.dni"
+                name="dni"
+                placeholder="Ingrese DNI"
+                required
+              />
+            </div>
+            <div class="col-md-6 form-group mb-3">
+              <label for="codigo">Código</label>
+              <input
+                type="text"
+                class="form-control"
+                [(ngModel)]="usuarioForm.codigo"
+                name="codigo"
+                placeholder="Ingrese código"
+                required
+              />
+            </div>
           </div>
-          <div class="form-group">
-            <label for="codigo">Código</label>
-            <input type="text" class="form-control" [(ngModel)]="usuarioForm.codigo" name="codigo" required />
+          <div class="row">
+            <div class="col-md-6 form-group mb-3">
+              <label for="email">Email</label>
+              <input
+                type="email"
+                class="form-control"
+                [(ngModel)]="usuarioForm.email"
+                name="email"
+                placeholder="Ingrese email"
+                required
+              />
+            </div>
+            <div class="col-md-6 form-group mb-3">
+              <label for="password">Password</label>
+              <input
+                type="password"
+                class="form-control"
+                [(ngModel)]="usuarioForm.password"
+                name="password"
+                placeholder="Ingrese contraseña"
+                required
+              />
+            </div>
           </div>
-          <div class="form-group">
-            <label for="email">Email</label>
-            <input type="email" class="form-control" [(ngModel)]="usuarioForm.email" name="email" required />
+          <div class="row">
+            <div class="col-md-6 form-group mb-3">
+              <label for="private_ingreso">Private Ingreso</label>
+              <input
+                type="text"
+                class="form-control"
+                [(ngModel)]="usuarioForm.private_ingreso"
+                name="private_ingreso"
+                placeholder="Ingrese Private Ingreso"
+                required
+              />
+            </div>
+            <div class="col-md-6 form-group mb-3">
+              <label for="horas_obtenidas">Horas Obtenidas</label>
+              <input
+                type="number"
+                class="form-control"
+                [(ngModel)]="usuarioForm.horas_obtenidas"
+                name="horas_obtenidas"
+                placeholder="Ingrese Horas Obtenidas"
+                required
+              />
+            </div>
           </div>
-          <div class="form-group">
-            <label for="password">Password</label>
-            <input type="password" class="form-control" [(ngModel)]="usuarioForm.password" name="password" required />
-          </div>
-          <div class="form-group">
-            <label for="private_ingreso">Private Ingreso</label>
-            <input type="text" class="form-control" [(ngModel)]="usuarioForm.private_ingreso" name="private_ingreso" required />
-          </div>
-          <div class="form-group">
-            <label for="horas_obtenidas">Horas Obtenidas</label>
-            <input type="number" class="form-control" [(ngModel)]="usuarioForm.horas_obtenidas" name="horas_obtenidas" required />
-          </div>
-          <div class="form-group">
+          <div class="form-group mb-3">
             <label for="status">Status</label>
-            <select class="form-control" [(ngModel)]="usuarioForm.status" name="status" required>
-              <option [value]="'Cachimbo'">Cachimbo</option>
+            <select
+              class="form-control"
+              [(ngModel)]="usuarioForm.status"
+              name="status"
+              required
+            >
+              <option [value]="'Estudiante'">Estudiante</option>
               <option [value]="'Egresado'">Egresado</option>
+              <option [value]="'Docente'">Docente</option>
             </select>
           </div>
-          <div class="form-group">
-            <label for="carreras_id">Carrera</label>
-            <input type="number" class="form-control" [(ngModel)]="usuarioForm.carreras_id" name="carreras_id" required />
+          <div style="display: flex">
+            <div class="form-group" style="width: 250px">
+              <label for="carrera">Carrera</label>
+              <select id="carrera" [(ngModel)]="usuarioForm.carrera.id" name="carrera_id" class="form-control" required>
+                <option *ngFor="let carrera of carreras" [value]="carrera.id">{{ carrera.nombre }}</option>
+              </select>
+            </div>
+
+            <!-- Campo de Rol -->
+            <div class="form-group" style="margin-left: 40px; width: 250px">
+              <label for="rol">Rol</label>
+              <select id="rol" [(ngModel)]="usuarioForm.rol.id" name="rol_id" class="form-control" required>
+                <option *ngFor="let rol of roles" [value]="rol.id">{{ rol.nombre }}</option>
+              </select>
+            </div>
           </div>
-          <div class="form-group">
-            <label for="roles_id">Rol</label>
-            <input type="number" class="form-control" [(ngModel)]="usuarioForm.roles_id" name="roles_id" required />
+          <br>
+          <div class="text-center">
+            <button type="submit" class="btn btn-primary w-100">
+              {{ mostrarModalCrear ? 'Crear Usuario' : 'Actualizar Usuario' }}
+            </button>
           </div>
-          <button type="submit" class="btn btn-primary">Guardar</button>
         </form>
       </div>
     </div>

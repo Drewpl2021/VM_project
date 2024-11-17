@@ -7,6 +7,7 @@ import org.example.projectvm.entity.Roles;
 import org.example.projectvm.entity.User;
 import org.example.projectvm.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -19,6 +20,9 @@ import java.util.Optional;
 public class UserService {
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private BCryptPasswordEncoder passwordEncoder;
 
     // Listar todos los usuarios
     public List<User> getAllUsers() {
@@ -40,7 +44,11 @@ public class UserService {
     }
 
     // Crear un nuevo usuario
-    public User createUser(User user) {return userRepository.save(user);}
+    public User createUser(User user) {
+        // Encripta la contraseña antes de guardar
+        //user.setPassword(passwordEncoder.encode(user.getPassword()));
+        return userRepository.save(user);
+    }
 
 
     // Eliminar un usuario por ID
@@ -91,6 +99,11 @@ public class UserService {
                 user.setDni(dni);
                 user.setCodigo(codigo);
                 user.setEmail(getCellValueAsString(row.getCell(4)));
+
+                // Encripta la contraseña antes de asignarla
+                // rawPassword = getCellValueAsString(row.getCell(5));
+                //user.setPassword(passwordEncoder.encode(rawPassword));
+
                 user.setPassword(getCellValueAsString(row.getCell(5)));
                 user.setPrivate_ingreso(getCellValueAsString(row.getCell(6)));
                 user.setHoras_obtenidas((int) row.getCell(7).getNumericCellValue());

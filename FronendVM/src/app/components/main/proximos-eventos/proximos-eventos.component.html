@@ -1,24 +1,29 @@
 <div class="container">
-  <h2>Próximos eventos</h2>
-  <br><br>
-  <!-- Contenedor de tarjetas de eventos -->
+  <h2 class="text-center mb-4">Próximos eventos</h2>
+
   <div class="row">
     <div *ngFor="let evento of eventosFiltrados" class="col-md-4 mb-4 d-flex align-items-stretch">
-      <div class="card" style="width: 100%;">
+      <div class="card shadow-sm" style="width: 100%; border-radius: 10px;">
         <div class="card-body">
           <h5 class="card-title">{{ evento.nombre }}</h5>
-          <p class="card-text">{{ evento.lugar }}</p>
-          <p class="card-text">Fecha: El día {{ evento.fecha | date:'EEEE d \'de\' MMMM\' del\' y':'es' }} a las {{ evento.hora }}</p>
-          <p class="card-text">Horas Válidas: {{ evento.horas_obtenidas }}</p>
-          <p class="card-text">Dirección: {{ evento.direccion }}</p>
+          <p class="card-text"><strong>Lugar:</strong> {{ evento.lugar }}</p>
+          <p class="card-text">
+            <strong>Fecha:</strong> El día
+            {{ evento.fecha | date:'EEEE d \'de\' MMMM\' del\' y':'es' }}
+            a las {{ evento.hora }}
+          </p>
+          <p class="card-text"><strong>Horas Válidas:</strong> {{ evento.horas_obtenidas }}</p>
+          <p class="card-text"><strong>Dirección:</strong> {{ evento.direccion }}</p>
 
           <div class="d-flex justify-content-between mt-3">
-            <button  (click)="inscribirse(evento.id, usuario.id)" class="btn " style="background-color: #005fb1; color: white">Inscribirse</button>
+            <button
+              (click)="inscribirse(evento.id, usuario.id)"
+              class="btn btn-primary w-100">
+              Inscribirse
+            </button>
           </div>
         </div>
-
       </div>
     </div>
-
   </div>
 </div>

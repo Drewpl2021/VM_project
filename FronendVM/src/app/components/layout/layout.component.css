@@ -40,7 +40,7 @@
 /* Hover efecto en enlaces */
 .sidebar a:hover {
   background-color: #058df3;
-  color: #fff;
+  color: white;
 }
 
 /* Estado activo del enlace */
@@ -56,7 +56,7 @@
   margin-left: 260px; /* Deja espacio para la barra lateral */
   padding: 20px;
   height: 100vh;
-  background-color: #f4f4f9;
+  background-color: white;
 }
 
 .sidebar a.active {

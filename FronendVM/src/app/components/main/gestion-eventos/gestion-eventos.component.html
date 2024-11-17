@@ -29,7 +29,7 @@
   </div>
 
   <!-- Modal para crear un nuevo evento -->
-  <div class="modal" tabindex="-1" [ngClass]="{ 'show': mostrarModalCrear }" style="display: block;" *ngIf="mostrarModalCrear" (click)="cerrarModalCrearEvento()">
+  <div class="modal-overlay" tabindex="-1" [ngClass]="{ 'show': mostrarModalCrear }" style="display: block;" *ngIf="mostrarModalCrear" (click)="cerrarModalCrearEvento()">
     <div class="modal-dialog" (click)="detenerPropagacion($event)">
       <div class="modal-content">
         <div class="modal-header">
@@ -63,7 +63,7 @@
               <input type="text" class="form-control" id="direccion" [(ngModel)]="nuevoEvento.direccion" name="direccion" required>
             </div>
             <div class="mb-3">
-              <label for="status" class="form-label">Status</label>
+              <label for="status" class="form-label">Estado</label>
               <select class="form-select" id="status" [(ngModel)]="nuevoEvento.status" name="status" required>
                 <option value="Activo">Activo</option>
                 <option value="Finalizado">Finalizado</option>
@@ -77,8 +77,8 @@
   </div>
 
   <!-- Modal para editar un evento existente -->
-  <div class="modal" tabindex="-1" [ngClass]="{ 'show': mostrarModalEditar }" style="display: block;" *ngIf="mostrarModalEditar">
-    <div class="modal-dialog">
+  <div class="modal-overlay" tabindex="-1" [ngClass]="{ 'show': mostrarModalEditar }" style="display: block;" *ngIf="mostrarModalEditar" (click)="cerrarModalCrearEvento()">
+    <div class="modal-dialog" (click)="detenerPropagacion($event)">
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title">Editar Evento</h5>

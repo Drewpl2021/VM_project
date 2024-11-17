@@ -19,3 +19,30 @@
   font-size: 24px;
   color: #333;
 }
+.card {
+  transition: transform 0.2s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+  transform: scale(1.03);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+}
+
+.card-title {
+  color: #005fb1;
+  font-weight: bold;
+}
+
+.btn-primary {
+  background-color: #005fb1;
+  border: none;
+}
+
+.btn-primary:hover {
+  background-color: #003f7f;
+}
+
+h2 {
+  color: #333;
+  font-weight: bold;
+}

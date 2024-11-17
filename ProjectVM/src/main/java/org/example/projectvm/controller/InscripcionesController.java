@@ -123,7 +123,10 @@ public class InscripcionesController {
         return inscripcionesService.getEventosPorUsuarioId(usuarioId);
     }
 
-
+    @GetMapping("/usuario/{usuarioId}")
+    public List<Inscripciones> getInscripcionesPorUsuario(@PathVariable Integer usuarioId) {
+        return inscripcionesService.findByUsuarioId(usuarioId);
+    }
 
 
 

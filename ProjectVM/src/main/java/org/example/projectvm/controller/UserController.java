@@ -1,6 +1,7 @@
 package org.example.projectvm.controller;
 
 import jakarta.annotation.PostConstruct;
+import org.example.projectvm.dto.UserDto;
 import org.example.projectvm.entity.Carreras;
 import org.example.projectvm.entity.Roles;
 import org.example.projectvm.entity.User;
@@ -13,7 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -78,9 +79,31 @@ public class UserController {
 
     // Crear un nuevo usuario
     @PostMapping
-    public User createUser(@RequestBody User user) {
-        return userService.createUser(user);
+    public ResponseEntity<?> createUser(@RequestBody User user) {
+        if (user.getRol() == null || user.getRol().getId() == null) {
+            return ResponseEntity.badRequest().body("El rol es obligatorio y debe incluir un ID.");
+        }
+        if (user.getCarrera() == null || user.getCarrera().getId() == null) {
+            return ResponseEntity.badRequest().body("La carrera es obligatoria y debe incluir un ID.");
+        }
+
+        // Verificar que los IDs de rol y carrera existan en la base de datos
+        Roles rol = rolesRepository.findById(user.getRol().getId())
+                .orElseThrow(() -> new IllegalArgumentException("Rol no encontrado con ID: " + user.getRol().getId()));
+        Carreras carrera = carrerasRepository.findById(user.getCarrera().getId())
+                .orElseThrow(() -> new IllegalArgumentException("Carrera no encontrada con ID: " + user.getCarrera().getId()));
+
+        user.setRol(rol);
+        user.setCarrera(carrera);
+
+        // Guardar el usuario en la base de datos
+        userRepository.save(user);
+        Map<String, String> response = new HashMap<>();
+        response.put("message", "Usuario creado exitosamente");
+        return ResponseEntity.ok(response);
     }
+
+
 
     // Eliminar un usuario
     @DeleteMapping("/{id}")
@@ -173,9 +196,11 @@ public class UserController {
             usuario.setNombre("Eder");
             usuario.setApellido("Gutierrez Quispe");
             usuario.setDni("41857964");
-            usuario.setCodigo(null); // Campo código como NULL
+            usuario.setCodigo("000000000"); // Campo código como NULL
             usuario.setEmail("eder.gutierres@gmail.com");
-            usuario.setPassword("12345"); // Mejor encriptar la contraseña
+            //BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+            //usuario.setPassword(encoder.encode("12345"));
+            usuario.setPassword("12345");
             usuario.setPrivate_ingreso("1");
             usuario.setHoras_obtenidas(0);
             usuario.setStatus(User.Status.Docente); // Estado inicial

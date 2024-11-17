@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import {BackendService} from "../../../services/backend.service";
 import {Router} from "@angular/router";
+import Swal from 'sweetalert2';
+
 
 @Component({
   selector: 'app-gestion-eventos',
@@ -31,6 +33,7 @@ export class GestionEventosComponent {
       },
       (error) => {
         console.error('Error al obtener eventos:', error);
+        Swal.fire('Error', 'No se pudieron cargar los eventos.', 'error');
       }
     );
   }
@@ -59,10 +62,11 @@ export class GestionEventosComponent {
         this.eventos.push(data);
         this.eventosFiltrados = this.eventos;
         this.cerrarModalCrearEvento();
-        alert('Evento creado correctamente.');
+        Swal.fire('Éxito', 'Evento creado correctamente.', 'success');
       },
       (error) => {
         console.error('Error al crear el evento:', error);
+        Swal.fire('Error', 'No se pudo crear el evento.', 'error');
       }
     );
   }
@@ -96,26 +100,39 @@ export class GestionEventosComponent {
           this.eventosFiltrados = this.eventos;
         }
         this.cerrarModalEditarEvento();
-        alert('Evento actualizado correctamente.');
+        Swal.fire('Éxito', 'Evento actualizado correctamente.', 'success');
       },
       (error) => {
         console.error('Error al actualizar el evento:', error);
+        Swal.fire('Error', 'No se pudo actualizar el evento.', 'error');
       }
     );
   }
 
   eliminarEvento(id: number): void {
-    if (confirm("¿Estás seguro de que deseas eliminar este evento?")) {
-      this.backendService.deleteEvento(id).subscribe(
-        () => {
-          this.eventos = this.eventos.filter(evento => evento.id !== id);
-          this.eventosFiltrados = this.eventos;
-          alert('Evento eliminado correctamente.');
-        },
-        (error) => {
-          console.error('Error al eliminar el evento:', error);
-        }
-      );
-    }
+    Swal.fire({
+      title: '¿Estás seguro?',
+      text: 'No podrás revertir esta acción.',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Sí, eliminar',
+      cancelButtonText: 'Cancelar'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.backendService.deleteEvento(id).subscribe(
+          () => {
+            this.eventos = this.eventos.filter(evento => evento.id !== id);
+            this.eventosFiltrados = this.eventos;
+            Swal.fire('Eliminado', 'Evento eliminado correctamente.', 'success');
+          },
+          (error) => {
+            console.error('Error al eliminar el evento:', error);
+            Swal.fire('Error', 'No se pudo eliminar el evento.', 'error');
+          }
+        );
+      }
+    });
   }
 }

@@ -42,6 +42,10 @@ export class BackendService {
   obtenerEventoPorId(eventoId: number): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}/evento/${eventoId}`);
   }
+  getEventoById(eventoId: number): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/eventos/${eventoId}`);
+  }
+
 
 
 
@@ -69,9 +73,10 @@ export class BackendService {
     return this.http.get<any[]>(`${this.apiUrl}/user`);
   }
 
-  createUser(user: any): Observable<any> {
-    return this.http.post(`${this.apiUrl}/user`, user);
+  crearUsuario(data: any): Observable<any> {
+    return this.http.post(`${this.apiUrl}/user`, data, { responseType: 'text' });
   }
+
 
   updateUser(id: number, user: any): Observable<any> {
     return this.http.put(`${this.apiUrl}/user/${id}`, user);
@@ -80,6 +85,11 @@ export class BackendService {
   deleteUser(id: number): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/user/${id}`);
   }
+  obtenerUsuarioPorId(userId: number): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/user/${userId}`);
+  }
+
+
 
 
 
@@ -111,5 +121,17 @@ export class BackendService {
   actualizarInscripcion(idInscripcion: number, payload: any): Observable<any> {
     return this.http.put(`${this.apiUrl}/inscripciones/${idInscripcion}`, payload);
   }
+
+  obtenerInscripcionesPorUsuario(usuarioId: number) {
+    return this.http.get<any[]>(`http://localhost:8080/inscripciones/usuario/${usuarioId}`);
+  }
+
+
+
+  //ROL
+  getRoles(): Observable<any> {
+    return this.http.get(`${this.apiUrl}/roles`);
+  }
+
 
 }
