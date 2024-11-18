@@ -59,7 +59,9 @@ export class DashboardComponent {
 
 
   }
-
+  irAUpeu(): void {
+    window.location.href = 'https://upeu.edu.pe/';
+  }
 
   onSearch() {
     this.resultado = null; // Limpiar el resultado previo

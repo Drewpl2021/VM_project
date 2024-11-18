@@ -42,6 +42,14 @@
   background-color: #058df3;
   color: white;
 }
+.no-style-link {
+  all: unset; /* Resetea todos los estilos del enlace */
+  display: inline-block; /* Asegura que funcione correctamente con imágenes */
+}
+
+.no-style-link img {
+  display: block; /* Asegura que la imagen se ajuste correctamente */
+}
 
 /* Estado activo del enlace */
 .sidebar a.active {
@@ -49,7 +57,12 @@
   color: white;
 }
 
-
+.toolbar-logo {
+  height: 60px;
+  max-width: 100%;
+  object-fit: contain;
+  margin-left: 30px;
+}
 
 /* Contenido principal */
 .content {
@@ -94,3 +107,4 @@
 .logout-btn:hover {
   background-color: #e60000;
 }
+

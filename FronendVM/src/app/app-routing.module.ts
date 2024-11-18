@@ -23,11 +23,18 @@ const routes: Routes = [
     children: [
       // Rutas específicas para Estudiantes
       {
+        path: 'inicio',
+        component: DashboardComponent,
+        canActivate: [RoleGuard],
+        data: { roles: ['Estudiante'] }
+      },
+      {
         path: 'proximos_eventos',
         component: ProximosEventosComponent,
         canActivate: [RoleGuard],
         data: { roles: ['Estudiante'] }
       },
+
       {
         path: 'eventos_participados',
         component: EventosParticipadosComponent,

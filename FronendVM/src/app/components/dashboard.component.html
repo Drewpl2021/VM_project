@@ -2,13 +2,13 @@
 
 <div class="main">
   <div class="toolbar" role="banner">
-    <img src="../assets/images/logo.png" alt="Logo" class="toolbar-logo">
+    <img src="../assets/images/logo.png" (click)="irAUpeu()" alt="Logo" class="toolbar-logo">
 
     <!-- Menú u otros elementos alineados a la derecha -->
 
     <div class="toolbar-right d-flex justify-content-end gap-3 mt-3">
       <a routerLink="/main" class="btn custom-btn">
-        <i class="fa-solid fa-house me-2"></i> Inicio
+        <i class="fa-solid fa-house me-2"></i> Home
       </a>
       <a (click)="goToSecondComponent()" class="btn custom-btn">
         <i class="fa-solid fa-right-to-bracket me-2"></i> Iniciar Sesión
