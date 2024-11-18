@@ -249,3 +249,90 @@ input.form-control {
 .add-button:hover {
   background-color: #003d80;
 }
+
+/* Contenedor principal de la paginación */
+.pagination-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+  background-color: #f8f9fa;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  margin-top: 15px;
+  font-family: Arial, sans-serif;
+}
+
+/* Controles de líneas por página */
+.pagination-controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.pagination-label {
+  font-size: 14px;
+  color: #555;
+}
+
+.pagination-select {
+  padding: 5px 10px;
+  font-size: 14px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background-color: #fff;
+  cursor: pointer;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.pagination-select:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+/* Información de la paginación */
+.pagination-info {
+  font-size: 14px;
+  color: #555;
+}
+
+/* Botones de paginación */
+.pagination-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.pagination-btn {
+  padding: 8px 15px;
+  font-size: 14px;
+  color: #fff;
+  background-color: #007bff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.pagination-btn:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.pagination-btn:hover:not(:disabled) {
+  background-color: #0056b3;
+  transform: scale(1.05);
+}
+
+.pagination-btn:active:not(:disabled) {
+  transform: scale(0.95);
+}
+
+/* Botón "Anterior" */
+.prev-btn {
+  background-color: #007bff;
+}
+
+/* Botón "Siguiente" */
+.next-btn {
+  background-color: #007bff;
+}

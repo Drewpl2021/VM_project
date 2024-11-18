@@ -10,11 +10,18 @@ import Swal from 'sweetalert2';
 export class ImportarDatosComponent implements OnInit {
   selectedFile: File | null = null;
   users: any[] = [];
-  searchTerm: string = '';
   mostrarModalCrear = false;
   mostrarModalEditar = false;
   carreras: any[] = [];
   roles: any[] = [];
+
+  usuariosPaginados: any[] = []; // Usuarios visibles por página
+  searchTerm: string = ''; // Término de búsqueda
+
+  // Paginación
+  pageSize: number = 10; // Tamaño de cada página
+  paginaActual: number = 1; // Página actual
+  totalPaginas: number = 0; // Total de páginas
   usuarioForm: any = {
     nombre: '',
     apellido: '',
@@ -74,6 +81,7 @@ export class ImportarDatosComponent implements OnInit {
     this.buscarUsuarios();
     this.obtenerCarreras();
     this.obtenerRoles();
+    this.cargarUsuarios();
   }
   obtenerCarreras(): void {
     this.backendService.getData().subscribe(
@@ -98,21 +106,53 @@ export class ImportarDatosComponent implements OnInit {
   }
 
 
+  cargarUsuarios(): void {
+    this.backendService.getAllUsers().subscribe(
+      (data) => {
+        this.users = data; // Carga los datos
+        this.actualizarPaginacion(); // Calcula la paginación
+      },
+      (error) => {
+        console.error('Error al cargar usuarios:', error);
+        Swal.fire('Error', 'No se pudieron cargar los usuarios.', 'error');
+      }
+    );
+  }
+
   buscarUsuarios(): void {
     if (this.searchTerm.trim()) {
-      this.backendService.buscarUsuariosPorTermino(this.searchTerm).subscribe(
-        (data) => {
-          this.users = data;
-        },
-        (error) => {
-          console.error('Error al buscar usuarios:', error);
-
-        }
+      const termino = this.searchTerm.toLowerCase();
+      const usuariosFiltrados = this.users.filter((user) =>
+        user.nombre.toLowerCase().includes(termino) ||
+        user.apellido.toLowerCase().includes(termino) ||
+        user.codigo.toLowerCase().includes(termino)
       );
+      this.paginaActual = 1; // Reinicia la página
+      this.actualizarPaginacion(usuariosFiltrados);
     } else {
-      this.obtenerUsuarios(); // Si no hay término de búsqueda, cargar todos los usuarios
+      this.paginaActual = 1; // Reinicia la página
+      this.actualizarPaginacion(this.users); // Muestra todos los usuarios
     }
   }
+
+  actualizarPaginacion(lista: any[] = this.users): void {
+    const inicio = (this.paginaActual - 1) * this.pageSize;
+    const fin = inicio + this.pageSize;
+    this.usuariosPaginados = lista.slice(inicio, fin); // Toma los usuarios para la página actual
+    this.totalPaginas = Math.ceil(lista.length / this.pageSize); // Calcula las páginas totales
+  }
+
+  cambiarPagina(incremento: number): void {
+    this.paginaActual += incremento;
+    this.actualizarPaginacion();
+  }
+
+  actualizarTamanioPagina(size: number): void {
+    this.pageSize = size;
+    this.paginaActual = 1; // Reinicia a la primera página
+    this.actualizarPaginacion(); // Recalcula la paginación
+  }
+
 
   obtenerUsuarios(): void {
     this.backendService.getAllUsers().subscribe(

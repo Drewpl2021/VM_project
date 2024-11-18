@@ -41,7 +41,7 @@
     </tr>
     </thead>
     <tbody>
-    <tr *ngFor="let user of users">
+    <tr *ngFor="let user of usuariosPaginados">
       <td>{{ user.id }}</td>
       <td>{{ user.nombre }}</td>
       <td>{{ user.apellido }}</td>
@@ -57,11 +57,28 @@
     </tr>
     </tbody>
   </table>
+  <br>
 
-</div>
+  <div class="pagination-container">
+    <div class="pagination-controls">
+      <span class="pagination-label">Líneas por página:</span>
+      <select class="pagination-select" [(ngModel)]="pageSize" (change)="actualizarTamanioPagina(pageSize)">
+        <option [value]="10">10</option>
+        <option [value]="20">20</option>
+        <option [value]="50">50</option>
+      </select>
+    </div>
+    <div class="pagination-info">
+      <span class="pagination-text">Página {{ paginaActual }} de {{ totalPaginas }}</span>
+    </div>
+    <div class="pagination-buttons">
+      <button class="pagination-btn prev-btn" [disabled]="paginaActual === 1" (click)="cambiarPagina(-1)">Anterior</button>
+      <button class="pagination-btn next-btn" [disabled]="paginaActual === totalPaginas" (click)="cambiarPagina(1)">Siguiente</button>
+    </div>
+  </div>
 
 
-<!-- Modal para crear/editar usuario -->
+  <!-- Modal para crear/editar usuario -->
 <div *ngIf="mostrarModalCrear || mostrarModalEditar" class="modal-overlay" (click)="cerrarModal()">
   <div class="modal-dialog" (click)="$event.stopPropagation()">
     <div class="modal-content">
@@ -205,6 +222,7 @@
           </div>
         </form>
       </div>
+
     </div>
   </div>
 </div>

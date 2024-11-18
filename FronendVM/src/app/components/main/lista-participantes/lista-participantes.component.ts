@@ -21,6 +21,12 @@ export class ListaParticipantesComponent implements OnInit {
   participantesOriginales: any[] = [];
   fileToUpload: File | null = null;
 
+  participantesPaginados: any[] = []; // Datos paginados
+  tamanioPagina: number = 10; // Tamaño inicial de página
+  paginaActual: number = 1; // Página inicial
+  usuariosPaginados: any[] = []; // Usuarios mostrados en el modal (paginados)
+  paginaActualUsuarios: number = 1; // Página actual en el modal
+  tamanioPaginaUsuarios: number = 10; // Tamaño inicial de página en el modal
 
 
   constructor(private route: ActivatedRoute,
@@ -114,14 +120,39 @@ export class ListaParticipantesComponent implements OnInit {
   cargarParticipantes(): void {
     this.backendService.obtenerParticipantes(this.eventoId!).subscribe(
       (data) => {
-        this.participantesOriginales = [...data]; // Mantén una copia de los datos originales
-        this.participantes = [...data]; // Los datos que se mostrarán en la tabla
-        console.log('Participantes cargados:', data);
+        this.participantesOriginales = [...data]; // Copia de datos originales
+        this.participantes = [...data]; // Datos visibles
+        this.actualizarPagina(); // Asegúrate de que los datos paginados se actualicen
+        console.log('Participantes cargados:', data); // Depuración
       },
       (error) => {
         console.error('Error al cargar participantes:', error);
       }
     );
+  }
+
+
+
+
+  cambiarPagina(incremento: number): void {
+    this.paginaActual += incremento;
+    this.actualizarPagina();
+  }
+
+  actualizarTamanioPagina(event: any): void {
+    this.tamanioPagina = +event.target.value; // Convertir el valor a número
+    this.paginaActual = 1; // Reiniciar a la primera página
+    this.actualizarPagina();
+  }
+
+  actualizarTamanioPaginaModel(event: Event): void {
+    const selectElement = event.target as HTMLSelectElement; // Hacer cast explícito
+    this.tamanioPaginaUsuarios = +selectElement.value; // Convertir el valor a número
+    this.paginaActualUsuarios = 1; // Reiniciar a la primera página
+    this.actualizarPaginaUsuarios();
+  }
+  get totalPaginas(): number {
+    return Math.ceil(this.participantes.length / this.tamanioPagina);
   }
 
 
@@ -205,12 +236,14 @@ export class ListaParticipantesComponent implements OnInit {
           seleccionado: false // Agrega un campo temporal para manejar selección
         }));
         this.usuariosFiltrados = [...this.usuariosNoInscritos]; // Inicializa la lista filtrada
+        this.actualizarPaginaUsuarios(); // Actualiza la paginación inicial
       },
       (error) => {
         console.error('Error al obtener usuarios no inscritos:', error);
       }
     );
   }
+
 
 // Método para cerrar el modal
   cerrarModalAgregarParticipantes(): void {
@@ -221,36 +254,59 @@ export class ListaParticipantesComponent implements OnInit {
   filtrarUsuariosNoInscritos(): void {
     const termino = this.busquedaUsuario.trim().toLowerCase();
     if (termino) {
-      this.backendService.buscarUsuariosPorTermino(termino).subscribe(
-        (resultado) => {
-          this.usuariosNoInscritos = resultado;
-          console.log('Usuarios filtrados:', resultado);
-        },
-        (error) => {
-          console.error('Error al buscar usuarios:', error);
-          this.usuariosNoInscritos = []; // Vacía la lista si hay error
-        }
+      this.usuariosFiltrados = this.usuariosNoInscritos.filter(usuario =>
+        usuario.nombre.toLowerCase().includes(termino) ||
+        usuario.apellido.toLowerCase().includes(termino) ||
+        usuario.email.toLowerCase().includes(termino)
       );
     } else {
-      // Si no hay término de búsqueda, muestra todos los usuarios no inscritos
-      this.usuariosNoInscritos = [...this.usuariosNoInscritos];
+      this.usuariosFiltrados = [...this.usuariosNoInscritos];
     }
+
+    // Actualizar la paginación después de filtrar
+    this.actualizarPaginaUsuarios();
+  }
+  cambiarPaginaUsuarios(incremento: number): void {
+    this.paginaActualUsuarios += incremento;
+    this.actualizarPaginaUsuarios();
   }
 
+  actualizarPaginaUsuarios(): void {
+    const inicio = (this.paginaActualUsuarios - 1) * this.tamanioPaginaUsuarios;
+    const fin = inicio + this.tamanioPaginaUsuarios;
+    this.usuariosPaginados = this.usuariosFiltrados.slice(inicio, fin);
+  }
+
+  get totalPaginasUsuarios(): number {
+    return Math.ceil(this.usuariosFiltrados.length / this.tamanioPaginaUsuarios);
+  }
+
+
   filtrarUsuarios(): void {
-    const termino = this.busquedaUsuario.trim().toLowerCase();
+    const termino = this.busquedaUsuario.trim().toLowerCase(); // Convertir el término a minúsculas
     if (termino) {
-      // Filtra los participantes ya cargados en la tabla
+      // Filtra los datos originales
       this.participantes = this.participantesOriginales.filter((participante) =>
         participante.nombre.toLowerCase().includes(termino) ||
         participante.apellido.toLowerCase().includes(termino) ||
         participante.codigo.toLowerCase().includes(termino)
       );
     } else {
-      // Si no hay término de búsqueda, muestra todos los participantes originales
+      // Si no hay término de búsqueda, restaurar todos los datos originales
       this.participantes = [...this.participantesOriginales];
     }
+
+    // Después de filtrar, actualiza los datos paginados
+    this.actualizarPagina();
   }
+  actualizarPagina(): void {
+    const inicio = (this.paginaActual - 1) * this.tamanioPagina;
+    const fin = inicio + this.tamanioPagina;
+    this.participantesPaginados = this.participantes.slice(inicio, fin);
+  }
+
+
+
 
 
   cargarUsuariosNoInscritos(): void {
@@ -351,5 +407,5 @@ export class ListaParticipantesComponent implements OnInit {
   }
 
 
-
+  protected readonly Math = Math;
 }
