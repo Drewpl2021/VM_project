@@ -1,3 +1,4 @@
+
 <div class="container">
   <h2 class="text-center mb-4">Próximos eventos</h2>
 
@@ -16,9 +17,12 @@
           <p class="card-text"><strong>Dirección:</strong> {{ evento.direccion }}</p>
 
           <div class="d-flex justify-content-between mt-3">
+            <!-- Usa la variable `statusUsuario` -->
             <button
-              (click)="inscribirse(evento.id, usuario.id)"
-              class="btn btn-primary w-100">
+              *ngIf="statusUsuario === 'Estudiante'"
+              class="btn btn-primary w-100"
+              (click)="inscribirse(evento.id)"
+            >
               Inscribirse
             </button>
           </div>
@@ -27,3 +31,4 @@
     </div>
   </div>
 </div>
+

@@ -26,7 +26,8 @@ public class User {
     public enum Status {
         Estudiante,
         Egresado,
-        Docente
+        Docente,
+        Retirado
 
     }
 

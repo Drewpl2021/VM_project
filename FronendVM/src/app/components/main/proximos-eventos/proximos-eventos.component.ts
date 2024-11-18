@@ -14,15 +14,26 @@ export class ProximosEventosComponent implements OnInit {
   eventosFiltrados: any[] = [];
   usuario: any = {};
   horas_obtenidas: number = 5;
-  anio_academico: string = "2024";
+  anio_academico="2024";
+
+  public statusUsuario: string | null = null;
 
   constructor(private backendService: BackendService,
-              private authService: AuthService,
+              public authService: AuthService,
               ) {}
 
   ngOnInit(): void {
     this.obtenerEventos();
     this.obtenerDatosUsuario();
+    this.authService.getAuthenticatedUser().subscribe(
+      (usuario) => {
+        this.statusUsuario = usuario.status;
+        console.log('Status del usuario:', this.statusUsuario); // Para verificar
+      },
+      (error) => {
+        console.error('Error al obtener usuario autenticado:', error);
+      }
+    );
   }
 
   obtenerEventos(): void {
@@ -63,12 +74,26 @@ export class ProximosEventosComponent implements OnInit {
     );
   }
 
-  inscribirse(eventoId: number, userId: number): void {
+  inscribirse(eventoId: number): void {
+    // Obtener los datos del usuario autenticado
+    const usuario = this.authService.getAuthenticatedUserData();
+
+    if (!usuario) {
+      Swal.fire({
+        title: 'Error',
+        text: 'No se pudo recuperar la información del usuario autenticado. Por favor, inicia sesión nuevamente.',
+        icon: 'error',
+        confirmButtonText: 'Aceptar',
+      });
+      return;
+    }
+
+    const userId = usuario.id; // ID del usuario autenticado
+
     // Buscar las horas válidas del evento en el listado ya cargado
-    const eventoSeleccionado = this.eventos.find(evento => evento.id === eventoId);
+    const eventoSeleccionado = this.eventos.find((evento) => evento.id === eventoId);
 
     if (!eventoSeleccionado) {
-      // Si no se encuentra el evento (por alguna razón), mostrar un error
       Swal.fire({
         title: 'Error',
         text: 'No se pudo encontrar el evento seleccionado. Intenta nuevamente.',
@@ -79,10 +104,9 @@ export class ProximosEventosComponent implements OnInit {
     }
 
     // Verificar si el usuario ya está inscrito en el evento
-    this.backendService.verificarInscripcion(this.usuario.id, eventoId).subscribe(
+    this.backendService.verificarInscripcion(userId, eventoId).subscribe(
       (yaInscrito) => {
         if (yaInscrito) {
-          // Usar SweetAlert2 para mejorar la notificación
           Swal.fire({
             title: 'Atención',
             text: 'Ya estás inscrito en este evento.',
@@ -93,9 +117,9 @@ export class ProximosEventosComponent implements OnInit {
           // Construir la inscripción con las horas válidas del evento
           const inscripcion = {
             evento: { id: eventoId },
-            usuario: { id: this.usuario.id },
+            usuario: { id: userId },
             horas_obtenidas: parseInt(eventoSeleccionado.horas_obtenidas, 10), // Convertir a número
-            anio_academico: this.anio_academico,
+            anio_academico: this.anio_academico, // Suponiendo que ya tienes este valor configurado
           };
 
           // Enviar la inscripción al backend
