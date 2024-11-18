@@ -9,14 +9,13 @@ export class RoleGuard implements CanActivate {
   constructor(private authService: AuthService, private router: Router) {}
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
-    const usuario = this.authService.getAuthenticatedUserData();
+    const userRole = this.authService.getUserRole(); // Recuperar el rol correctamente
     const rolesPermitidos = route.data['roles'];
 
-    if (usuario && rolesPermitidos.includes(usuario.rol)) {
-      return true; // Permite el acceso
+    if (userRole && rolesPermitidos.includes(userRole)) {
+      return true; // Permitir acceso si el usuario tiene un rol permitido
     } else {
-      // Redirige a una página predeterminada si no tiene permiso
-      this.router.navigate(['/']);
+      this.router.navigate(['/']); // Redirigir si no tiene permiso
       return false;
     }
   }

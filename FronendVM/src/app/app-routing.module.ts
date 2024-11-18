@@ -10,26 +10,53 @@ import {GestionEventosComponent} from "./components/main/gestion-eventos/gestion
 import {ImportarDatosComponent} from "./components/main/importar-datos/importar-datos.component";
 import {AuthGuard} from "./guards/auth.guard";
 import {ListaParticipantesComponent} from "./components/main/lista-participantes/lista-participantes.component";
+import {RoleGuard} from "./guards/role.guard";
 
 const routes: Routes = [
-  { path: '', component: DashboardComponent }, // Página de inicio
+  { path: '', component: DashboardComponent }, // Redirección inicial a login
   { path: 'login', component: LoginComponent }, // Ruta del login
-  { path: 'main', component: LayoutComponent, canActivate: [AuthGuard] },
+  { path: 'main', component: LayoutComponent, canActivate: [AuthGuard] }, // Ruta para el login
   {
     path: '',
     component: LayoutComponent,
     canActivate: [AuthGuard],
     children: [
-      { path: 'proximos_eventos', component: ProximosEventosComponent },
-      { path: 'eventos_participados', component: EventosParticipadosComponent },
-      { path: 'gestion_eventos', component: GestionEventosComponent },
-      { path: 'importar_datos', component: ImportarDatosComponent },
-      { path: 'lista_participantes/:id', component: ListaParticipantesComponent},
-      { path: '', redirectTo: 'proximos_eventos', pathMatch: 'full' }
+      // Rutas específicas para Estudiantes
+      {
+        path: 'proximos_eventos',
+        component: ProximosEventosComponent,
+        canActivate: [RoleGuard],
+        data: { roles: ['Estudiante'] }
+      },
+      {
+        path: 'eventos_participados',
+        component: EventosParticipadosComponent,
+        canActivate: [RoleGuard],
+        data: { roles: ['Estudiante'] }
+      },
+
+      // Rutas específicas para Coordinadores
+      {
+        path: 'gestion_eventos',
+        component: GestionEventosComponent,
+        canActivate: [RoleGuard],
+        data: { roles: ['Coordinador'] }
+      },
+      {
+        path: 'importar_datos',
+        component: ImportarDatosComponent,
+        canActivate: [RoleGuard],
+        data: { roles: ['Coordinador'] }
+      },
+      {
+        path: 'lista_participantes/:id',
+        component: ListaParticipantesComponent,
+        canActivate: [RoleGuard],
+        data: { roles: ['Coordinador'] }
+      }
     ]
   }
 ];
-
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule]

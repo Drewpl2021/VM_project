@@ -57,6 +57,7 @@ export class DashboardComponent {
     const usuarioAutenticado = false; // Simulación de autenticación
 
 
+
   }
 
 

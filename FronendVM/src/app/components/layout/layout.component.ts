@@ -18,6 +18,8 @@ export class LayoutComponent implements OnInit {
 
   ngOnInit(): void {
     this.obtenerDatosUsuario(); // Asegúrate de llamar a este método aquí
+    this.usuario = this.authService.getAuthenticatedUserData();
+
   }
   // Método para alternar la visibilidad de la barra lateral
   toggleSidebar() {
