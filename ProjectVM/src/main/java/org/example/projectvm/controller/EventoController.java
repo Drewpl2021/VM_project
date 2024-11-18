@@ -2,7 +2,9 @@ package org.example.projectvm.controller;
 
 
 import org.example.projectvm.entity.Evento;
+import org.example.projectvm.entity.Inscripciones;
 import org.example.projectvm.service.EventoService;
+import org.example.projectvm.service.InscripcionesService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,6 +17,8 @@ import java.util.List;
 public class EventoController {
     @Autowired
     private EventoService eventoService;
+    @Autowired
+    private InscripcionesService inscripcionesService;
 
     // Listar todos
     @GetMapping
@@ -42,13 +46,24 @@ public class EventoController {
         eventoService.delete(id);
         return ResponseEntity.noContent().build();
     }
-
-    //Actualizar
     @PutMapping("/{id}")
     public ResponseEntity<Evento> actualizar(@PathVariable Integer id, @RequestBody Evento evento) {
-        // Aquí puedes verificar que el ID del usuario en el cuerpo coincide con el ID de la ruta
-        evento.setId(id); // Establece el ID para asegurarte de que estás actualizando el registro correcto
-        Evento updatedUser = eventoService.actualizar(evento);
-        return ResponseEntity.ok(updatedUser);
+        // Establecer el ID para asegurarte de que estás actualizando el registro correcto
+        evento.setId(id);
+
+        // Actualiza el evento
+        Evento updatedEvento = eventoService.actualizar(evento);
+
+        // Obtener todas las inscripciones asociadas al evento
+        List<Inscripciones> inscripciones = inscripcionesService.findByEventoId(id);
+
+        // Actualizar las horas de los usuarios asociados a estas inscripciones
+        for (Inscripciones inscripcion : inscripciones) {
+            inscripcionesService.actualizarHorasUsuario(inscripcion.getUsuario().getId());
+        }
+
+        return ResponseEntity.ok(updatedEvento);
     }
+
+
 }

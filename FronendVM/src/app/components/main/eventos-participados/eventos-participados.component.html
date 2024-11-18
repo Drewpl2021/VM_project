@@ -1,6 +1,6 @@
 <div class="container">
   <h2>Eventos en los que estás inscrito</h2>
-  <h3>Tienes <b>{{ horasTotales }}</b> horas de Vinculación con el Medio (Las horas pueden variar al finalizar el evento, comunicarse con su coordinador)</h3>
+  <h3>Tienes <b>{{ horasTotales }}</b> horas de Vinculación con el Medio</h3>
   <br><br>
   <div class="row">
     <div *ngFor="let evento of eventosInscritos" class="col-md-4 mb-4 d-flex align-items-stretch">
@@ -21,7 +21,11 @@
           <p class="card-text">{{ evento.lugar }}</p>
           <p class="card-text">Fecha: El día {{ evento.fecha | date:'EEEE d \'de\' MMMM\' del\' y':'es' }} a las {{ evento.hora }}</p>
           <p class="card-text">Horas del Evento: {{ evento.horas_obtenidas }}</p>
-          <p class="card-text">Horas Asignadas: {{ evento.horas_asignadas }}</p>
+          <p *ngIf="evento.status === 'Finalizado'" class="card-text">Horas Asignadas: {{ evento.horas_asignadas }}</p>
+          <p *ngIf="evento.status === 'Finalizado' && +evento.horas_obtenidas !== +evento.horas_asignadas" class="card-text">
+            Descripción: {{ evento.detalles }}
+          </p>
+
           <p class="card-text">Dirección: {{ evento.direccion }}</p>
         </div>
       </div>

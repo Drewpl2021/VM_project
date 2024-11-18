@@ -59,14 +59,16 @@ public class InscripcionesService {
                     participanteData.put("nombre", inscripcion.getUsuario().getNombre());
                     participanteData.put("apellido", inscripcion.getUsuario().getApellido());
                     participanteData.put("codigo", inscripcion.getUsuario().getCodigo());
-                    participanteData.put("horas_obtenidas", inscripcion.getHoras_obtenidas()); // Horas obtenidas
                     participanteData.put("detalles", inscripcion.getDetalles());
+                    participanteData.put("horas_obtenidas", inscripcion.getHoras_obtenidas()); // Horas obtenidas
+
                     return participanteData;
                 })
                 .collect(Collectors.toList());
     }
-
-
+    public List<Inscripciones> findByEventoId(Integer eventoId) {
+        return inscripcionesRepository.findByEventoId(eventoId);
+    }
 
 
     public List<Evento> getEventosPorUsuarioId(Integer usuarioId) {
@@ -80,8 +82,9 @@ public class InscripcionesService {
     }
 
     public void actualizarHorasUsuario(Integer userId) {
-        // Sumar todas las horas obtenidas de las inscripciones del usuario
+        // Filtrar inscripciones cuyos eventos estén en estado Finalizado
         Integer totalHoras = inscripcionesRepository.findByUsuarioId(userId).stream()
+                .filter(inscripcion -> inscripcion.getEvento().getStatus() == Evento.Status.Finalizado) // Filtra eventos finalizados
                 .mapToInt(Inscripciones::getHoras_obtenidas)
                 .sum();
 
@@ -92,6 +95,8 @@ public class InscripcionesService {
 
         userRepository.save(usuario);
     }
+
+
 
     public List<Inscripciones> findByUsuarioId(Integer usuarioId) {
         return inscripcionesRepository.findByUsuarioId(usuarioId);

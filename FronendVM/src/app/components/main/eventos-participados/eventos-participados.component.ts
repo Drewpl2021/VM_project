@@ -54,7 +54,7 @@ export class EventosParticipadosComponent implements OnInit{
     if (this.userId) {
       this.backendService.obtenerEventosInscritosPorUsuario(this.userId).subscribe(
         (eventos) => {
-          this.eventosInscritos = eventos;
+          this.eventosInscritos = eventos; // Asegúrate de que 'detalles' venga en los datos
           this.vincularHorasAsignadas(); // Vincular las horas después de obtener los eventos
         },
         (error) => {
@@ -63,6 +63,7 @@ export class EventosParticipadosComponent implements OnInit{
       );
     }
   }
+
 
   obtenerInscripciones(): void {
     if (this.userId) {
@@ -85,6 +86,7 @@ export class EventosParticipadosComponent implements OnInit{
           insc => insc.evento.id === evento.id
         );
         evento.horas_asignadas = inscripcion ? inscripcion.horas_obtenidas : 0;
+        evento.detalles = inscripcion ? inscripcion.detalles : 'Sin descripción';
         return evento;
       });
     }
