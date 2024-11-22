@@ -1,6 +1,12 @@
 <div class="container">
   <h2>Eventos en los que estás inscrito</h2>
-  <h3>Tienes <b>{{ horasTotales }}</b> horas de Vinculación con el Medio</h3>
+  <div class="info-container">
+    <h3>Tienes <b>{{ horasTotales }}</b> horas de Vinculación con el Medio</h3>
+    <div class="datetime-container">
+      <span class="date">{{ fechaActual }}</span>
+    </div>
+  </div>
+
   <br><br>
   <div class="row">
     <div *ngFor="let evento of eventosInscritos" class="col-md-4 mb-4 d-flex align-items-stretch">

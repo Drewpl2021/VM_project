@@ -22,6 +22,24 @@
           <button type="submit" class="submit-button">Subir Archivo</button>
         </form>
       </div>
+    <!-- Contenedor de filtros -->
+    <div class="filter-container-horizontal">
+      <h4 class="filter-title">Filtrar por Estado:</h4>
+      <div class="filter-options-horizontal">
+        <div *ngFor="let status of statuses" class="form-check-inline">
+          <input
+            type="checkbox"
+            [value]="status"
+            id="filter-{{ status }}"
+            class="form-check-input"
+            (change)="actualizarFiltros(status, $event)"
+          />
+          <label for="filter-{{ status }}" class="form-check-label">{{ status }}</label>
+        </div>
+      </div>
+    </div>
+
+
   </div>
 
 

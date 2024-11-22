@@ -18,6 +18,11 @@ export class ImportarDatosComponent implements OnInit {
   usuariosPaginados: any[] = []; // Usuarios visibles por página
   searchTerm: string = ''; // Término de búsqueda
 
+  statuses: string[] = ['Estudiante', 'Egresado', 'Docente', 'Retirado']; // Opciones de status
+  statusSeleccionados: string[] = []; // Lista de status seleccionados
+  filtrosStatus: string[] = [];
+
+
   // Paginación
   pageSize: number = 10; // Tamaño de cada página
   paginaActual: number = 1; // Página actual
@@ -47,6 +52,45 @@ export class ImportarDatosComponent implements OnInit {
       console.log('Archivo seleccionado:', file); // Confirmar que se seleccionó el archivo
     }
   }
+
+  filtrarUsuarios(): void {
+    const termino = this.searchTerm.toLowerCase();
+
+    const usuariosFiltrados = this.usuariosPaginados.filter((user: any) => {
+      const cumpleBusqueda =
+        user.nombre.toLowerCase().includes(termino) ||
+        user.apellido.toLowerCase().includes(termino) ||
+        user.codigo.toLowerCase().includes(termino);
+
+      const cumpleStatus =
+        this.statusSeleccionados.length === 0 || this.statusSeleccionados.includes(user.status);
+
+      return cumpleBusqueda && cumpleStatus;
+    });
+
+    this.paginaActual = 1; // Reinicia la página
+    this.actualizarPaginacion(usuariosFiltrados);
+  }
+
+  actualizarFiltros(status: string, event: Event): void {
+    const checkbox = event.target as HTMLInputElement;
+    const checked = checkbox.checked;
+
+    if (checked) {
+      // Agrega el estado al filtro seleccionado
+      if (!this.filtrosStatus.includes(status)) {
+        this.filtrosStatus.push(status);
+      }
+    } else {
+      // Remueve el estado del filtro seleccionado
+      this.filtrosStatus = this.filtrosStatus.filter((filtro) => filtro !== status);
+    }
+    this.buscarUsuarios();
+  }
+
+
+
+
 
   descargarFormatoExcel(): void {
     const link = document.createElement('a');
@@ -120,20 +164,28 @@ export class ImportarDatosComponent implements OnInit {
   }
 
   buscarUsuarios(): void {
+    let usuariosFiltrados = this.users;
+
     if (this.searchTerm.trim()) {
       const termino = this.searchTerm.toLowerCase();
-      const usuariosFiltrados = this.users.filter((user) =>
+      usuariosFiltrados = usuariosFiltrados.filter((user) =>
         user.nombre.toLowerCase().includes(termino) ||
         user.apellido.toLowerCase().includes(termino) ||
         user.codigo.toLowerCase().includes(termino)
       );
-      this.paginaActual = 1; // Reinicia la página
-      this.actualizarPaginacion(usuariosFiltrados);
-    } else {
-      this.paginaActual = 1; // Reinicia la página
-      this.actualizarPaginacion(this.users); // Muestra todos los usuarios
     }
+
+    if (this.filtrosStatus.length > 0) {
+      usuariosFiltrados = usuariosFiltrados.filter((user) =>
+        this.filtrosStatus.includes(user.status)
+      );
+    }
+
+    this.paginaActual = 1; // Reinicia la página
+    this.actualizarPaginacion(usuariosFiltrados);
   }
+
+
 
   actualizarPaginacion(lista: any[] = this.users): void {
     const inicio = (this.paginaActual - 1) * this.pageSize;

@@ -12,6 +12,7 @@ export class EventosParticipadosComponent implements OnInit{
   eventosInscritos: any[] = [];
   inscripciones: any[] = [];
   horasTotales: number = 0;
+  fechaActual: string = '';
 
   constructor(
     private authService: AuthService,
@@ -20,6 +21,18 @@ export class EventosParticipadosComponent implements OnInit{
 
   ngOnInit(): void {
     this.obtenerUserId();
+    setInterval(() => {
+      const ahora = new Date();
+      this.fechaActual = this.formatearFechaHora(ahora);
+    }, 1000);
+  }
+  private formatearFechaHora(fecha: Date): string {
+    const opcionesFecha = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' } as const;
+    const opcionesHora = { hour: '2-digit', minute: '2-digit', second: '2-digit' } as const;
+    const formatoFecha = fecha.toLocaleDateString('es-ES', opcionesFecha);
+    const formatoHora = fecha.toLocaleTimeString('es-ES', opcionesHora);
+
+    return `${formatoFecha}, ${formatoHora}`;
   }
 
   obtenerUserId(): void {
@@ -91,4 +104,6 @@ export class EventosParticipadosComponent implements OnInit{
       });
     }
   }
+
+
 }

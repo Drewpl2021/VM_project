@@ -39,3 +39,56 @@ h2 {
   color: #333;
   font-weight: bold;
 }
+.info-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center; /* Alinea verticalmente si los elementos tienen diferentes alturas */
+  padding: 10px; /* Opcional: para agregar espacio interno */
+}
+
+h3 {
+  margin: 0; /* Elimina márgenes innecesarios */
+}
+
+.datetime-container {
+  text-align: right; /* Alinea el texto dentro del contenedor de la fecha */
+}
+
+.date {
+  font-size: 14px; /* Ajusta el tamaño de fuente según sea necesario */
+}
+/* Contenedor principal */
+.datetime-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 20px;
+  background: linear-gradient(90deg, #007bff, #0056b3);
+  border-radius: 8px;
+  color: #fff;
+  font-family: 'Arial', sans-serif;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+  width: fit-content;
+  margin: 10px auto;
+  animation: fadeIn 1s ease;
+}
+
+/* Estilo del texto */
+.date {
+  font-size: 1.2rem;
+  font-weight: bold;
+  letter-spacing: 1px;
+  text-shadow: 0px 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+/* Animación para entrada suave */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

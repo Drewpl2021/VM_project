@@ -555,3 +555,53 @@ h2 {
 .next-btn {
   background-color: #007bff;
 }
+/* Contenedor principal del filtro */
+.filter-container-horizontal {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 15px 20px;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  font-family: Arial, sans-serif;
+}
+
+/* Título del filtro */
+.filter-title {
+  font-size: 1rem;
+  font-weight: bold;
+  color: #333;
+  margin-right: 15px;
+}
+
+/* Opciones del filtro en línea */
+.filter-options-horizontal {
+  display: flex;
+  gap: 15px; /* Espaciado entre las opciones */
+}
+
+.form-check-inline {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.form-check-input {
+  width: 18px;
+  height: 18px;
+  accent-color: #007bff; /* Cambia el color del checkbox marcado */
+  cursor: pointer;
+}
+
+.form-check-label {
+  font-size: 14px;
+  color: #555;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.form-check-label:hover {
+  color: #007bff; /* Cambia el color del texto al pasar el ratón */
+}
