@@ -56,8 +56,8 @@
     </tr>
     </thead>
     <tbody>
-    <tr *ngFor="let user of usuariosPaginados">
-      <td>{{ user.id }}</td>
+    <tr *ngFor="let user of usuariosPaginados,let i = index">
+      <td>{{ i + 1 }}</td>
       <td>{{ user.nombre }}</td>
       <td>{{ user.apellido }}</td>
       <td>{{ user.dni }}</td>
