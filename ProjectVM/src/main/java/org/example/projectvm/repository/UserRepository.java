@@ -20,6 +20,7 @@ public interface UserRepository  extends JpaRepository<User, Integer> {
     List<User> findByIdNotIn(List<Integer> ids);
     @Query("SELECT u FROM User u WHERE u.id NOT IN :ids AND u.status = 'Estudiante'")
     List<User> findByIdNotInAndStatusEstudiante(@Param("ids") List<Integer> ids);
+    List<User> findByStatusIn(List<String> status);
 
 
 }

@@ -53,24 +53,22 @@ export class ImportarDatosComponent implements OnInit {
     }
   }
 
-  filtrarUsuarios(): void {
-    const termino = this.searchTerm.toLowerCase();
+  descargarReporte(): void {
+    const filtros = this.filtrosStatus; // Asegúrate de tener los filtros seleccionados
+    const params = filtros.length > 0 ? { status: filtros } : {};
 
-    const usuariosFiltrados = this.usuariosPaginados.filter((user: any) => {
-      const cumpleBusqueda =
-        user.nombre.toLowerCase().includes(termino) ||
-        user.apellido.toLowerCase().includes(termino) ||
-        user.codigo.toLowerCase().includes(termino);
-
-      const cumpleStatus =
-        this.statusSeleccionados.length === 0 || this.statusSeleccionados.includes(user.status);
-
-      return cumpleBusqueda && cumpleStatus;
+    this.backendService.exportarUsuarios(params).subscribe((data: Blob) => {
+      const blob = new Blob([data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'usuarios.xlsx';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
     });
-
-    this.paginaActual = 1; // Reinicia la página
-    this.actualizarPaginacion(usuariosFiltrados);
   }
+
 
   actualizarFiltros(status: string, event: Event): void {
     const checkbox = event.target as HTMLInputElement;

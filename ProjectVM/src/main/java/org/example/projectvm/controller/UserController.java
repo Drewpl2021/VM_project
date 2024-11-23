@@ -1,6 +1,10 @@
 package org.example.projectvm.controller;
 
 import jakarta.annotation.PostConstruct;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.example.projectvm.dto.UserDto;
 import org.example.projectvm.entity.Carreras;
 import org.example.projectvm.entity.Roles;
@@ -16,6 +20,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
+import java.io.ByteArrayOutputStream;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -231,5 +237,60 @@ public class UserController {
         return ResponseEntity.ok(usuariosNoInscritos);
     }
 
+    @GetMapping("/export")
+    public ResponseEntity<byte[]> exportarUsuarios(@RequestParam(required = false) List<String> status) {
+        try {
+            // Filtrar usuarios según el status proporcionado
+            List<User> usuariosFiltrados;
+            if (status != null && !status.isEmpty()) {
+                usuariosFiltrados = userRepository.findByStatusIn(status);
+            } else {
+                usuariosFiltrados = userRepository.findAll();
+            }
 
+            // Crear un archivo Excel
+            Workbook workbook = new XSSFWorkbook();
+            Sheet sheet = workbook.createSheet("Usuarios");
+
+            // Crear el encabezado
+            Row header = sheet.createRow(0);
+            header.createCell(0).setCellValue("ID");
+            header.createCell(1).setCellValue("Nombre");
+            header.createCell(2).setCellValue("Apellido");
+            header.createCell(3).setCellValue("DNI");
+            header.createCell(4).setCellValue("Código");
+            header.createCell(5).setCellValue("Email");
+            header.createCell(6).setCellValue("Horas Obtenidas");
+            header.createCell(7).setCellValue("Status");
+
+            // Rellenar datos
+            int rowIndex = 1;
+            for (User user : usuariosFiltrados) {
+                Row row = sheet.createRow(rowIndex++);
+                row.createCell(0).setCellValue(user.getId());
+                row.createCell(1).setCellValue(user.getNombre());
+                row.createCell(2).setCellValue(user.getApellido());
+                row.createCell(3).setCellValue(user.getDni());
+                row.createCell(4).setCellValue(user.getCodigo());
+                row.createCell(5).setCellValue(user.getEmail());
+                row.createCell(6).setCellValue(user.getHoras_obtenidas());
+                row.createCell(7).setCellValue(user.getStatus().name());
+            }
+
+            // Convertir el archivo a un array de bytes
+            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+            workbook.write(outputStream);
+            workbook.close();
+
+            // Configurar la respuesta
+            byte[] excelBytes = outputStream.toByteArray();
+            return ResponseEntity.ok()
+                    .header("Content-Disposition", "attachment; filename=usuarios.xlsx")
+                    .body(excelBytes);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+    }
 }

@@ -1,4 +1,82 @@
-/* Estilos generales para el formulario */
+.search-bar {
+  display: flex;
+  align-items: center;
+  gap: 10px; /* Espacio entre los elementos */
+}
+
+.search-input {
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+  width: 300px; /* Ancho del campo de búsqueda */
+  flex-shrink: 0;
+}
+
+.action-button {
+  padding: 10px 20px; /* Uniforme para todos los botones */
+  font-size: 14px;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  text-align: center;
+  transition: transform 0.2s ease, background-color 0.3s ease;
+}
+
+.action-button:hover {
+  transform: scale(1.05);
+}
+
+.export-button {
+  background-color: #28a745;
+}
+
+.new-user-button {
+  background-color: #005fb1;
+}
+
+.download-button {
+  background-color: #28a745;
+}
+
+.import-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 5px 10px;
+  background-color: #f8f9fa;
+}
+
+.import-label {
+  color: #333;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.submit-button {
+  background-color: #005fb1;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.submit-button:hover {
+  background-color: #003f7f;
+}
+
+.import-container input[type="file"] {
+  display: none; /* Ocultamos el input de archivo */
+}
+
+
+
+
+
 .form {
   max-width: 400px; /* Limita el ancho del formulario */
   margin: 0 auto; /* Centra el formulario en la página */
@@ -78,10 +156,7 @@
   color: #333;
 }
 
-.search-bar {
-  display: flex;
-  align-items: center;
-}
+
 
 .search-bar input {
   padding: 10px;
@@ -161,7 +236,6 @@ table tbody tr:nth-child(even) {
 .search-bar {
   display: flex;
   align-items: center;
-  gap: 10px;
 }
 
 .search-input {
@@ -178,10 +252,6 @@ table tbody tr:nth-child(even) {
   border-radius: 4px;
   padding: 10px;
   cursor: pointer;
-}
-.search-bar {
-  display: flex;
-  align-items: center;
 }
 
 .search-bar input {
@@ -605,3 +675,5 @@ h2 {
 .form-check-label:hover {
   color: #007bff; /* Cambia el color del texto al pasar el ratón */
 }
+
+

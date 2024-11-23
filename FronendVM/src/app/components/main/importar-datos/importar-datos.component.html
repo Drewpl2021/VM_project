@@ -2,26 +2,23 @@
   <div class="">
     <h2><b>Usuarios</b></h2>
     <div class="search-bar">
-      <input type="text" placeholder="Buscar " [(ngModel)]="searchTerm" (input)="buscarUsuarios()" class="form-control " />
-
-      <button class="add-button" (click)="abrirModalCrearUsuario()" style="background-color: #005fb1; color: white; margin-left: 350px">
+      <input type="text" placeholder="Buscar" [(ngModel)]="searchTerm" (input)="buscarUsuarios()" class="search-input"/>
+      <button class="action-button export-button" (click)="descargarReporte()"><i class="fa-solid fa-download"></i>  Reporte</button>
+      <button class="action-button new-user-button" (click)="abrirModalCrearUsuario()">
         <i class="fa-solid fa-plus"></i> Nuevo Usuario
       </button>
-      <button class="add-button" (click)="descargarFormatoExcel()" style="background-color: #28a745; color: white; margin-left: 10px;">
+      <button class="action-button download-button" (click)="descargarFormatoExcel()">
         <i class="fa-solid fa-file-excel"></i> Descargar Formato Excel
       </button>
-        <!-- Formulario de carga de archivo con estilo integrado -->
-        <form (ngSubmit)="uploadFile()" class=" form file-upload-form" style="">
-          <label for="formFile" class="form-label">
-            <i class="fa-solid fa-file-import"></i> Importar Datos
-          </label>
-          <input class="form-control file-input" type="file" id="formFile"
-                 (change)="onFileChange($event)"
-                 accept=".xlsx"
-                 required>
-          <button type="submit" class="submit-button">Subir Archivo</button>
-        </form>
+      <div class="import-container">
+        <label for="formFile" class="import-label">
+          <i class="fa-solid fa-file-import"></i> Importar Datos
+        </label>
+        <input type="file" id="formFile" (change)="onFileChange($event)" accept=".xlsx" required/>
+        <button class="submit-button" (click)="uploadFile()">Subir Archivo</button>
       </div>
+    </div>
+    <br>
     <!-- Contenedor de filtros -->
     <div class="filter-container-horizontal">
       <h4 class="filter-title">Filtrar por Estado:</h4>

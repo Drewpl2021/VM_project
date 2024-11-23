@@ -77,7 +77,6 @@ export class BackendService {
     return this.http.post(`${this.apiUrl}/user`, data, { responseType: 'text' });
   }
 
-
   updateUser(id: number, user: any): Observable<any> {
     return this.http.put(`${this.apiUrl}/user/${id}`, user);
   }
@@ -85,12 +84,22 @@ export class BackendService {
   deleteUser(id: number): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/user/${id}`);
   }
+
   obtenerUsuarioPorId(userId: number): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}/user/${userId}`);
   }
+
   obtenerUsuariosNoInscritos(eventoId: number): Observable<any[]> {
     return this.http.get<any[]>(`${this.apiUrl}/user/no-inscritos/${eventoId}`);
   }
+
+  exportarUsuarios(params: any): Observable<Blob> {
+    return this.http.get(`${this.apiUrl}/user/export`, {
+      params: params,
+      responseType: 'blob',
+    });
+  }
+
 
 
 
