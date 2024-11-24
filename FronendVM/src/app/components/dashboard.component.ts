@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {BackendService} from "../services/backend.service";
 import {Router} from "@angular/router";
 
@@ -7,8 +7,8 @@ import {Router} from "@angular/router";
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css']
 })
-export class DashboardComponent {
-
+export class DashboardComponent implements OnInit{
+  fechaActual: string = '';
   nombre: string = '';
   eventos: any[] = [];
   eventosActivos: any[] = [];
@@ -53,12 +53,26 @@ export class DashboardComponent {
       (error) => {
         console.error('Error al cargar los eventos:', error);
       }
+
     );
     const usuarioAutenticado = false; // Simulación de autenticación
 
-
+    setInterval(() => {
+      const ahora = new Date();
+      this.fechaActual = this.formatearFechaHora(ahora);
+    }, 1000);
 
   }
+
+  private formatearFechaHora(fecha: Date): string {
+    const opcionesFecha = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' } as const;
+    const opcionesHora = { hour: '2-digit', minute: '2-digit', second: '2-digit' } as const;
+    const formatoFecha = fecha.toLocaleDateString('es-ES', opcionesFecha);
+    const formatoHora = fecha.toLocaleTimeString('es-ES', opcionesHora);
+
+    return `${formatoFecha}, ${formatoHora}`;
+  }
+
   irAUpeu(): void {
     window.location.href = 'https://upeu.edu.pe/';
   }
