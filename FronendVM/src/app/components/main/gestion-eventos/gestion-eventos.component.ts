@@ -71,8 +71,6 @@ export class GestionEventosComponent implements OnInit{
   }
 
 
-
-
   abrirModalCrearEvento(): void {
     this.mostrarModalCrear = true;
     this.nuevoEvento = { status: 'Activo' };
@@ -83,6 +81,33 @@ export class GestionEventosComponent implements OnInit{
   }
 
   crearEvento(): void {
+    // Validar los campos requeridos
+    if (!this.nuevoEvento.nombre || this.nuevoEvento.nombre.trim() === '') {
+      Swal.fire('Error', 'El campo "Nombre" es obligatorio. Por favor, complétalo.', 'error');
+      return;
+    }
+    if (!this.nuevoEvento.lugar || this.nuevoEvento.lugar.trim() === '') {
+      Swal.fire('Error', 'El campo "Lugar" es obligatorio. Por favor, complétalo.', 'error');
+      return;
+    }
+    if (!this.nuevoEvento.hora) {
+      Swal.fire('Error', 'El campo "Hora" es obligatorio. Por favor, complétalo.', 'error');
+      return;
+    }
+
+    if (!this.nuevoEvento.horas_obtenidas) {
+      Swal.fire('Error', 'El campo "Horas Válidas" es obligatorio. Por favor, complétalo.', 'error');
+      return;
+    }
+
+    if (!this.nuevoEvento.direccion || this.nuevoEvento.direccion.trim() === '') {
+      Swal.fire('Error', 'El campo "Dirección" es obligatorio. Por favor, complétalo.', 'error');
+      return;
+    }
+    // Obtener el año actual
+    const anioActual = new Date().getFullYear();
+    this.nuevoEvento.anio = anioActual.toString(); // Asigna el año actual al campo `anio`
+
     // Ajustar las fechas para que el backend las reciba correctamente
     if (this.nuevoEvento.fechaInicio) {
       this.nuevoEvento.fechaInicio = this.ajustarFechaTimezone(this.nuevoEvento.fechaInicio);
@@ -104,6 +129,7 @@ export class GestionEventosComponent implements OnInit{
       }
     );
   }
+
 
 // Ajustar la fecha para ignorar el timezone
   private ajustarFechaTimezone(fecha: string): string {
