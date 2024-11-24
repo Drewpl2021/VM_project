@@ -24,6 +24,7 @@ public class Evento {
         Activo,
         Finalizado,
     }
+    private String anio;
 
 
 }

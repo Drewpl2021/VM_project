@@ -209,3 +209,23 @@ button:active {
 .add-event-button:hover {
   background-color: #003f7f;
 }
+.custom-select {
+  background-color: #f4f4f9; /* Fondo claro */
+  border: 1px solid #005fb1; /* Borde azul */
+  border-radius: 4px; /* Bordes redondeados */
+  padding: 8px; /* Espaciado interno */
+  font-size: 16px; /* Tamaño de letra */
+  color: #333; /* Color del texto */
+  transition: all 0.3s ease; /* Animación al pasar el ratón */
+}
+
+.custom-select:focus {
+  outline: none; /* Sin borde azul feo */
+  box-shadow: 0 0 5px #005fb1; /* Sombra azul */
+}
+
+.custom-select option {
+  background-color: #ffffff; /* Fondo blanco */
+  color: #333; /* Texto gris oscuro */
+  padding: 8px; /* Espaciado interno */
+}

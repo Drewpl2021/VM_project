@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {BackendService} from "../../../services/backend.service";
 import {Router} from "@angular/router";
 import Swal from 'sweetalert2';
@@ -9,7 +9,7 @@ import Swal from 'sweetalert2';
   templateUrl: './gestion-eventos.component.html',
   styleUrls: ['./gestion-eventos.component.css']
 })
-export class GestionEventosComponent {
+export class GestionEventosComponent implements OnInit{
   eventos: any[] = [];
   eventosFiltrados: any[] = [];
   searchTerm: string = '';
@@ -18,6 +18,9 @@ export class GestionEventosComponent {
   mostrarModalEditar: boolean = false;
   nuevoEvento: any = { status: 'Activo' };
   eventoSeleccionado: any = {};
+
+  aniosDisponibles: number[] = [];
+  anioSeleccionado: string = '';
 
   constructor(private backendService: BackendService,) {}
 
@@ -30,6 +33,12 @@ export class GestionEventosComponent {
       (data) => {
         this.eventos = data;
         this.eventosFiltrados = data;
+
+        // Extraer los años únicos directamente desde el campo 'anio'
+        this.aniosDisponibles = [
+          ...new Set(this.eventos.map(evento => evento.anio))
+        ].sort((a, b) => b - a); // Ordenar de mayor a menor
+        console.log('Años disponibles:', this.aniosDisponibles);
       },
       (error) => {
         console.error('Error al obtener eventos:', error);
@@ -38,7 +47,21 @@ export class GestionEventosComponent {
     );
   }
 
+
+  filtrarPorAnio(anio: string): void {
+    if (anio) {
+      this.eventosFiltrados = this.eventos.filter((evento) => evento.anio === anio);
+    } else {
+      this.eventosFiltrados = [...this.eventos]; // Mostrar todos los eventos si no hay filtro
+    }
+  }
+
+
   buscarEventos(): void {
+    // Resetea el filtro de año al usar el buscador
+    this.anioSeleccionado = '';
+
+    // Lógica para filtrar eventos según el término de búsqueda
     const term = this.searchTerm.toLowerCase();
     this.eventosFiltrados = this.eventos.filter(evento =>
       evento.nombre.toLowerCase().includes(term) ||
@@ -46,6 +69,9 @@ export class GestionEventosComponent {
       evento.direccion.toLowerCase().includes(term)
     );
   }
+
+
+
 
   abrirModalCrearEvento(): void {
     this.mostrarModalCrear = true;
