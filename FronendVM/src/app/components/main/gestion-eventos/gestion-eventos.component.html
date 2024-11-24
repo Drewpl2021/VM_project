@@ -32,6 +32,7 @@
           <p class="card-text">La hora del evento es a las {{ evento.hora }} horas</p>
           <p class="card-text">Horas Válidas: {{ evento.horas_obtenidas }}</p>
           <p class="card-text">Dirección: {{ evento.direccion }}</p>
+          <p class="card-text">Estado: {{ evento.status }}</p>
 
           <div class="d-flex justify-content-between mt-3">
             <button  [routerLink]="['/lista_participantes', evento.id]" class="btn" style="background-color: #005fb1; color: white">Ver inscritos</button>

@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {ActivatedRoute} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
 import {BackendService} from "../../../services/backend.service";
 import Swal from 'sweetalert2';
 
@@ -13,24 +13,24 @@ export class ListaParticipantesComponent implements OnInit {
   eventoNombre: string | null = null;
   participantes: any[] = [];
   editMode: boolean = false;
-  usuariosNoInscritos: any[] = []; // Lista de usuarios no inscritos con una propiedad 'seleccionado'
+  usuariosNoInscritos: any[] = [];
   usuariosFiltrados: any[] = [];
   busquedaUsuario: string = '';
   mostrarModalAgregarParticipantes: boolean = false;
   eventoHorasObtenidas: number = 0;
   participantesOriginales: any[] = [];
   fileToUpload: File | null = null;
-
-  participantesPaginados: any[] = []; // Datos paginados
-  tamanioPagina: number = 10; // Tamaño inicial de página
-  paginaActual: number = 1; // Página inicial
-  usuariosPaginados: any[] = []; // Usuarios mostrados en el modal (paginados)
-  paginaActualUsuarios: number = 1; // Página actual en el modal
-  tamanioPaginaUsuarios: number = 10; // Tamaño inicial de página en el modal
-
+  participantesPaginados: any[] = [];
+  tamanioPagina: number = 10;
+  paginaActual: number = 1;
+  usuariosPaginados: any[] = [];
+  paginaActualUsuarios: number = 1;
+  tamanioPaginaUsuarios: number = 10;
 
   constructor(private route: ActivatedRoute,
-              private backendService: BackendService) {}
+              private backendService: BackendService,
+              private router: Router
+  ) {}
 
   ngOnInit(): void {
     this.eventoId = Number(this.route.snapshot.paramMap.get('id'));
@@ -61,7 +61,6 @@ export class ListaParticipantesComponent implements OnInit {
       Swal.fire('Advertencia', 'No se seleccionó un evento válido.', 'warning');
     }
   }
-
 
   abrirInputArchivo(): void {
     const input = document.getElementById('inputArchivo') as HTMLInputElement;
@@ -108,14 +107,10 @@ export class ListaParticipantesComponent implements OnInit {
     );
   }
 
-
-
   truncarTexto(texto: string | null, limite: number): string {
     if (!texto) return "Sin descripción"; // Devuelve "Sin descripción" si el campo está vacío o es nulo
     return texto.length > limite ? texto.substring(0, limite) + '...' : texto;
   }
-
-
 
   cargarParticipantes(): void {
     this.backendService.obtenerParticipantes(this.eventoId!).subscribe(
@@ -130,9 +125,6 @@ export class ListaParticipantesComponent implements OnInit {
       }
     );
   }
-
-
-
 
   cambiarPagina(incremento: number): void {
     this.paginaActual += incremento;
@@ -154,7 +146,6 @@ export class ListaParticipantesComponent implements OnInit {
   get totalPaginas(): number {
     return Math.ceil(this.participantes.length / this.tamanioPagina);
   }
-
 
   cargarNombreEvento(): void {
     this.backendService.obtenerEventoPorId(this.eventoId!).subscribe(
@@ -195,8 +186,6 @@ export class ListaParticipantesComponent implements OnInit {
     participante.horas_obtenidas = Number(participante.horas_obtenidas);
   }
 
-
-
   eliminarParticipante(participanteId: number): void {
     Swal.fire({
       title: '¿Estás seguro?',
@@ -224,7 +213,7 @@ export class ListaParticipantesComponent implements OnInit {
       }
     });
   }
-// Método para abrir el modal y cargar usuarios no inscritos
+
   abrirModalAgregarParticipantes(): void {
     this.mostrarModalAgregarParticipantes = true;
 
@@ -244,13 +233,10 @@ export class ListaParticipantesComponent implements OnInit {
     );
   }
 
-
-// Método para cerrar el modal
   cerrarModalAgregarParticipantes(): void {
     this.mostrarModalAgregarParticipantes = false;
   }
 
-// Método para filtrar usuarios en tiempo real
   filtrarUsuariosNoInscritos(): void {
     const termino = this.busquedaUsuario.trim().toLowerCase();
     if (termino) {
@@ -262,10 +248,9 @@ export class ListaParticipantesComponent implements OnInit {
     } else {
       this.usuariosFiltrados = [...this.usuariosNoInscritos];
     }
-
-    // Actualizar la paginación después de filtrar
     this.actualizarPaginaUsuarios();
   }
+
   cambiarPaginaUsuarios(incremento: number): void {
     this.paginaActualUsuarios += incremento;
     this.actualizarPaginaUsuarios();
@@ -280,7 +265,6 @@ export class ListaParticipantesComponent implements OnInit {
   get totalPaginasUsuarios(): number {
     return Math.ceil(this.usuariosFiltrados.length / this.tamanioPaginaUsuarios);
   }
-
 
   filtrarUsuarios(): void {
     const termino = this.busquedaUsuario.trim().toLowerCase(); // Convertir el término a minúsculas
@@ -299,6 +283,7 @@ export class ListaParticipantesComponent implements OnInit {
     // Después de filtrar, actualiza los datos paginados
     this.actualizarPagina();
   }
+
   actualizarPagina(): void {
     const inicio = (this.paginaActual - 1) * this.tamanioPagina;
     const fin = inicio + this.tamanioPagina;
@@ -398,13 +383,49 @@ export class ListaParticipantesComponent implements OnInit {
     }
   }
 
+  terminarEvento(): void {
+    if (!this.eventoId) {
+      Swal.fire('Error', 'No se encontró el evento a finalizar.', 'error');
+      return;
+    }
 
+    Swal.fire({
+      title: '¿Estás seguro?',
+      text: 'El evento será marcado como finalizado.',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Sí, finalizar',
+      cancelButtonText: 'Cancelar',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        const eventoActualizado = { status: 'Finalizado' };
 
-
-
-  detenerPropagacion(event: MouseEvent): void {
-    event.stopPropagation();
+        this.backendService.updateEvento(this.eventoId as number, eventoActualizado).subscribe(
+          () => {
+            Swal.fire(
+              'Éxito',
+              'El evento ha sido finalizado correctamente.',
+              'success'
+            ).then(() => {
+              this.router.navigate(['/gestion_eventos']);
+            });
+          },
+          (error) => {
+            Swal.fire(
+              'Éxito',
+              'El evento ha sido finalizado correctamente.',
+              'success'
+            ).then(() => {
+              this.router.navigate(['/gestion_eventos']);
+            });
+          }
+        );
+      }
+    });
   }
+
 
 
   protected readonly Math = Math;

@@ -42,9 +42,10 @@ export class BackendService {
   obtenerEventoPorId(eventoId: number): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}/evento/${eventoId}`);
   }
-  getEventoById(eventoId: number): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}/eventos/${eventoId}`);
+  updateEvento(eventoId: number, data: any): Observable<any> {
+    return this.http.put(`${this.apiUrl}/evento/${eventoId}/finalizar`, { responseType: 'text' });
   }
+
 
 
 

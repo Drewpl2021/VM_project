@@ -13,6 +13,12 @@
       (input)="filtrarUsuarios()"
       class="form-control"
     />
+    <button
+      class=" add-button"
+      style="background-color: #005fb1; color: white"
+      (click)="terminarEvento()">
+      <i class="fa-solid fa-check"></i> Terminar Evento
+    </button>
 
     <button class="add-button" (click)="toggleEditMode()" style="background-color: #005fb1; color: white" >
       <i class="fa-solid fa-pen-to-square"></i> {{ editMode ? 'Guardar cambios' : 'Editar Horas' }}
