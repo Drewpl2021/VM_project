@@ -15,6 +15,7 @@ export class ProximosEventosComponent implements OnInit {
   usuario: any = {};
   horas_obtenidas: number = 5;
   anio_academico="2024";
+  inscripciones: number[] = [];
 
   public statusUsuario: string | null = null;
 
@@ -35,7 +36,9 @@ export class ProximosEventosComponent implements OnInit {
       }
     );
   }
-
+  usuarioInscrito(eventoId: number): boolean {
+    return this.inscripciones.includes(eventoId);
+  }
   obtenerEventos(): void {
     this.backendService.getEventos().subscribe(
       (data) => {
@@ -73,6 +76,7 @@ export class ProximosEventosComponent implements OnInit {
       }
     );
   }
+
 
   inscribirse(eventoId: number): void {
     // Obtener los datos del usuario autenticado

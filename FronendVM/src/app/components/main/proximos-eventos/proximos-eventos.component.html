@@ -6,11 +6,17 @@
     <div *ngFor="let evento of eventosFiltrados" class="col-md-4 mb-4 d-flex align-items-stretch">
       <div class="card shadow-sm" style="width: 100%; border-radius: 10px;">
         <div class="card-body">
-          <h5 class="card-title">{{ evento.nombre }}</h5>
+          <div style="display: flex">
+            <h5 class="card-title">{{ evento.nombre }}</h5>
+
+            <div *ngIf="evento.usuarioInscrito;" style="width: 130px; position: absolute; margin-left: 340px" >
+              <img src="assets/images/chek.png" alt="Inscrito" class="img-fluid w-50 mx-auto d-block" />
+            </div>
+          </div>
           <p class="card-text"><strong>Lugar:</strong> {{ evento.lugar }}</p>
           <p class="card-text">
-            <strong>Fecha:</strong> El día
-            {{ evento.fecha | date:'EEEE d \'de\' MMMM\' del\' y':'es' }}
+            <strong>Fecha del Evento:</strong> El día
+            {{ evento.fecha_inicio | date:'EEEE d \'de\' MMMM\' del\' y':'es' }}
             a las {{ evento.hora }}
           </p>
           <p class="card-text"><strong>Horas Válidas:</strong> {{ evento.horas_obtenidas }}</p>

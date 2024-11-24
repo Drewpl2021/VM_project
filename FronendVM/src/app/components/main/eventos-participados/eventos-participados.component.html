@@ -25,7 +25,7 @@
         <div class="card-body">
           <h5 class="card-title">{{ evento.nombre }}</h5>
           <p class="card-text">{{ evento.lugar }}</p>
-          <p class="card-text">Fecha: El día {{ evento.fecha | date:'EEEE d \'de\' MMMM\' del\' y':'es' }} a las {{ evento.hora }}</p>
+          <p class="card-text">Fecha: El día {{ evento.fecha_inicio | date:'EEEE d \'de\' MMMM\' del\' y':'es' }} a las {{ evento.hora }}</p>
           <p class="card-text">Horas del Evento: {{ evento.horas_obtenidas }}</p>
           <p *ngIf="evento.status === 'Finalizado'" class="card-text">Horas Asignadas: {{ evento.horas_asignadas }}</p>
           <p *ngIf="evento.status === 'Finalizado' && +evento.horas_obtenidas !== +evento.horas_asignadas" class="card-text">
