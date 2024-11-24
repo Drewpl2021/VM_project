@@ -104,11 +104,11 @@ public class UserService {
                 user.setCodigo(codigo);
                 user.setEmail(getCellValueAsString(row.getCell(4)));
 
-                // Encripta la contraseña antes de asignarla
-                // rawPassword = getCellValueAsString(row.getCell(5));
-                //user.setPassword(passwordEncoder.encode(rawPassword));
+                // Obtener la contraseña del Excel y encriptarla antes de asignarla
+                String rawPassword = getCellValueAsString(row.getCell(5));
+                user.setPassword(passwordEncoder.encode(rawPassword));
 
-                user.setPassword(getCellValueAsString(row.getCell(5)));
+                //user.setPassword(getCellValueAsString(row.getCell(5)));
                 user.setPrivate_ingreso(getCellValueAsString(row.getCell(6)));
                 user.setHoras_obtenidas((int) row.getCell(7).getNumericCellValue());
                 user.setStatus(User.Status.valueOf(getCellValueAsString(row.getCell(8))));

@@ -39,6 +39,8 @@ public class UserController {
     private CarrerasRepository carrerasRepository;
     @Autowired
     private InscripcionesRepository inscripcionesRepository;
+    @Autowired
+    private BCryptPasswordEncoder passwordEncoder;
 
     // Listar todos los usuarios
     @GetMapping
@@ -104,6 +106,10 @@ public class UserController {
 
         user.setRol(rol);
         user.setCarrera(carrera);
+
+        // Encriptar la contraseña antes de guardar
+        String encryptedPassword = passwordEncoder.encode(user.getPassword());
+        user.setPassword(encryptedPassword);
 
         // Guardar el usuario en la base de datos
         userRepository.save(user);
@@ -207,9 +213,9 @@ public class UserController {
             usuario.setDni("41857964");
             usuario.setCodigo("000000000"); // Campo código como NULL
             usuario.setEmail("eder.gutierres@gmail.com");
-            //BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-            //usuario.setPassword(encoder.encode("12345"));
-            usuario.setPassword("12345");
+            BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+            usuario.setPassword(encoder.encode("12345"));
+            //usuario.setPassword("12345");
             usuario.setPrivate_ingreso("1");
             usuario.setHoras_obtenidas(0);
             usuario.setStatus(User.Status.Docente); // Estado inicial
