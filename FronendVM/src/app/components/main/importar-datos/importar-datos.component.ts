@@ -15,10 +15,10 @@ export class ImportarDatosComponent implements OnInit {
   carreras: any[] = [];
   roles: any[] = [];
 
-  usuariosPaginados: any[] = []; // Usuarios visibles por página
-  searchTerm: string = ''; // Término de búsqueda
+  usuariosPaginados: any[] = [];
+  searchTerm: string = '';
 
-  statuses: string[] = ['Estudiante', 'Egresado', 'Docente', 'Retirado']; // Opciones de status
+  statuses: string[] = ['Estudiante', 'Egresado', 'Docente', 'Retirado'];
   statusSeleccionados: string[] = []; // Lista de status seleccionados
   filtrosStatus: string[] = [];
 
@@ -69,7 +69,6 @@ export class ImportarDatosComponent implements OnInit {
     });
   }
 
-
   actualizarFiltros(status: string, event: Event): void {
     const checkbox = event.target as HTMLInputElement;
     const checked = checkbox.checked;
@@ -85,10 +84,6 @@ export class ImportarDatosComponent implements OnInit {
     }
     this.buscarUsuarios();
   }
-
-
-
-
 
   descargarFormatoExcel(): void {
     const link = document.createElement('a');
@@ -112,7 +107,16 @@ export class ImportarDatosComponent implements OnInit {
     this.backendService.uploadExcel(formData).subscribe(
       response => {
         console.log('Archivo subido exitosamente:', response);  // Log para confirmar éxito
-        Swal.fire('Éxito', 'Archivo cargado y procesado correctamente.', 'success');  // Mostrar mensaje de éxito
+        Swal.fire({
+          title: 'Éxito',
+          text: 'Archivo cargado y procesado correctamente.',
+          icon: 'success',
+          confirmButtonText: 'OK'
+        }).then((result) => {
+          if (result.isConfirmed) {
+            window.location.reload(); // Refresca la página al confirmar
+          }
+        });
       },
       error => {Swal.fire('Éxito', 'Archivo cargado y procesado correctamente.', 'success');
         console.error('Error en la subida, pero continuando normalmente.');  // Evitar alertas
@@ -291,7 +295,16 @@ export class ImportarDatosComponent implements OnInit {
     this.backendService.updateUser(this.usuarioForm.id, this.usuarioForm).subscribe(() => {
       this.obtenerUsuarios();
       this.cerrarModal();
-        Swal.fire('Éxito', 'Usuario actualizado correctamente.', 'success');
+        Swal.fire({
+          title: 'Éxito',
+          text: 'Usuario actualizado correctamente.',
+          icon: 'success',
+          confirmButtonText: 'OK'
+        }).then((result) => {
+          if (result.isConfirmed) {
+            window.location.reload(); // Refresca la página al confirmar
+          }
+        });
       },
       (error) => {
         console.error('Error al actualizar el usuario:', error);
@@ -313,8 +326,16 @@ export class ImportarDatosComponent implements OnInit {
       if (result.isConfirmed) {
         this.backendService.deleteUser(id).subscribe(
           () => {
-            this.obtenerUsuarios();
-            Swal.fire('Eliminado', 'Usuario eliminado correctamente.', 'success');
+            Swal.fire({
+              title: 'Eliminado',
+              text: 'Usuario eliminado correctamente.',
+              icon: 'success',
+              confirmButtonText: 'OK'
+            }).then((result) => {
+              if (result.isConfirmed) {
+                window.location.reload(); // Refresca la página al confirmar
+              }
+            });
           },
           (error) => {
             console.error('Error al eliminar el usuario:', error);
@@ -324,6 +345,7 @@ export class ImportarDatosComponent implements OnInit {
       }
     });
   }
+
 
 
 }

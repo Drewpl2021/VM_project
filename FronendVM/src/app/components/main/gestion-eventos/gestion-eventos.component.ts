@@ -214,7 +214,7 @@ export class GestionEventosComponent implements OnInit{
           },
           (error) => {
             console.error('Error al eliminar el evento:', error);
-            Swal.fire('Error', 'No se pudo eliminar el evento.', 'error');
+            Swal.fire('Error', 'No se pudo eliminar el evento, ya hay inscritos.', 'error');
           }
         );
       }

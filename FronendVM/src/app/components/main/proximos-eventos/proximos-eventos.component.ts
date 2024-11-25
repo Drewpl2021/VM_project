@@ -42,7 +42,23 @@ export class ProximosEventosComponent implements OnInit {
     this.isLoading = true; // Inicia la carga
     this.backendService.getEventos().subscribe(
       (eventos) => {
-        this.eventosFiltrados = eventos;
+        // Filtrar eventos cuyo estado sea 'Activo'
+        this.eventos = eventos;
+        this.eventosFiltrados = this.eventos.filter(evento => evento.status === 'Activo');
+
+        // Verificar si el usuario está inscrito en cada evento
+        this.eventosFiltrados.forEach(evento => {
+          this.backendService.verificarInscripcion(this.usuario.id, evento.id).subscribe(
+            (yaInscrito) => {
+              evento.usuarioInscrito = yaInscrito; // Añadir propiedad usuarioInscrito al evento
+            },
+            (error) => {
+              console.error(`Error al verificar inscripción para el evento ${evento.id}:`, error);
+              evento.usuarioInscrito = false; // En caso de error, asumir que no está inscrito
+            }
+          );
+        });
+
         this.isLoading = false; // Termina la carga
       },
       (error) => {
@@ -51,6 +67,7 @@ export class ProximosEventosComponent implements OnInit {
       }
     );
   }
+
   usuarioInscrito(eventoId: number): boolean {
     return this.inscripciones.includes(eventoId);
   }

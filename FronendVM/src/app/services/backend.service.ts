@@ -68,7 +68,7 @@ export class BackendService {
   }
 
   uploadExcel(formData: FormData): Observable<any> {
-    return this.http.post(`${this.apiUrl}/user/upload`, formData);
+    return this.http.post(`${this.apiUrl}/user/upload`, formData,{ responseType: 'text' });
   }
   getAllUsers(): Observable<any[]> {
     return this.http.get<any[]>(`${this.apiUrl}/user`);
