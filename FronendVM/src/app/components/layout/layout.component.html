@@ -36,15 +36,35 @@
   <div class="content">
     <!-- Contenido inicial -->
     <div *ngIf="mostrarContenidoInicial" class="contenido-inicial">
-      <h1>Bienvenido al Sistema de Gestión</h1>
-      <p>Por favor, selecciona una opción del menú para comenzar.</p>
-      <button
-        class="add-button"
-        style="background-color: #005fb1; color: white"
-        (click)="abrirModal()"
-      >
-        <i class="fa-solid fa-lock"></i> Cambiar Contraseña
-      </button>
+      <div class="welcome-container">
+        <h1 class="welcome-title">
+          <i class="fa-solid fa-tachometer-alt"></i>
+          Bienvenido al Sistema de Gestión</h1>
+        <p class="welcome-text">
+          Mira que te mando que te esfuerces y seas valiente: no temas ni desmayes, porque Jehová tu Dios será contigo en donde quiera que fueres
+          <strong>JOSUE 1:9</strong>
+        </p>
+
+        <div class="video-container">
+          <iframe
+            id="video-frame"
+            width="800"
+            height="450"
+            src="https://www.youtube.com/embed/ukliAPQYkCY?autoplay=1&mute=0"
+            frameborder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen
+          ></iframe>
+        </div>
+
+
+        <button
+          class="add-button fixed-button"
+          (click)="abrirModal()"
+        >
+          <i class="fa-solid fa-lock"></i> Cambiar Contraseña
+        </button>
+      </div>
 
 
 

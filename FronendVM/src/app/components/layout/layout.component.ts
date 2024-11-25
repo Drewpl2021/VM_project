@@ -24,7 +24,7 @@ export class LayoutComponent implements OnInit {
   userId: number | null = null;
 
   primerIngreso: boolean = false;
-
+  private player: any;
   showCurrentPassword: boolean = false;
   showNewPassword: boolean = false;
   showConfirmPassword: boolean = false;
@@ -40,6 +40,40 @@ export class LayoutComponent implements OnInit {
 
     const storedUserId = localStorage.getItem('userId');
     this.userId = storedUserId ? parseInt(storedUserId, 10) : null;
+    this.loadYouTubeAPI();
+  }
+
+  // Carga la API de YouTube
+  loadYouTubeAPI(): void {
+    const tag = document.createElement('script');
+    tag.src = 'https://www.youtube.com/iframe_api';
+    const firstScriptTag = document.getElementsByTagName('script')[0];
+    firstScriptTag.parentNode?.insertBefore(tag, firstScriptTag);
+
+    // Define el método global requerido por la API
+    (window as any).onYouTubeIframeAPIReady = () => {
+      this.player = new (window as any).YT.Player('youtube-player', {
+        height: '450',
+        width: '800',
+        videoId: 'ukliAPQYkCY', // ID del video
+        playerVars: {
+          autoplay: 1,
+          controls: 1,
+          rel: 0,
+          modestbranding: 1,
+          showinfo: 0,
+        },
+        events: {
+          onReady: this.onPlayerReady.bind(this),
+        },
+      });
+    };
+  }
+
+  // Método que se ejecuta cuando el reproductor está listo
+  onPlayerReady(event: any): void {
+    event.target.setVolume(25); // Configura el volumen al 50%
+    event.target.playVideo();   // Reproduce el video automáticamente
   }
 
   togglePasswordVisibility(field: string): void {
