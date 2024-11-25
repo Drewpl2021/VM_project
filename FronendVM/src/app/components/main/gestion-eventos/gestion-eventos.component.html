@@ -19,10 +19,9 @@
   </div>
 
 
-
   <!-- Contenedor de tarjetas de eventos -->
   <div class="row">
-    <div *ngFor="let evento of eventosFiltrados" class="col-md-4 mb-4 d-flex align-items-stretch">
+    <div *ngFor="let evento of eventosFiltrados.slice().reverse()" class="col-md-4 mb-4 d-flex align-items-stretch">
       <div class="card" style="width: 100%;">
         <div class="card-body">
           <h5 class="card-title">{{ evento.nombre }}</h5>
@@ -32,10 +31,10 @@
           <p class="card-text">La hora del evento es a las {{ evento.hora }} horas</p>
           <p class="card-text">Horas Válidas: {{ evento.horas_obtenidas }}</p>
           <p class="card-text">Dirección: {{ evento.direccion }}</p>
-          <p class="card-text">Estado: {{ evento.status }}</p>
+          <p class="card-text">Estado: <b>{{ evento.status }}</b></p>
 
           <div class="d-flex justify-content-between mt-3">
-            <button  [routerLink]="['/lista_participantes', evento.id]" class="btn" style="background-color: #005fb1; color: white">Ver inscritos</button>
+            <button [routerLink]="['/lista_participantes', evento.id]" class="btn" style="background-color: #005fb1; color: white">Ver inscritos</button>
             <button (click)="abrirModalEditarEvento(evento)" class="btn" style="background-color: #058DF3; color: white">Editar</button>
             <button (click)="eliminarEvento(evento.id)" class="btn btn-danger">Eliminar</button>
           </div>
@@ -43,6 +42,7 @@
       </div>
     </div>
   </div>
+
 
   <!-- Modal para crear un nuevo evento -->
   <div class="modal-overlay" tabindex="-1" [ngClass]="{ 'show': mostrarModalCrear }" style="display: block;" *ngIf="mostrarModalCrear" (click)="cerrarModalCrearEvento()">

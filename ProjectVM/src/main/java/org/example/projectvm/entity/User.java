@@ -20,6 +20,13 @@ public class User {
     private String email;
     private String password;
     private String private_ingreso;
+    @Enumerated(EnumType.STRING)
+    private Primeringreso primeringreso = Primeringreso.NO;
+    public enum Primeringreso {
+        SI,
+        NO,
+    }
+
     private Integer horas_obtenidas;
     @Enumerated(EnumType.STRING)
     private Status status;

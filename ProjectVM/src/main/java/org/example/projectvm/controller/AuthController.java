@@ -29,8 +29,16 @@ public class AuthController {
         Optional<User> user = userService.findByEmail(loginRequest.getEmail());
 
         if (user.isPresent()) {
-            // Verificar la contraseña encriptada
             if (passwordEncoder.matches(loginRequest.getPassword(), user.get().getPassword())) {
+                // Verificar si el usuario tiene "primeringreso" en NO
+                if (user.get().getPrimeringreso() == User.Primeringreso.NO) {
+                    Map<String, Object> response = new HashMap<>();
+                    response.put("message", "Primer ingreso. Es necesario cambiar la contraseña.");
+                    response.put("primeringreso", true); // Indica al frontend que debe mostrar el formulario de cambio
+                    response.put("userId", user.get().getId());
+                    return ResponseEntity.ok(response);
+                }
+
                 return ResponseEntity.ok(Collections.singletonMap("message", "Inicio de sesión exitoso"));
             } else {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Credenciales incorrectas");
@@ -39,6 +47,41 @@ public class AuthController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Usuario no encontrado");
         }
     }
+    @PutMapping("/change-password/{userId}")
+    public ResponseEntity<?> changePassword(@PathVariable Integer userId, @RequestBody PasswordChangeRequest request) {
+        Optional<User> userOpt = userService.getUserById(userId);
+
+        if (userOpt.isPresent()) {
+            User user = userOpt.get();
+
+            // Verificar el estado de primer ingreso
+            if (user.getPrimeringreso() == User.Primeringreso.SI) {
+                return ResponseEntity.badRequest().body("El usuario ya cambió su contraseña previamente.");
+            }
+
+            // Cambiar la contraseña y actualizar "primeringreso"
+            user.setPassword(passwordEncoder.encode(request.getNewPassword()));
+            user.setPrimeringreso(User.Primeringreso.SI); // Cambiar a "SI" después de cambiar contraseña
+
+            userService.actualizar(user);
+
+            return ResponseEntity.ok("Contraseña actualizada correctamente.");
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuario no encontrado.");
+        }
+    }
+
+
+    @Data
+    public static class PasswordChangeRequest {
+        private String currentPassword;
+        private String newPassword;
+
+
+    }
+
+
+
     @GetMapping("/me")
     public ResponseEntity<?> getAuthenticatedUser(@RequestParam String email) {
         Optional<User> user = userService.findByEmail(email);
