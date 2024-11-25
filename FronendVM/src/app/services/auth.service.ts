@@ -43,6 +43,21 @@ export class AuthService {
     this.authenticatedUserEmail = email;
     localStorage.setItem('authenticatedUserEmail', email);
   }
+  changePassword(currentPassword: string, newPassword: string): Observable<any> {
+    const usuario = JSON.parse(localStorage.getItem('usuario') || '{}');
+    if (!usuario || !usuario.id) {
+      throw new Error('No se pudo obtener el ID del usuario autenticado.');
+    }
+
+    const userId = usuario.id; // Obtener el ID del usuario
+    const url = `http://localhost:8080/auth/change-password/${userId}`;
+    const body = { currentPassword, newPassword };
+
+    return this.http.put(url, body,{ responseType: 'text' });
+  }
+
+
+
 
   getAuthenticatedUser(): Observable<any> {
     const email = this.authenticatedUserEmail || localStorage.getItem('authenticatedUserEmail');

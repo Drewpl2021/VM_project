@@ -39,11 +39,76 @@
       <h1>Bienvenido al Sistema de Gestión</h1>
       <p>Por favor, selecciona una opción del menú para comenzar.</p>
       <button
-        class=" add-button"
+        class="add-button"
         style="background-color: #005fb1; color: white"
-        >
-        <i class="fa-solid fa-check"></i> Terminar Evento
+        (click)="abrirModal()"
+      >
+        <i class="fa-solid fa-check"></i> Cambiar Contraseña
       </button>
+
+
+
+
+      <div class="modal fade" id="changePasswordModal" tabindex="-1" aria-hidden="true" (click)="cerrarModal()">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" (click)="$event.stopPropagation()">
+          <div class="modal-content">
+            <!-- Header del modal -->
+            <div class="modal-header bg-primary text-white">
+              <h5 class="modal-title">Cambiar Contraseña</h5>
+              <button type="button" class="btn-close text-white" (click)="cerrarModal()" aria-label="Close"></button>
+            </div>
+
+            <!-- Cuerpo del modal -->
+            <div class="modal-body">
+              <form (ngSubmit)="onChangePassword()">
+                <div class="mb-3">
+                  <label for="currentPassword" class="form-label">Contraseña Actual</label>
+                  <input
+                    type="password"
+                    class="form-control"
+                    id="currentPassword"
+                    [(ngModel)]="currentPassword"
+                    name="currentPassword"
+                    placeholder="Ingresa tu contraseña actual"
+                    required
+                  />
+                </div>
+                <div class="mb-3">
+                  <label for="newPassword" class="form-label">Nueva Contraseña</label>
+                  <input
+                    type="password"
+                    class="form-control"
+                    id="newPassword"
+                    [(ngModel)]="newPassword"
+                    name="newPassword"
+                    placeholder="Ingresa una nueva contraseña"
+                    required
+                  />
+                </div>
+                <div class="mb-3">
+                  <label for="confirmPassword" class="form-label">Confirmar Nueva Contraseña</label>
+                  <input
+                    type="password"
+                    class="form-control"
+                    id="confirmPassword"
+                    [(ngModel)]="confirmPassword"
+                    name="confirmPassword"
+                    placeholder="Confirma tu nueva contraseña"
+                    required
+                  />
+                </div>
+                <button type="submit" class="btn btn-primary w-100">Cambiar Contraseña</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+
+
+
+
     </div>
 
     <!-- Contenido de cada página -->

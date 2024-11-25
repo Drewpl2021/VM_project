@@ -125,3 +125,67 @@
 }.add-button:hover {
    background-color: #003d80;
  }
+
+
+
+
+.modal-content {
+  border-radius: 10px;
+  padding: 20px;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.modal-body {
+  padding: 15px;
+}
+
+.btn-primary {
+  background-color: #005fb1;
+  border-color: #005fb1;
+}
+
+.btn-primary:hover {
+  background-color: #004080;
+  border-color: #004080;
+}
+
+
+.modal.fade.show {
+  background-color: rgba(0, 0, 0, 0.5); /* Sombra en toda la pantalla */
+}
+
+/* Transición suave */
+.modal-dialog {
+  transform: scale(0.8);
+  opacity: 0;
+}
+
+.modal.fade.show .modal-dialog {
+  transform: scale(1);
+  opacity: 1;
+}
+
+/* Botón cerrar personalizado */
+.btn-close {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  opacity: 0.8;
+  transition: opacity 0.3s ease;
+}
+
+.btn-close:hover {
+  opacity: 1;
+}
+
+/* Input focus */
+.form-control:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 8px rgba(0, 123, 255, 0.5);
+}
+

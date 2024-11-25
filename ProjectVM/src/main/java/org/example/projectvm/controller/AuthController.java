@@ -54,9 +54,14 @@ public class AuthController {
         if (userOpt.isPresent()) {
             User user = userOpt.get();
 
-            // Verificar el estado de primer ingreso
-            if (user.getPrimeringreso() == User.Primeringreso.SI) {
-                return ResponseEntity.badRequest().body("El usuario ya cambió su contraseña previamente.");
+            // Validar si la contraseña actual enviada coincide con la almacenada
+            if (!passwordEncoder.matches(request.getCurrentPassword(), user.getPassword())) {
+                return ResponseEntity.badRequest().body("La contraseña actual no es correcta.");
+            }
+
+            // Verificar si la nueva contraseña es igual a la actual
+            if (passwordEncoder.matches(request.getNewPassword(), user.getPassword())) {
+                return ResponseEntity.badRequest().body("La nueva contraseña no puede ser igual a la contraseña actual.");
             }
 
             // Cambiar la contraseña y actualizar "primeringreso"
@@ -70,6 +75,8 @@ public class AuthController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuario no encontrado.");
         }
     }
+
+
 
 
     @Data

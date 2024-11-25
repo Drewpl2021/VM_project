@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {Router} from "@angular/router";
 import {AuthService} from "../../services/auth.service";
 import {BackendService} from "../../services/backend.service";
+import Swal from "sweetalert2";
 
 @Component({
   selector: 'app-layout',
@@ -12,19 +13,25 @@ export class LayoutComponent implements OnInit {
   sidebarVisible: boolean = true;
   usuario: any = {};
   userRole: number | null = null;
-  mostrarContenidoInicial = true; // Mostrar contenido inicial por defecto
-
+  mostrarContenidoInicial = true;
   nombre: string = '';
   eventos: any[] = [];
   eventosActivos: any[] = [];
-  query: string = ''; // Un único campo para búsqueda
+  query: string = '';
   resultado: any = null;
   error: string = '';
+
+  currentPassword: string = '';
+  newPassword: string = '';
+  confirmPassword: string = '';
+  userId: number | null = null;
+
 
 
   constructor(private router: Router,
               private authService: AuthService,
-              private backendService: BackendService,) {}
+              private backendService: BackendService,
+              ) {this.userId = Number(localStorage.getItem('userId'))}
 
 
   ngOnInit(): void {
@@ -45,8 +52,75 @@ export class LayoutComponent implements OnInit {
     );
     const usuarioAutenticado = false; // Simulación de autenticación
 
+    const storedUserId = localStorage.getItem('userId');
+    this.userId = storedUserId ? parseInt(storedUserId, 10) : null;
 
   }
+
+  abrirModal() {
+    const modal = document.getElementById('changePasswordModal');
+    if (modal) {
+      modal.classList.add('show');
+      modal.style.display = 'block';
+      modal.removeAttribute('aria-hidden');
+      modal.setAttribute('aria-modal', 'true');
+    }
+  }
+
+  cerrarModal() {
+    const modal = document.getElementById('changePasswordModal');
+    if (modal) {
+      modal.classList.remove('show');
+      modal.style.display = 'none';
+      modal.setAttribute('aria-hidden', 'true');
+      modal.removeAttribute('aria-modal');
+    }
+  }
+
+  onChangePassword(): void {
+    if (!this.currentPassword || !this.newPassword || !this.confirmPassword) {
+      Swal.fire({
+        title: 'Error',
+        text: 'Todos los campos son obligatorios.',
+        icon: 'error',
+        confirmButtonText: 'Aceptar',
+      });
+      return;
+    }
+
+    if (this.newPassword !== this.confirmPassword) {
+      Swal.fire({
+        title: 'Error',
+        text: 'La nueva contraseña y la confirmación no coinciden.',
+        icon: 'error',
+        confirmButtonText: 'Aceptar',
+      });
+      return;
+    }
+
+    this.authService.changePassword(this.currentPassword, this.newPassword).subscribe(
+      (response) => {
+        Swal.fire({
+          title: '¡Éxito!',
+          text: response, // Mostrar respuesta del backend
+          icon: 'success',
+          confirmButtonText: 'Aceptar',
+        });
+        this.cerrarModal();
+      },
+      (error) => {
+        console.error('Error al cambiar la contraseña:', error);
+        Swal.fire({
+          title: 'Error',
+          text: error.error || 'Ocurrió un error al intentar cambiar la contraseña.',
+          icon: 'error',
+          confirmButtonText: 'Aceptar',
+        });
+      }
+    );
+  }
+
+
 
   // Este método se activa cuando se carga un componente en el router-outlet
   onActivate() {
