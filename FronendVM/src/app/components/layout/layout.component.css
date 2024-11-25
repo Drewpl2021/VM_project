@@ -189,3 +189,19 @@
   box-shadow: 0 0 8px rgba(0, 123, 255, 0.5);
 }
 
+.position-relative {
+  position: relative;
+}
+
+.password-toggle-icon {
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
+  cursor: pointer;
+  color: #6c757d; /* Color gris para el ícono */
+}
+
+.password-toggle-icon:hover {
+  color: #0056b3; /* Color azul al pasar el mouse */
+}

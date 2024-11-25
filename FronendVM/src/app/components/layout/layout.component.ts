@@ -25,6 +25,9 @@ export class LayoutComponent implements OnInit {
 
   primerIngreso: boolean = false;
 
+  showCurrentPassword: boolean = false;
+  showNewPassword: boolean = false;
+  showConfirmPassword: boolean = false;
 
   constructor(private router: Router,
               private authService: AuthService,
@@ -37,8 +40,16 @@ export class LayoutComponent implements OnInit {
 
     const storedUserId = localStorage.getItem('userId');
     this.userId = storedUserId ? parseInt(storedUserId, 10) : null;
+  }
 
-
+  togglePasswordVisibility(field: string): void {
+    if (field === 'current') {
+      this.showCurrentPassword = !this.showCurrentPassword;
+    } else if (field === 'new') {
+      this.showNewPassword = !this.showNewPassword;
+    } else if (field === 'confirm') {
+      this.showConfirmPassword = !this.showConfirmPassword;
+    }
   }
 
   abrirModal(): void {
