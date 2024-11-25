@@ -77,7 +77,6 @@ export class EventosParticipadosComponent implements OnInit{
     }
   }
 
-
   obtenerInscripciones(): void {
     if (this.userId) {
       this.backendService.obtenerInscripcionesPorUsuario(this.userId).subscribe(

@@ -1,15 +1,31 @@
 
 <div class="container">
   <h2 class="text-center mb-4">Próximos eventos</h2>
-
   <div class="row">
+    <!-- Mostrar mensaje si no hay eventos -->
+    <div *ngIf="!isLoading && eventosFiltrados.length === 0" class="col-12 text-center">
+      <p class="alert alert-warning mt-4" style="font-size: 40px">
+        <b>No hay eventos disponibles.</b>
+        <img src="assets/images/espera.png">
+      </p>
+    </div>
+
+    <div *ngIf="isLoading" class="col-12 text-center">
+      <p class="alert alert-info mt-4" style="font-size: 20px">
+        Cargando eventos...
+        <img src="assets/images/loading.gif" alt="Cargando" style="width: 50px;">
+      </p>
+    </div>
+
+    <!-- Mostrar las tarjetas de eventos si existen -->
     <div *ngFor="let evento of eventosFiltrados" class="col-md-4 mb-4 d-flex align-items-stretch">
       <div class="card shadow-sm" style="width: 100%; border-radius: 10px;">
         <div class="card-body">
           <div style="display: flex">
             <h5 class="card-title">{{ evento.nombre }}</h5>
 
-            <div *ngIf="evento.usuarioInscrito;" style="width: 130px; position: absolute; margin-left: 340px" >
+            <!-- Mostrar ícono si el usuario está inscrito -->
+            <div *ngIf="evento.usuarioInscrito" style="width: 130px; position: absolute; top: 10px; right: 10px;">
               <img src="assets/images/chek.png" alt="Inscrito" class="img-fluid w-50 mx-auto d-block" />
             </div>
           </div>
@@ -36,5 +52,6 @@
       </div>
     </div>
   </div>
+
 </div>
 

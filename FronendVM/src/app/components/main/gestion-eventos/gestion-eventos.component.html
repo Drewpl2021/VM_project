@@ -21,6 +21,21 @@
 
   <!-- Contenedor de tarjetas de eventos -->
   <div class="row">
+    <div *ngIf="isLoading" class="col-12 text-center">
+      <p class="alert alert-info mt-4" style="font-size: 20px">
+        Cargando eventos...
+        <img src="assets/images/loading.gif" alt="Cargando" style="width: 50px;">
+      </p>
+    </div>
+
+    <!-- Mostrar mensaje si no hay eventos y ya no se están cargando -->
+    <div *ngIf="!isLoading && eventosFiltrados.length === 0" class="col-12 text-center">
+      <p class="alert alert-warning mt-4" style="font-size: 40px">
+        <b>No hay ningún evento creado.</b>
+        <img src="assets/images/espera.png" alt="No eventos">
+      </p>
+    </div>
+    <!-- Mostrar las tarjetas de eventos si existen -->
     <div *ngFor="let evento of eventosFiltrados.slice().reverse()" class="col-md-4 mb-4 d-flex align-items-stretch">
       <div class="card" style="width: 100%;">
         <div class="card-body">

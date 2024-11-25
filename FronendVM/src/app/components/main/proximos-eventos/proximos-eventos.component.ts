@@ -16,6 +16,7 @@ export class ProximosEventosComponent implements OnInit {
   horas_obtenidas: number = 5;
   anio_academico="2024";
   inscripciones: number[] = [];
+  isLoading: boolean = true;
 
   public statusUsuario: string | null = null;
 
@@ -33,6 +34,20 @@ export class ProximosEventosComponent implements OnInit {
       },
       (error) => {
         console.error('Error al obtener usuario autenticado:', error);
+      }
+    );
+    this.cargarEventos();
+  }
+  cargarEventos(): void {
+    this.isLoading = true; // Inicia la carga
+    this.backendService.getEventos().subscribe(
+      (eventos) => {
+        this.eventosFiltrados = eventos;
+        this.isLoading = false; // Termina la carga
+      },
+      (error) => {
+        console.error('Error al cargar eventos:', error);
+        this.isLoading = false; // Termina la carga incluso si hay un error
       }
     );
   }

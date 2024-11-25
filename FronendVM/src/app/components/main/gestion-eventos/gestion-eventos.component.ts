@@ -21,11 +21,26 @@ export class GestionEventosComponent implements OnInit{
 
   aniosDisponibles: number[] = [];
   anioSeleccionado: string = '';
+  isLoading: boolean = true;
 
   constructor(private backendService: BackendService,) {}
 
   ngOnInit(): void {
     this.obtenerEventos();
+    this.cargarEventos();
+  }
+  cargarEventos(): void {
+    this.isLoading = true; // Activar el indicador de carga
+    this.backendService.getEventos().subscribe(
+      (eventos) => {
+        this.eventosFiltrados = eventos; // Asignar eventos obtenidos
+        this.isLoading = false; // Desactivar el indicador de carga
+      },
+      (error) => {
+        console.error('Error al cargar eventos:', error);
+        this.isLoading = false; // Desactivar el indicador de carga incluso si hay error
+      }
+    );
   }
 
   obtenerEventos(): void {

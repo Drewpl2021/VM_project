@@ -127,14 +127,41 @@ public class UserController {
         return ResponseEntity.noContent().build();
     }
 
-    //Actualizar
+    // Actualizar
     @PutMapping("/{id}")
     public ResponseEntity<User> actualizarUsuario(@PathVariable Integer id, @RequestBody User user) {
-        // Aquí puedes verificar que el ID del usuario en el cuerpo coincide con el ID de la ruta
-        user.setId(id); // Establece el ID para asegurarte de que estás actualizando el registro correcto
-        User updatedUser = userService.actualizar(user);
-        return ResponseEntity.ok(updatedUser);
+        // Verificar si el usuario existe
+        Optional<User> usuarioExistente = userService.getUserById(id);
+
+        if (usuarioExistente.isPresent()) {
+            User usuarioActualizado = usuarioExistente.get();
+
+            // Actualizar los campos básicos
+            usuarioActualizado.setNombre(user.getNombre());
+            usuarioActualizado.setApellido(user.getApellido());
+            usuarioActualizado.setEmail(user.getEmail());
+            usuarioActualizado.setStatus(user.getStatus());
+            usuarioActualizado.setRol(user.getRol());
+            usuarioActualizado.setDni(user.getDni());
+            usuarioActualizado.setCodigo(user.getCodigo());
+            usuarioActualizado.setCarrera(user.getCarrera());
+            usuarioActualizado.setHoras_obtenidas(user.getHoras_obtenidas());
+            usuarioActualizado.setPrimeringreso(user.getPrimeringreso());
+
+            // Encriptar el password solo si fue proporcionado y es diferente del actual
+            if (user.getPassword() != null && !user.getPassword().isEmpty()) {
+                usuarioActualizado.setPassword(passwordEncoder.encode(user.getPassword()));
+            }
+
+            // Guardar los cambios
+            User updatedUser = userService.actualizar(usuarioActualizado);
+            return ResponseEntity.ok(updatedUser);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
     }
+
+
     @GetMapping("nombre/{nombre}")
     public ResponseEntity<List<User>> buscarPorNombre(@PathVariable String nombre) {
         List<User> users = userService.findByNombreContaining(nombre);
